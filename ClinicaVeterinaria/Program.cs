@@ -1,3 +1,5 @@
+using ClinicaVeterinaria.Service;
+using ClinicaVeterinaria.Service.Intertface;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +19,18 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         opt.AccessDeniedPath = "/Home/AccessDenied";
     });
 
+builder.Services.AddScoped<IUtenteService, UtenteService>();
+
+
+// Configura il logging
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+
+
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -31,6 +44,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

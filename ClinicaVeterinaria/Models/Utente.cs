@@ -11,11 +11,15 @@ namespace ClinicaVeterinaria.Models
         [Required, StringLength(20)]
         public string Username { get; set; }
 
-        [Required]
-        public byte[] PasswordHash { get; set; }
+        [NotMapped]
+        [Required(ErrorMessage = "La password è obbligatoria.")]
+        public string Password { get; set; } // Campo per la password in input
 
         [Required]
-        public byte[] PasswordSalt { get; set; }
+        public byte[]? PasswordHash { get; set; }
+
+        [Required]
+        public byte[]? PasswordSalt { get; set; }
 
         [Required]
         public string Ruolo { get; set; } = "User";
