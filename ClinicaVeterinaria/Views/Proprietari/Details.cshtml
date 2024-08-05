@@ -1,0 +1,108 @@
+﻿@model ClinicaVeterinaria.Models.Proprietario
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Proprietario</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Nome)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Nome)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Cognome)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Cognome)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Telefono)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Telefono)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Indirizzo)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Indirizzo)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Citta)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Citta)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CodiceFiscale)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CodiceFiscale)
+        </dd>
+    </dl>
+
+    <h4>Animali del Proprietario</h4>
+    <hr />
+    @if (Model.Animali != null && Model.Animali.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Animali.FirstOrDefault().Nome)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Animali.FirstOrDefault().TipologiaAnimale)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Animali.FirstOrDefault().ColoreManto)
+                    </th>
+                    <th>
+                        Data di Nascita
+                    </th>
+                    <th>
+                        Azioni
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var animale in Model.Animali)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(m => animale.Nome)</td>
+                        <td>@Html.DisplayFor(m => animale.TipologiaAnimale)</td>
+                        <td>@Html.DisplayFor(m => animale.ColoreManto)</td>
+                        <td>
+                            @if (animale.DataNascita.HasValue)
+                            {
+                                @animale.DataNascita.Value.ToShortDateString()
+                            }
+                            else
+                            {
+                                <i>Data di nascita non disponibile</i>
+                            }
+                        </td>
+                        <td>
+                            <a asp-controller="Animali" asp-action="Details" asp-route-id="@animale.Id" class="btn btn-info">Dettagli</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Questo proprietario non ha animali registrati.</p>
+    }
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Modifica</a> |
+    <a asp-action="Index">Torna alla lista</a>
+</div>

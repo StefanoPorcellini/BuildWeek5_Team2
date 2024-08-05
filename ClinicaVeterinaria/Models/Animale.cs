@@ -13,7 +13,7 @@
 
        
         public int ProprietarioId { get; set; }
-        public Proprietario Proprietario { get; set; }
+        public Proprietario? Proprietario { get; set; }
     }
 
 }
