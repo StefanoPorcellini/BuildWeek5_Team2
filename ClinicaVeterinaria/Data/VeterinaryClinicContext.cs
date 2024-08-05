@@ -11,6 +11,7 @@ public class VeterinaryClinicContext : DbContext
     }
 
     // DbSet per ogni entità
+    public DbSet<Utente> Utenti { get; set; }
     public DbSet<Animale> Animali { get; set; }
     public DbSet<Proprietario> Proprietari { get; set; }
     public DbSet<Veterinario> Veterinari { get; set; }
