@@ -1,0 +1,115 @@
+﻿@model ClinicaVeterinaria.Models.Animale
+
+@{
+    ViewData["Title"] = "Crea Animale";
+}
+
+<h1>Crea Animale</h1>
+
+<h4>Animale</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Nome" class="control-label"></label>
+                <input asp-for="Nome" class="form-control" />
+                <span asp-validation-for="Nome" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TipologiaAnimale" class="control-label"></label>
+                <input asp-for="TipologiaAnimale" class="form-control" />
+                <span asp-validation-for="TipologiaAnimale" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ColoreManto" class="control-label"></label>
+                <input asp-for="ColoreManto" class="form-control" />
+                <span asp-validation-for="ColoreManto" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DataNascita" class="control-label"></label>
+                <input asp-for="DataNascita" class="form-control" />
+                <span asp-validation-for="DataNascita" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="PossiedeChip" /> @Html.DisplayNameFor(model => model.PossiedeChip)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumeroChip" class="control-label"></label>
+                <input asp-for="NumeroChip" class="form-control" />
+                <span asp-validation-for="NumeroChip" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Randagio" /> @Html.DisplayNameFor(model => model.Randagio)
+                </label>
+            </div>
+            <div class="form-group">
+                <label for="ProprietarioSearch">Cerca Proprietario</label>
+                <input type="text" id="ProprietarioSearch" class="form-control" placeholder="Nome, cognome o codice fiscale..." />
+            </div>
+            <div class="form-group">
+                <label asp-for="ProprietarioId" class="control-label"></label>
+                <select asp-for="ProprietarioId" class="form-control" id="ProprietarioSelect">
+                    <option value="">-- Seleziona un proprietario --</option>
+                </select>
+                <span asp-validation-for="ProprietarioId" class="text-danger"></span>
+            </div>
+
+            <!-- Campo nascosto per memorizzare l'ID del proprietario selezionato -->
+            <input type="hidden" asp-for="ProprietarioId" id="ProprietarioIdHidden" />
+
+            <div class="form-group">
+                <input type="submit" value="Crea" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Torna alla lista</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // Funzione di ricerca proprietari
+        document.getElementById('ProprietarioSearch').addEventListener('input', async function () {
+            var searchTerm = this.value;
+            var select = document.getElementById('ProprietarioSelect');
+
+            // Se il termine di ricerca è vuoto, non fare nulla
+            if (!searchTerm.trim()) {
+                return;
+            }
+
+            try {
+                const response = await fetch('/Proprietari/Search?term=' + encodeURIComponent(searchTerm));
+                const proprietari = await response.json();
+
+                // Svuota il select prima di riempirlo
+                select.innerHTML = '<option value="">-- Seleziona un proprietario --</option>';
+
+                proprietari.forEach(p => {
+                    const option = document.createElement('option');
+                    option.value = p.id;
+                    option.text = p.NomeCompleto;
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Errore nella ricerca dei proprietari:', error);
+            }
+        });
+
+        // Funzione per aggiornare l'input nascosto con l'ID del proprietario selezionato
+        document.getElementById('ProprietarioSelect').addEventListener('change', function () {
+            var selectedValue = this.value;
+            document.getElementById('ProprietarioIdHidden').value = selectedValue;
+        });
+    </script>
+}

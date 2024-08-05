@@ -1,3 +1,5 @@
+using ClinicaVeterinaria.Service.Intertface;
+using ClinicaVeterinaria.Service;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<VeterinaryClinicContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<IProprietarioService, ProprietarioService>();
+builder.Services.AddScoped<IAnimaleService, AnimaleService>();
+builder.Services.AddScoped<IVisitaService, VisitaService>();
+
+
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(opt =>
