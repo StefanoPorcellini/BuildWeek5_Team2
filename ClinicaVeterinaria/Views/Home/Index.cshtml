@@ -2,7 +2,34 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h1>Trova il tuo animale</h1>
+
+<form method="post" asp-action="SearchAnimal">
+    <div class="form-group">
+        <label for="chipNumber">Chip Number</label>
+        <input type="text" class="form-control" id="chipNumber" name="chipNumber" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-info">@ViewBag.Message</div>
+}
+
+@if (ViewBag.Animal != null)
+{
+    var animal = (ClinicaVeterinaria.Models.Animale)ViewBag.Animal;
+    <div class="card mt-3">
+        <div class="card-header">
+            Animal Details
+        </div>
+        <div class="card-body">
+            <p><strong>Name:</strong> @animal.Nome</p>
+            <p><strong>Type:</strong> @animal.TipologiaAnimale</p>
+            <p><strong>Color:</strong> @animal.ColoreManto</p>
+            <p><strong>Birth Date:</strong> @animal.DataNascita?.ToString("dd/MM/yyyy")</p>
+            <p><strong>Chip Number:</strong> @animal.NumeroChip</p>
+        </div>
+    </div>
+}
