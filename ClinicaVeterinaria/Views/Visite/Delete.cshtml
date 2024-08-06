@@ -1,51 +1,57 @@
 ﻿@model ClinicaVeterinaria.Models.Visita
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Elimina Visita";
 }
 
-<h1>Delete</h1>
+<h1>Elimina Visita</h1>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Sei sicuro di voler eliminare questa visita?</h3>
 <div>
     <h4>Visita</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DataVisita)
+        <dt class="col-sm-2">
+            ID
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DataVisita)
+        <dd class="col-sm-10">
+            @Model.Id
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Animale)
+        <dt class="col-sm-2">
+            Data Visita
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Animale.Id)
+        <dd class="col-sm-10">
+            @Model.DataVisita
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Anamnesi)
+        <dt class="col-sm-2">
+            Animale
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Anamnesi)
+        <dd class="col-sm-10">
+            @ViewBag.AnimaleNome
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Cura)
+        <dt class="col-sm-2">
+            Anamnesi
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Cura)
+        <dd class="col-sm-10">
+            @Model.Anamnesi
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Prezzo)
+        <dt class="col-sm-2">
+            Cura
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Prezzo)
+        <dd class="col-sm-10">
+            @Model.Cura
+        </dd>
+        <dt class="col-sm-2">
+            Prezzo
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Prezzo
         </dd>
     </dl>
-    
-    <form asp-action="DeleteConfirmed">
+
+    <form asp-action="DeleteConfirmed" method="post">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="Elimina" class="btn btn-danger" /> |
+        <a asp-action="Index" class="btn btn-secondary">Indietro alla lista</a>
     </form>
 </div>
