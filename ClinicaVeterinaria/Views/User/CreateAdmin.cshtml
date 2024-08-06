@@ -1,0 +1,35 @@
+﻿@model ClinicaVeterinaria.Models.Utente
+
+@{
+    ViewData["Title"] = "Crea Admin";
+}
+
+<h2>Crea un nuovo Admin</h2>
+
+<form asp-action="CreateAdmin" method="post">
+    <div class="form-group">
+        <label asp-for="Username" class="control-label"></label>
+        <input asp-for="Username" class="form-control" />
+        <span asp-validation-for="Username" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="password" class="control-label">Password</label>
+        <input id="password" name="password" type="password" class="form-control" />
+        <span class="text-danger" data-valmsg-for="password" data-valmsg-replace="true"></span>
+    </div>
+    <div class="form-group">
+        <label for="ruolo" class="control-label">Ruolo</label>
+        <select id="ruolo" name="ruolo" class="form-control">
+            <option value="Veterinario">Veterinario</option>
+            <option value="Farmacista">Farmacista</option>
+        </select>
+        <span class="text-danger" data-valmsg-for="ruolo" data-valmsg-replace="true"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Crea" class="btn btn-primary" />
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -66,7 +66,8 @@ namespace ClinicaVeterinaria.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Username = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    PasswordHash = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    PasswordSalt = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     Ruolo = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -227,6 +228,11 @@ namespace ClinicaVeterinaria.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Utenti",
+                columns: new[] { "Id", "PasswordHash", "PasswordSalt", "Ruolo", "Username" },
+                values: new object[] { 1, new byte[] { 173, 201, 94, 230, 114, 26, 215, 174, 172, 220, 202, 71, 55, 26, 87, 172, 67, 1, 151, 176, 90, 105, 3, 102, 62, 20, 138, 41, 173, 28, 207, 165 }, new byte[] { 178, 180, 142, 119, 13, 224, 71, 64, 23, 69, 60, 181, 127, 213, 255, 142 }, "Admin", "admin" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Animali_ProprietarioId",
