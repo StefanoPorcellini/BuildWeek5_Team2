@@ -167,44 +167,6 @@ public class VisiteController : Controller
         }
         return View(visita);
     }
-
-    // GET: Visite/Delete/5
-    public async Task<IActionResult> Delete(int? id)
-    {
-        if (id == null)
-        {
-            return NotFound();
-        }
-
-        var visita = await _visitaService.GetByIdAsync(id.Value);
-        if (visita == null)
-        {
-            return NotFound();
-        }
-
-        var animale = await _context.Animali
-            .Where(a => a.Id == visita.AnimaleId)
-            .Select(a => new { a.Id, Nome = a.Nome ?? "Senza Nome" })
-            .FirstOrDefaultAsync();
-
-        ViewBag.AnimaleNome = animale?.Nome ?? "Senza Nome";
-
-        return View(visita);
-    }
-
-    // POST: Visite/Delete/5
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int id)
-    {
-        var visita = await _visitaService.GetByIdAsync(id);
-        if (visita != null)
-        {
-            await _visitaService.DeleteAsync(visita);
-        }
-        return RedirectToAction(nameof(Index));
-    }
-
 }
 
 

@@ -67,12 +67,6 @@ namespace ClinicaVeterinaria.Service
             return visita;
         }
 
-        public async Task DeleteAsync(Visita visita)
-        {
-                _context.Visite.Remove(visita);
-                await _context.SaveChangesAsync();
-        }
-
         public bool VisitaExists(int id)
         {
             return _context.Visite.Any(e => e.Id == id);
