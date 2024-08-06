@@ -58,6 +58,14 @@ namespace ClinicaVeterinaria.Service
         {
             return await _context.Proprietari.FindAsync(proprietarioId);
         }
+
+        public async Task<Animale> SearchByChipNumberAsync(string chipNumber)
+        {
+            return await _context.Animali
+                .FirstOrDefaultAsync(a => a.NumeroChip == chipNumber);
+        }
     }
+
+
 
 }
