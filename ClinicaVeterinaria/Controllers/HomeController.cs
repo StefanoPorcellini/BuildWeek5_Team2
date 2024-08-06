@@ -23,28 +23,7 @@ namespace ClinicaVeterinaria.Controllers
             return View();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> SearchAnimal(string chipNumber)
-        {
-            if (string.IsNullOrEmpty(chipNumber))
-            {
-                ViewBag.Message = "Please enter a chip number.";
-                return View("Index");
-            }
-
-            var animal = await _animaleService.SearchByChipNumberAsync(chipNumber);
-
-            if (animal == null)
-            {
-                ViewBag.Message = "Animal not found.";
-            }
-            else
-            {
-                ViewBag.Animal = animal;
-            }
-
-            return View("Index");
-        }
+       
 
 
         public IActionResult Privacy()

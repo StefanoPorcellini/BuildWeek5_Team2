@@ -45,7 +45,6 @@ public class AnimaliController : Controller
         return View();
     }
 
-
     // POST: Animali/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -90,10 +89,6 @@ public class AnimaliController : Controller
 
         return View(animale);
     }
-
-
-
-
 
     // GET: Animali/Edit/5
     public async Task<IActionResult> Edit(int? id)
@@ -167,5 +162,30 @@ public class AnimaliController : Controller
     {
         await _animaleService.DeleteAsync(id);
         return RedirectToAction(nameof(Index));
+    }
+
+    // POST: Animali/Search
+    [HttpPost]
+    public async Task<IActionResult> SearchAnimal(string chipNumber)
+    {
+        if (string.IsNullOrEmpty(chipNumber))
+        {
+            ViewBag.Message = "Please enter a chip number.";
+            return View("Index");
+        }
+
+        var animale = await _animaleService.SearchByChipNumberAsync(chipNumber);
+
+        if (animale == null)
+        {
+            ViewBag.Message = "Animal not found.";
+        }
+        else
+        {
+            ViewBag.Animale = animale;
+        }
+
+        var animali = await _animaleService.GetAllAsync();
+        return View("Index", animali);
     }
 }
