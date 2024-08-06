@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClinicaVeterinaria.Migrations
 {
     [DbContext(typeof(VeterinaryClinicContext))]
-    partial class VeterinaryClinicContextModelSnapshot : ModelSnapshot
+    [Migration("20240806133301_AddDimessoToRicoveri")]
+    partial class AddDimessoToRicoveri
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,7 +63,7 @@ namespace ClinicaVeterinaria.Migrations
 
                     b.HasIndex("ProprietarioId");
 
-                    b.ToTable("Animali", (string)null);
+                    b.ToTable("Animali");
                 });
 
             modelBuilder.Entity("ClinicaVeterinaria.Models.CasaFarmaceutica", b =>
@@ -85,7 +88,7 @@ namespace ClinicaVeterinaria.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CaseFarmaceutiche", (string)null);
+                    b.ToTable("CaseFarmaceutiche");
                 });
 
             modelBuilder.Entity("ClinicaVeterinaria.Models.Cliente", b =>
@@ -107,7 +110,7 @@ namespace ClinicaVeterinaria.Migrations
 
                     b.HasIndex("ProprietarioId");
 
-                    b.ToTable("Clienti", (string)null);
+                    b.ToTable("Clienti");
                 });
 
             modelBuilder.Entity("ClinicaVeterinaria.Models.Farmacista", b =>
@@ -132,7 +135,7 @@ namespace ClinicaVeterinaria.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Farmacisti", (string)null);
+                    b.ToTable("Farmacisti");
                 });
 
             modelBuilder.Entity("ClinicaVeterinaria.Models.Prodotto", b =>
@@ -167,7 +170,7 @@ namespace ClinicaVeterinaria.Migrations
 
                     b.HasIndex("CasaFarmaceuticaId");
 
-                    b.ToTable("Prodotti", (string)null);
+                    b.ToTable("Prodotti");
                 });
 
             modelBuilder.Entity("ClinicaVeterinaria.Models.Proprietario", b =>
@@ -204,7 +207,7 @@ namespace ClinicaVeterinaria.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Proprietari", (string)null);
+                    b.ToTable("Proprietari");
                 });
 
             modelBuilder.Entity("ClinicaVeterinaria.Models.Ricovero", b =>
@@ -240,7 +243,7 @@ namespace ClinicaVeterinaria.Migrations
 
                     b.HasIndex("AnimaleId");
 
-                    b.ToTable("Ricoveri", (string)null);
+                    b.ToTable("Ricoveri");
                 });
 
             modelBuilder.Entity("ClinicaVeterinaria.Models.Utente", b =>
@@ -270,7 +273,17 @@ namespace ClinicaVeterinaria.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Utenti", (string)null);
+                    b.ToTable("Utenti");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            PasswordHash = new byte[] { 214, 167, 157, 69, 15, 106, 80, 54, 161, 9, 42, 41, 71, 168, 255, 149, 160, 169, 153, 128, 211, 157, 190, 98, 177, 75, 252, 246, 69, 73, 234, 142 },
+                            PasswordSalt = new byte[] { 149, 208, 179, 212, 95, 234, 254, 19, 51, 92, 236, 227, 98, 216, 213, 194 },
+                            Ruolo = "Admin",
+                            Username = "admin"
+                        });
                 });
 
             modelBuilder.Entity("ClinicaVeterinaria.Models.Vendita", b =>
@@ -302,7 +315,7 @@ namespace ClinicaVeterinaria.Migrations
 
                     b.HasIndex("ProdottoId");
 
-                    b.ToTable("Vendite", (string)null);
+                    b.ToTable("Vendite");
                 });
 
             modelBuilder.Entity("ClinicaVeterinaria.Models.Veterinario", b =>
@@ -327,7 +340,7 @@ namespace ClinicaVeterinaria.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Veterinari", (string)null);
+                    b.ToTable("Veterinari");
                 });
 
             modelBuilder.Entity("ClinicaVeterinaria.Models.Visita", b =>
@@ -359,7 +372,7 @@ namespace ClinicaVeterinaria.Migrations
 
                     b.HasIndex("AnimaleId");
 
-                    b.ToTable("Visite", (string)null);
+                    b.ToTable("Visite");
                 });
 
             modelBuilder.Entity("ClinicaVeterinaria.Models.Animale", b =>

@@ -15,6 +15,7 @@ builder.Services.AddScoped<IProprietarioService, ProprietarioService>();
 builder.Services.AddScoped<IAnimaleService, AnimaleService>();
 builder.Services.AddScoped<IVisitaService, VisitaService>();
 builder.Services.AddScoped<IUtenteService, UtenteService>();
+builder.Services.AddScoped<IRicoveroService, RicoveroService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
