@@ -1,14 +1,7 @@
 ﻿using ClinicaVeterinaria.Models;
-using ClinicaVeterinaria.Service.Intertface;
+using ClinicaVeterinaria.Interface;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace ClinicaVeterinaria.Service
-using ClinicaVeterinaria.Intertface;
 using ClinicaVeterinaria.Service;
-using Microsoft.EntityFrameworkCore;
 
 namespace ClinicaVeterinaria.Services
 {
@@ -104,7 +97,6 @@ namespace ClinicaVeterinaria.Services
                 throw;
             }
         }
-
         public async Task<Utente> LoginAsync(string username, string password)
         {
             try

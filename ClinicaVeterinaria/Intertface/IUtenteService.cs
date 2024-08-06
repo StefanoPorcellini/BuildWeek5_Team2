@@ -1,8 +1,6 @@
 ﻿using ClinicaVeterinaria.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace ClinicaVeterinaria.Intertface
+namespace ClinicaVeterinaria.Interface 
 {
     public interface IUtenteService
     {
