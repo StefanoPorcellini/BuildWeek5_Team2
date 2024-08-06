@@ -1,37 +1,36 @@
-﻿@model IEnumerable<ClinicaVeterinaria.Models.Visita>
+﻿@model IEnumerable<dynamic>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Visite";
 }
 
-<h1>Index</h1>
+<h1>Visite</h1>
+<div>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+
 <table class="table">
     <thead>
         <tr>
-            <th>Data</th>
+            <th>ID</th>
+            <th>Data Visita</th>
+            <th>Animale</th>
             <th>Anamnesi</th>
             <th>Cura</th>
             <th>Prezzo</th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var visita in Model)
         {
             <tr>
-                <td>@item.DataVisita.ToShortDateString()</td>
-                <td>@item.Anamnesi</td>
-                <td>@item.Cura</td>
-                <td>@item.Prezzo</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Modifica</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Dettagli</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Elimina</a>
-                </td>
+                <td>@visita.Id</td>
+                <td>@visita.DataVisita</td>
+                <td>@visita.AnimaleNome</td>
+                <td>@visita.Anamnesi</td>
+                <td>@visita.Cura</td>
+                <td>@visita.Prezzo</td>
             </tr>
         }
     </tbody>
