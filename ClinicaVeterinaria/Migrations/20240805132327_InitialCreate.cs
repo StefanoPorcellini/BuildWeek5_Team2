@@ -125,9 +125,9 @@ namespace ClinicaVeterinaria.Migrations
                     ColoreManto = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DataNascita = table.Column<DateTime>(type: "datetime2", nullable: true),
                     PossiedeChip = table.Column<bool>(type: "bit", nullable: false),
-                    NumeroChip = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NumeroChip = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Randagio = table.Column<bool>(type: "bit", nullable: false),
-                    ProprietarioId = table.Column<int>(type: "int", nullable: false)
+                    ProprietarioId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {

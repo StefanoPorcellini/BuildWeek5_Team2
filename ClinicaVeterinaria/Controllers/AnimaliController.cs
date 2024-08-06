@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 public class AnimaliController : Controller
 {
     private readonly IAnimaleService _animaleService;
+    private readonly IProprietarioService _proprietarioService;
     private readonly ILogger<AnimaliController> _logger;
 
-    public AnimaliController(IAnimaleService animaleService, ILogger<AnimaliController> logger)
+    public AnimaliController(IAnimaleService animaleService, IProprietarioService proprietarioService, ILogger<AnimaliController> logger)
     {
         _animaleService = animaleService;
+        _proprietarioService = proprietarioService;
         _logger = logger;
     }
 
@@ -45,7 +47,6 @@ public class AnimaliController : Controller
         return View();
     }
 
-
     // POST: Animali/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -53,14 +54,25 @@ public class AnimaliController : Controller
     {
         _logger.LogInformation("Avviata la creazione di un nuovo animale.");
 
+        // Verifica se l'animale è randagio e non ha un proprietario
+        if (!animale.Randagio && !animale.ProprietarioId.HasValue)
+        {
+            _logger.LogWarning("ProprietarioId è nullo. Non è possibile creare l'animale non randagio senza un proprietario associato.");
+            ModelState.AddModelError("ProprietarioId", "È necessario selezionare un proprietario per un animale non randagio.");
+        }
+
         if (ModelState.IsValid)
         {
             try
             {
-                _logger.LogInformation("Modello valido. Inizio del processo di creazione per l'animale con Nome: {Nome}, Tipologia: {Tipologia}, ProprietarioId: {ProprietarioId}.", animale.Nome, animale.TipologiaAnimale, animale.ProprietarioId);
+                _logger.LogInformation("Modello valido. Inizio del processo di creazione per l'animale con Nome: {Nome}, Tipologia: {Tipologia}, Randagio: {Randagio}.",
+                    animale.Nome, animale.TipologiaAnimale, animale.Randagio);
 
-                // Carica il proprietario associato tramite il servizio
-                animale.Proprietario = await _animaleService.GetProprietarioByIdAsync(animale.ProprietarioId);
+                if (!animale.Randagio && animale.ProprietarioId.HasValue)
+                {
+                    // Carica il proprietario associato solo se l'animale non è randagio
+                    animale.Proprietario = await _proprietarioService.GetByIdAsync(animale.ProprietarioId.Value);
+                }
 
                 await _animaleService.CreateAsync(animale);
                 _logger.LogInformation("Animale creato con successo. Nome: {Nome}, ID: {Id}.", animale.Nome, animale.Id);
@@ -68,7 +80,8 @@ public class AnimaliController : Controller
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Errore durante la creazione dell'animale con Nome: {Nome}, Tipologia: {Tipologia}, ProprietarioId: {ProprietarioId}.", animale.Nome, animale.TipologiaAnimale, animale.ProprietarioId);
+                _logger.LogError(ex, "Errore durante la creazione dell'animale con Nome: {Nome}, Tipologia: {Tipologia}, Randagio: {Randagio}.",
+                    animale.Nome, animale.TipologiaAnimale, animale.Randagio);
                 ModelState.AddModelError(string.Empty, "Si è verificato un errore durante la creazione dell'animale. Riprova più tardi.");
             }
         }
@@ -90,10 +103,6 @@ public class AnimaliController : Controller
 
         return View(animale);
     }
-
-
-
-
 
     // GET: Animali/Edit/5
     public async Task<IActionResult> Edit(int? id)
