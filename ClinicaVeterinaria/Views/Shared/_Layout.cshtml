@@ -1,4 +1,26 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var currentUser = (User.Identity?.IsAuthenticated ?? false) ? User.Identity.Name : "Anonimo";
+    var isAdmin = User.IsInRole("Admin");
+    var isFarmacista = User.IsInRole("Farmacista");
+    var isVeterinario = User.IsInRole("Veterinario");
+
+    string roleClass = "text-primary"; // Default class
+
+    if (isAdmin)
+    {
+        roleClass = "text-danger";
+    }
+    else if (isFarmacista)
+    {
+        roleClass = "text-success";
+    }
+    else if (isVeterinario)
+    {
+        roleClass = "text-primary";
+    }
+
+}
+    <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -12,50 +34,51 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ClinicaVeterinaria</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img class="logo" src="~/img/logo_vetcare.svg" /></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="CreateAdmin">Crea Admin</a>
-                                </li>
-                            }
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" href="javascript:void(0);" onclick="document.getElementById('logoutForm').submit();">Logout</a>
-                                <form id="logoutForm" asp-area="" asp-controller="User" asp-action="Logout" method="post" style="display:none;"></form>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Login">Login</a>
-                            </li>
-                        }
-
+                        
                     </ul>
                 </div>
-                <a class="Btn orange" asp-controller="Utente" asp-action="Register">
-                    <div class="sign">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                             class="bi bi-pencil" viewBox="0 0 16 16">
-                            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325">
-                        </svg>
-                    </div>
-                    <div class="text">Registrati</div>
-                </a>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                    <form asp-area="" asp-controller="User" asp-action="Logout" method="post" 
+                    asp-antiforgery="true" class="d-flex gap-3 align-items-center">
+
+                        <span class="@roleClass ">
+                            <i class="bi bi-person-circle"></i> @currentUser</span>
+                        @if (isAdmin)
+                        {
+                            <a class="button text-decoration-none" asp-area=""  asp-antifo="" 
+                            asp-controller="User" asp-action="CreateAdmin">Crea nuovo utente</a>
+                        }
+                        <button class="Btn red" type="submit">
+                            <div class="sign">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                     class="bi bi-pencil" viewBox="0 0 16 16">
+                                    <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325">
+                                </svg>
+                            </div>
+                            <div class="text">Logout</div>
+                        </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <a class="Btn green" asp-controller="User" asp-action="Login">
+                            <div class="sign">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                     class="bi bi-pencil" viewBox="0 0 16 16">
+                                    <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325">
+                                </svg>
+                            </div>
+                            <div class="text">Login</div>
+                        </a>
+                    }
             </div>
         </nav>
     </header>
