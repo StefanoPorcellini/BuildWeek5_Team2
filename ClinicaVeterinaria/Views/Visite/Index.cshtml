@@ -6,7 +6,7 @@
 
 <h1>Visite</h1>
 <div>
-    <a asp-action="Create" class="btn btn-primary">Create New</a>
+    <a asp-action="Create" class="btn btn-primary">Crea Nuova Visita</a>
 </div>
 
 <table class="table">
@@ -18,7 +18,7 @@
             <th>Anamnesi</th>
             <th>Cura</th>
             <th>Prezzo</th>
-            <th>Azioni</th> <!-- Colonna aggiunta per i bottoni delle azioni -->
+            <th>Azioni</th>
         </tr>
     </thead>
     <tbody>
@@ -34,9 +34,6 @@
                 <td>
                     <a asp-action="Details" asp-route-id="@visita.Id" class="btn btn-info">Dettagli</a>
                     <a asp-action="Edit" asp-route-id="@visita.Id" class="btn btn-warning">Modifica</a>
-                    <form asp-action="Delete" asp-route-id="@visita.Id" method="post" class="d-inline">
-                        <button type="submit" class="btn btn-danger">Elimina</button>
-                    </form>
                 </td>
             </tr>
         }
