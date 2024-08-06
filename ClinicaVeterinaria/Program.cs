@@ -17,6 +17,8 @@ builder.Services.AddScoped<IVisitaService, VisitaService>();
 builder.Services.AddScoped<IUtenteService, UtenteService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped<IProdottoService, ProdottoService>();
+
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(opt =>

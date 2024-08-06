@@ -1,0 +1,30 @@
+﻿@model IEnumerable<ClinicaVeterinaria.Models.CasaFarmaceutica>
+
+<h2>Lista Case Farmaceutiche</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Indirizzo</th>
+            <th>Email</th>
+            <th>Azioni</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var casa in Model)
+        {
+            <tr>
+                <td>@casa.Nome</td>
+                <td>@casa.Indirizzo</td>
+                <td>@casa.Email</td>
+                <td>
+                    <a asp-action="EditCasaFarmaceutica" asp-route-id="@casa.Id" class="btn btn-warning">Modifica</a>
+                    <form asp-action="DeleteCasaFarmaceutica" asp-route-id="@casa.Id" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger">Elimina</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
