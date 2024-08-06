@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClinicaVeterinaria.Migrations
 {
     [DbContext(typeof(VeterinaryClinicContext))]
-    partial class VeterinaryClinicContextModelSnapshot : ModelSnapshot
+    [Migration("20240806131152_AddPrezzoTotaleToRicoveri")]
+    partial class AddPrezzoTotaleToRicoveri
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -227,9 +230,6 @@ namespace ClinicaVeterinaria.Migrations
                     b.Property<DateTime>("DataInizio")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("Dimesso")
-                        .HasColumnType("bit");
-
                     b.Property<decimal?>("PrezzoTotale")
                         .HasColumnType("decimal(18,2)");
 
@@ -276,8 +276,8 @@ namespace ClinicaVeterinaria.Migrations
                         new
                         {
                             Id = 1,
-                            PasswordHash = new byte[] { 214, 167, 157, 69, 15, 106, 80, 54, 161, 9, 42, 41, 71, 168, 255, 149, 160, 169, 153, 128, 211, 157, 190, 98, 177, 75, 252, 246, 69, 73, 234, 142 },
-                            PasswordSalt = new byte[] { 149, 208, 179, 212, 95, 234, 254, 19, 51, 92, 236, 227, 98, 216, 213, 194 },
+                            PasswordHash = new byte[] { 224, 52, 11, 200, 107, 38, 194, 242, 114, 250, 145, 180, 191, 61, 177, 108, 199, 1, 140, 238, 252, 17, 182, 160, 133, 237, 252, 166, 94, 170, 51, 0 },
+                            PasswordSalt = new byte[] { 225, 247, 156, 59, 78, 112, 246, 229, 211, 170, 5, 237, 189, 205, 209, 233 },
                             Ruolo = "Admin",
                             Username = "admin"
                         });

@@ -1,0 +1,56 @@
+﻿@model ClinicaVeterinaria.Models.Ricovero
+
+@{
+    ViewData["Title"] = "Checkout Ricovero";
+}
+
+<h2>Checkout Ricovero</h2>
+
+<div>
+    <h4>Animale: @Model.Animale.Nome</h4>
+    <p><strong>Data Inizio:</strong> @Model.DataInizio.ToShortDateString()</p>
+
+    <p><strong>Costo Giornaliero:</strong> @Model.CostoGiornaliero.ToString("C")</p>
+    <p><strong>Costo Totale:</strong> <span id="CostoTotale">@ViewBag.CostoTotale</span></p>
+
+    <form asp-action="ConfirmCheckout" method="post">
+        <input type="hidden" asp-for="Id" />
+        <p>
+            <strong>Data Fine:</strong>
+            <input type="datetime-local" id="DataFine" name="dataFine" value="" />
+        </p>
+        <input type="hidden" id="HiddenDataFine" name="dataFine" />
+        <button type="button" id="CalcolaCostoTotale" class="btn btn-secondary">Calcola Costo Totale</button>
+        <button type="submit" class="btn btn-primary">Conferma Checkout</button>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('CalcolaCostoTotale').addEventListener('click', async function () {
+            const dataFine = document.getElementById('DataFine').value;
+            const costoGiornaliero = @Model.CostoGiornaliero;
+
+            // Fai una richiesta asincrona per calcolare il costo totale
+            try {
+                const response = await fetch('/Ricoveri/CalcolaCostoTotale', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        dataInizio: '@Model.DataInizio.ToString("o")',
+                        dataFine: dataFine,
+                        costoGiornaliero: costoGiornaliero
+                    })
+                });
+
+                const result = await response.json();
+                document.getElementById('CostoTotale').textContent = result.costoTotale.toLocaleString('it-IT', { style: 'currency', currency: 'EUR' });
+                document.getElementById('HiddenDataFine').value = dataFine; // Imposta la data di fine nel campo nascosto per il submit
+            } catch (error) {
+                console.error('Errore nel calcolo del costo totale:', error);
+            }
+        });
+    </script>
+}
