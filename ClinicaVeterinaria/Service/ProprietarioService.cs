@@ -49,13 +49,8 @@ namespace ClinicaVeterinaria.Service
             }
         }
 
-        public async Task<IEnumerable<Proprietario>> SearchProprietariAsync(string term)
+        public async Task<IEnumerable<Proprietario>> SearchAsync(string term)
         {
-            if (string.IsNullOrWhiteSpace(term))
-            {
-                return new List<Proprietario>();
-            }
-
             return await _context.Proprietari
                 .Where(p => p.Nome.Contains(term) || p.Cognome.Contains(term) || p.CodiceFiscale.Contains(term))
                 .ToListAsync();

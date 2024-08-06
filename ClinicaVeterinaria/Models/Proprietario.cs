@@ -10,7 +10,7 @@
         public string Citta { get; set; }
         public string CodiceFiscale { get; set; }
 
-        public ICollection<Animale> Animali { get; set; }
+        public ICollection<Animale>? Animali { get; set; }
     }
 
 }
