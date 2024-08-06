@@ -1,12 +1,13 @@
 using ClinicaVeterinaria.Service.Intertface;
+using ClinicaVeterinaria.Intertface;
+using ClinicaVeterinaria.Services;
 using ClinicaVeterinaria.Service;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Registrazione dei servizi
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<VeterinaryClinicContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -15,6 +16,12 @@ builder.Services.AddScoped<IAnimaleService, AnimaleService>();
 builder.Services.AddScoped<IVisitaService, VisitaService>();
 
 
+
+// Registrazione dei servizi UtenteService e AuthenticationService
+builder.Services.AddScoped<IUtenteService, UtenteService>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(opt =>
@@ -41,13 +48,11 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 
 app.UseAuthentication();

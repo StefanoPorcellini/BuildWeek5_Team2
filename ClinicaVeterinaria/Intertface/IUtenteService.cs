@@ -1,6 +1,8 @@
 ﻿using ClinicaVeterinaria.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace ClinicaVeterinaria.Service.Intertface
+namespace ClinicaVeterinaria.Intertface
 {
     public interface IUtenteService
     {
@@ -9,6 +11,6 @@ namespace ClinicaVeterinaria.Service.Intertface
         Task<IEnumerable<Utente>> GetAllUtentiAsync();
         Task<Utente> UpdateUtenteAsync(Utente utente);
         Task DeleteUtenteAsync(int utenteId);
-        Utente Login(string username, string password);
+        Task<Utente> LoginAsync(string username, string password);
     }
 }

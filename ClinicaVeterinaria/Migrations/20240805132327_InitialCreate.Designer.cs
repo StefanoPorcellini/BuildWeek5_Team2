@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClinicaVeterinaria.Migrations
 {
     [DbContext(typeof(VeterinaryClinicContext))]
-    [Migration("20240805100125_InitialCreate")]
+    [Migration("20240805132327_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -249,10 +249,13 @@ namespace ClinicaVeterinaria.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Password")
+                    b.Property<byte[]>("PasswordHash")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Ruolo")
                         .IsRequired()
@@ -266,6 +269,16 @@ namespace ClinicaVeterinaria.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Utenti");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            PasswordHash = new byte[] { 173, 201, 94, 230, 114, 26, 215, 174, 172, 220, 202, 71, 55, 26, 87, 172, 67, 1, 151, 176, 90, 105, 3, 102, 62, 20, 138, 41, 173, 28, 207, 165 },
+                            PasswordSalt = new byte[] { 178, 180, 142, 119, 13, 224, 71, 64, 23, 69, 60, 181, 127, 213, 255, 142 },
+                            Ruolo = "Admin",
+                            Username = "admin"
+                        });
                 });
 
             modelBuilder.Entity("ClinicaVeterinaria.Models.Vendita", b =>
