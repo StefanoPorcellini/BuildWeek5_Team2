@@ -13,8 +13,6 @@ public class VeterinaryClinicContext : DbContext
     public DbSet<Utente> Utenti { get; set; }
     public DbSet<Animale> Animali { get; set; }
     public DbSet<Proprietario> Proprietari { get; set; }
-    public DbSet<Veterinario> Veterinari { get; set; }
-    public DbSet<Farmacista> Farmacisti { get; set; }
     public DbSet<Cliente> Clienti { get; set; }
     public DbSet<Visita> Visite { get; set; }
     public DbSet<Ricovero> Ricoveri { get; set; }
