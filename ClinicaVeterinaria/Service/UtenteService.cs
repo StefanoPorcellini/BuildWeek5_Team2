@@ -1,11 +1,9 @@
 ﻿using ClinicaVeterinaria.Models;
-using ClinicaVeterinaria.Service.Intertface;
+using ClinicaVeterinaria.Interface;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Linq;
+using ClinicaVeterinaria.Service;
 
-namespace ClinicaVeterinaria.Service
+namespace ClinicaVeterinaria.Services
 {
     public class UtenteService : IUtenteService
     {
@@ -16,60 +14,117 @@ namespace ClinicaVeterinaria.Service
             _context = context;
         }
 
+        // Metodo per creare un nuovo utente nel database
         public async Task<Utente> CreateUtenteAsync(Utente utente)
         {
-            // Imposta il ruolo predefinito se non specificato
-            if (string.IsNullOrEmpty(utente.Ruolo))
+            try
             {
-                utente.Ruolo = "User";
+                _context.Utenti.Add(utente);
+                await _context.SaveChangesAsync();
+                return utente;
             }
-
-            // Verifica che la password sia stata impostata e genera gli hash/salt
-            if (!string.IsNullOrEmpty(utente.Password))
+            catch (Exception ex)
             {
-                utente.SetPassword(utente.Password);
+                // Gestione degli errori durante la creazione dell'utente
+                throw;
             }
-
-            _context.Utenti.Add(utente);
-            await _context.SaveChangesAsync();
-            return utente;
         }
 
+        // Metodo per ottenere un utente per ID
         public async Task<Utente> GetUtenteByIdAsync(int utenteId)
         {
-            return await _context.Utenti.FindAsync(utenteId);
+            try
+            {
+                return await _context.Utenti.FindAsync(utenteId);
+            }
+            catch (Exception ex)
+            {
+                // Gestione degli errori durante la ricerca dell'utente per ID
+                throw;
+            }
         }
 
+        // Metodo per ottenere tutti gli utenti
         public async Task<IEnumerable<Utente>> GetAllUtentiAsync()
         {
-            return await _context.Utenti.ToListAsync();
+            try
+            {
+                return await _context.Utenti.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                // Gestione degli errori durante il recupero di tutti gli utenti
+                throw;
+            }
         }
 
+        // Metodo per aggiornare un utente
         public async Task<Utente> UpdateUtenteAsync(Utente utente)
         {
-            _context.Entry(utente).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-            return utente;
+            try
+            {
+                _context.Entry(utente).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+                return utente;
+            }
+            catch (Exception ex)
+            {
+                // Gestione degli errori durante l'aggiornamento dell'utente
+                throw;
+            }
         }
 
+        // Metodo per eliminare un utente
         public async Task DeleteUtenteAsync(int utenteId)
         {
-            var utente = await _context.Utenti.FindAsync(utenteId);
-            if (utente != null)
+            try
             {
-                _context.Utenti.Remove(utente);
-                await _context.SaveChangesAsync();
+                var utente = await _context.Utenti.FindAsync(utenteId);
+                if (utente != null)
+                {
+                    _context.Utenti.Remove(utente);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    // Gestione del caso in cui l'utente non viene trovato per l'eliminazione
+                }
+            }
+            catch (Exception ex)
+            {
+                // Gestione degli errori durante l'eliminazione dell'utente
+                throw;
             }
         }
 
-        public Utente Login(string username, string password)
+        // Metodo per eseguire il login di un utente
+        public async Task<Utente> LoginAsync(string username, string password)
         {
-            var utente = _context.Utenti.SingleOrDefault(u => u.Username == username);
-            if (utente == null || !utente.VerifyPassword(password))
+            try
             {
-                return null; // Utente non trovato o password errata
+                var user = await _context.Utenti.SingleOrDefaultAsync(u => u.Username == username);
+                if (user == null)
+                {
+                    // Gestione del caso in cui l'utente non viene trovato
+                    return null;
+                }
+
+                bool isValid = PasswordService.VerifyPassword(password, user.PasswordSalt, user.PasswordHash);
+                if (isValid)
+                {
+                    return user;
+                }
+                else
+                {
+                    // Gestione del caso in cui la password non è valida
+                    return null;
+                }
             }
-            return utente; // Login avvenuto con successo
+            catch (Exception ex)
+            {
+                // Gestione degli errori durante il login
+                throw;
+            }
         }
     }
 }

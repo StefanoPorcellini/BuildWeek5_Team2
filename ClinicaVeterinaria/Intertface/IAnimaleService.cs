@@ -11,6 +11,7 @@ namespace ClinicaVeterinaria.Service.Intertface
         Task DeleteAsync(int id);
         bool AnimaleExists(int id);
         Task<Proprietario> GetProprietarioByIdAsync(int proprietarioId);
+        Task<Animale> SearchByChipNumberAsync(string chipNumber);
     }
 
 }

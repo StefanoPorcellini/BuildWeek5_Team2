@@ -60,8 +60,6 @@
                 <span asp-validation-for="ProprietarioId" class="text-danger"></span>
             </div>
 
-            <input type="hidden" asp-for="ProprietarioId" id="ProprietarioIdHidden" />
-
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -78,45 +76,61 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script>
-        // Funzione di ricerca proprietari
-        document.getElementById('ProprietarioSearch').addEventListener('input', async function () {
-            var searchTerm = this.value;
-            var select = document.getElementById('ProprietarioSelect');
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('ProprietarioSearch');
+            const select = document.getElementById('ProprietarioSelect');
 
-            // Se il termine di ricerca è vuoto, non fare nulla
-            if (!searchTerm.trim()) {
+            if (!searchInput || !select) {
+                console.error('Elemento ProprietarioSearch o ProprietarioSelect non trovato nel DOM.');
                 return;
             }
 
-            try {
-                const response = await fetch('/Proprietari/Search?term=' + encodeURIComponent(searchTerm));
-                const proprietari = await response.json();
+            // Funzione di ricerca proprietari
+            searchInput.addEventListener('input', async function () {
+                var searchTerm = this.value;
 
-                // Svuota il select prima di riempirlo
-                select.innerHTML = '<option value="">-- Seleziona un proprietario --</option>';
+                // Se il termine di ricerca è vuoto, non fare nulla
+                if (!searchTerm.trim()) {
+                    return;
+                }
 
-                proprietari.forEach(p => {
-                    const option = document.createElement('option');
-                    option.value = p.id;
-                    option.text = p.NomeCompleto;
-                    select.appendChild(option);
-                });
-            } catch (error) {
-                console.error('Errore nella ricerca dei proprietari:', error);
-            }
-        });
+                try {
+                    const response = await fetch('/Proprietari/Search?term=' + encodeURIComponent(searchTerm));
 
-        // Funzione per aggiornare l'input nascosto con l'ID del proprietario selezionato
-        document.getElementById('ProprietarioSelect').addEventListener('change', function () {
-            var selectedValue = this.value;
-            document.getElementById('ProprietarioIdHidden').value = selectedValue;
-        });
+                    // Verifica se la risposta è andata a buon fine
+                    if (!response.ok) {
+                        throw new Error('Errore nella risposta del server');
+                    }
 
-        // Imposta il valore del dropdown e dell'input nascosto al caricamento della pagina
-        document.addEventListener('DOMContentLoaded', function () {
-            var selectedValue = document.getElementById('ProprietarioIdHidden').value;
-            if (selectedValue) {
-                document.getElementById('ProprietarioSelect').value = selectedValue;
+                    const proprietari = await response.json(); // Parse del JSON
+
+                    // Svuota il select prima di riempirlo
+                    select.innerHTML = '<option value="">-- Seleziona un proprietario --</option>';
+
+                    proprietari.forEach(p => {
+                        const option = document.createElement('option');
+                        option.value = p.id;
+                        // Concatenare Nome e Cognome per creare il NomeCompleto e aggiungere il Codice Fiscale
+                        option.text = `${p.nome} ${p.cognome} (${p.codiceFiscale})`;
+
+                        select.appendChild(option);
+                    });
+
+                    // Pre-seleziona il proprietario corrente se già impostato
+                    const currentProprietarioId = @Model.ProprietarioId;
+                    if (currentProprietarioId) {
+                        select.value = currentProprietarioId;
+                    }
+
+                } catch (error) {
+                    console.error('Errore nella ricerca dei proprietari:', error);
+                }
+            });
+
+            // Pre-seleziona il proprietario corrente al caricamento della pagina
+            const currentProprietarioId = @Model.ProprietarioId;
+            if (currentProprietarioId) {
+                select.value = currentProprietarioId;
             }
         });
     </script>

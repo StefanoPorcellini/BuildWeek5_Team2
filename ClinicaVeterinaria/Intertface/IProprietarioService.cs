@@ -9,6 +9,6 @@ namespace ClinicaVeterinaria.Service.Intertface
         Task<Proprietario> CreateAsync(Proprietario proprietario);
         Task<Proprietario> UpdateAsync(Proprietario proprietario);
         Task DeleteAsync(int id);
-        Task<IEnumerable<Proprietario>> SearchProprietariAsync(string term);
+        Task<IEnumerable<Proprietario>> SearchAsync(string term);
     }
 }

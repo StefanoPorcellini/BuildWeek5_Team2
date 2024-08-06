@@ -1,0 +1,29 @@
+﻿@model ClinicaVeterinaria.Models.Proprietario
+
+@{
+    ViewData["Title"] = "Elimina Proprietario";
+}
+
+<h1>Elimina Proprietario</h1>
+
+<h3>Sei sicuro di voler eliminare questo proprietario?</h3>
+<div>
+    <h4>@Model.Nome @Model.Cognome</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Telefono</dt>
+        <dd>@Model.Telefono</dd>
+        <dt>Indirizzo</dt>
+        <dd>@Model.Indirizzo</dd>
+        <dt>Città</dt>
+        <dd>@Model.Citta</dd>
+        <dt>Codice Fiscale</dt>
+        <dd>@Model.CodiceFiscale</dd>
+    </dl>
+
+    <form asp-action="DeleteConfirmed" method="post">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Elimina" class="btn btn-danger" /> |
+        <a asp-action="Index" class="btn btn-secondary">Annulla</a>
+    </form>
+</div>

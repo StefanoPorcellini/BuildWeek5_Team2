@@ -27,13 +27,29 @@ namespace ClinicaVeterinaria.Models
         // Metodo per settare la password
         public void SetPassword(string password)
         {
+            // Controlla che la password non sia vuota
+            if (string.IsNullOrEmpty(password))
+            {
+                throw new ArgumentException("La password non può essere vuota", nameof(password));
+            }
+
+            // Genera il salt per la password
             PasswordSalt = ClinicaVeterinaria.Service.PasswordService.GenerateSalt();
+
+            // Genera l'hash della password utilizzando il salt generato
             PasswordHash = ClinicaVeterinaria.Service.PasswordService.HashPassword(password, PasswordSalt);
+
+            // Verifica che i valori di PasswordHash e PasswordSalt siano stati settati correttamente
+            if (PasswordHash == null || PasswordSalt == null)
+            {
+                throw new InvalidOperationException("PasswordHash e PasswordSalt devono essere settati.");
+            }
         }
 
         // Metodo per verificare la password
         public bool VerifyPassword(string password)
         {
+            // Verifica che la password inserita corrisponda all'hash memorizzato
             return ClinicaVeterinaria.Service.PasswordService.VerifyPassword(password, PasswordSalt, PasswordHash);
         }
     }

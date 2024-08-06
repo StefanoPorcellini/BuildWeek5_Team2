@@ -1,70 +1,140 @@
-﻿using ClinicaVeterinaria.Models;
-using ClinicaVeterinaria.Service.Intertface;
+﻿using ClinicaVeterinaria.Interface;
+using ClinicaVeterinaria.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace ClinicaVeterinaria.Controllers
 {
+    [Route("User")]
     public class UtenteController : Controller
     {
         private readonly IUtenteService _utenteService;
-        private readonly ILogger<UtenteController> _logger;
 
-        public UtenteController(IUtenteService utenteService, ILogger<UtenteController> logger)
+        public UtenteController(IUtenteService utenteService)
         {
             _utenteService = utenteService;
-            _logger = logger;
         }
 
-        [HttpGet]
-        public IActionResult Register()
+        [HttpGet("Login")]
+        public IActionResult Login()
         {
-            bool isAdmin = User.Identity.IsAuthenticated && User.IsInRole("Admin");
-            ViewBag.IsAdmin = isAdmin;
-            return View();
+            return View("~/Views/User/Login.cshtml");
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Register(Utente model)
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
-            _logger.LogInformation("Register attempt for username: {Username}", model.Username);
+            // Verifica che il ModelState sia valido
+            if (ModelState.IsValid)
+            {
+                var user = await _utenteService.LoginAsync(model.Username, model.Password);
+                if (user != null)
+                {
+                    // Se l'utente è trovato, si creano le claims per l'autenticazione
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Name, user.Username),
+                        new Claim(ClaimTypes.Role, user.Ruolo)
+                    };
 
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var authProperties = new AuthenticationProperties { };
+
+                    // Si effettua l'accesso dell'utente
+                    await HttpContext.SignInAsync(
+                        CookieAuthenticationDefaults.AuthenticationScheme,
+                        new ClaimsPrincipal(claimsIdentity),
+                        authProperties);
+
+                    // Reindirizza l'utente in base al ruolo
+                    return user.Ruolo switch
+                    {
+                        "Admin" => RedirectToAction("AdminDashboard"),
+                        "Farmacista" => RedirectToAction("FarmacistaDashboard"),
+                        "Veterinario" => RedirectToAction("VeterinarioDashboard"),
+                        _ => RedirectToAction("Index", "Home"),
+                    };
+                }
+
+                // Se la combinazione username/password non è valida, aggiungi un errore al ModelState
+                ModelState.AddModelError(string.Empty, "Username o password errati.");
+            }
+
+            // Se il ModelState non è valido, ritorna alla vista di login con gli errori
+            return View(model);
+        }
+
+        [HttpPost("Logout")]
+        public async Task<IActionResult> Logout()
+        {
+            // Effettua il logout dell'utente
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            // Reindirizza alla homepage
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet("CreateAdmin")]
+        public IActionResult CreateAdmin()
+        {
+            return View("~/Views/User/CreateAdmin.cshtml");
+        }
+
+        [HttpPost("CreateAdmin")]
+        public async Task<IActionResult> CreateAdmin(CreateAdminViewModel model)
+        {
+            // Verifica che il ModelState sia valido
             if (ModelState.IsValid)
             {
                 try
                 {
-                    // Imposta la password e i valori di hash/salt
-                    if (!string.IsNullOrEmpty(model.Password))
+                    // Creazione di un nuovo oggetto Utente per l'admin
+                    var newAdmin = new Utente
                     {
-                        model.SetPassword(model.Password);
-                    }
+                        Username = model.Username,
+                        Ruolo = model.Ruolo
+                    };
 
-                    // Salva l'utente nel database
-                    await _utenteService.CreateUtenteAsync(model);
-                    _logger.LogInformation("User registered successfully: {Username}", model.Username);
-                    return RedirectToAction("Login");
+                    // Imposta la password dell'admin
+                    newAdmin.SetPassword(model.Password);
+
+                    // Salva il nuovo admin nel database
+                    await _utenteService.CreateUtenteAsync(newAdmin);
+
+                    // Reindirizza alla homepage dopo la creazione dell'admin
+                    return RedirectToAction("Index", "Home");
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    _logger.LogError(ex, "Error occurred while registering user: {Username}", model.Username);
-                    ModelState.AddModelError(string.Empty, "Errore durante la registrazione.");
+                    // Gestisce eventuali errori durante la creazione dell'admin
+                    ModelState.AddModelError("", "Errore durante la creazione dell'admin. Riprova.");
                 }
             }
-            else
-            {
-                foreach (var error in ModelState)
-                {
-                    foreach (var errorMessage in error.Value.Errors)
-                    {
-                        _logger.LogWarning("ModelState error for field {Field}: {Error}", error.Key, errorMessage.ErrorMessage);
-                    }
-                }
-                _logger.LogWarning("Model state is invalid for username: {Username}", model.Username);
-            }
 
+            // Se il ModelState non è valido, ritorna alla vista CreateAdmin con gli errori
             return View(model);
+        }
+
+        // Aggiungi le azioni delle dashboard
+        [HttpGet("AdminDashboard")]
+        public IActionResult AdminDashboard()
+        {
+            return View("~/Views/User/AdminDashboard.cshtml");
+        }
+
+        [HttpGet("FarmacistaDashboard")]
+        public IActionResult FarmacistaDashboard()
+        {
+            return View("~/Views/User/FarmacistaDashboard.cshtml");
+        }
+
+        [HttpGet("VeterinarioDashboard")]
+        public IActionResult VeterinarioDashboard()
+        {
+            return View("~/Views/User/VeterinarioDashboard.cshtml");
         }
     }
 }
