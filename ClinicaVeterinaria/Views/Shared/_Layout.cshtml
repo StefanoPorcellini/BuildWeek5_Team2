@@ -34,7 +34,8 @@
                                 </li>
                             }
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Logout">Logout</a>
+                                <a class="nav-link text-dark" href="javascript:void(0);" onclick="document.getElementById('logoutForm').submit();">Logout</a>
+                                <form id="logoutForm" asp-area="" asp-controller="User" asp-action="Logout" method="post" style="display:none;"></form>
                             </li>
                         }
                         else
@@ -43,6 +44,7 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Login">Login</a>
                             </li>
                         }
+
                     </ul>
                 </div>
                 <a class="Btn orange" asp-controller="Utente" asp-action="Register">

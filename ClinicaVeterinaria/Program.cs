@@ -1,7 +1,7 @@
-using ClinicaVeterinaria.Service.Intertface;
-using ClinicaVeterinaria.Intertface;
-using ClinicaVeterinaria.Services;
+using ClinicaVeterinaria.Interface;
 using ClinicaVeterinaria.Service;
+using ClinicaVeterinaria.Service.Intertface;
+using ClinicaVeterinaria.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,13 +14,8 @@ builder.Services.AddDbContext<VeterinaryClinicContext>(options =>
 builder.Services.AddScoped<IProprietarioService, ProprietarioService>();
 builder.Services.AddScoped<IAnimaleService, AnimaleService>();
 builder.Services.AddScoped<IVisitaService, VisitaService>();
-
-
-
-// Registrazione dei servizi UtenteService e AuthenticationService
 builder.Services.AddScoped<IUtenteService, UtenteService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
-
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -31,20 +26,14 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         opt.AccessDeniedPath = "/Home/AccessDenied";
     });
 
-builder.Services.AddScoped<IUtenteService, UtenteService>();
-
-
 // Configura il logging
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Logging.AddDebug();
 
-
 var app = builder.Build();
 
-
-
-// Configure the HTTP request pipeline.
+// Configura la pipeline di richieste HTTP
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -54,9 +43,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-
 app.UseAuthentication();
-
 app.UseAuthorization();
 
 app.MapControllerRoute(

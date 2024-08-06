@@ -1,12 +1,15 @@
-﻿using ClinicaVeterinaria.Models;
-using ClinicaVeterinaria.Service.Intertface;
+﻿using ClinicaVeterinaria.Interface;
+using ClinicaVeterinaria.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace ClinicaVeterinaria.Controllers
 {
+    [Route("User")]
     public class UtenteController : Controller
     {
         private readonly IUtenteService _utenteService;
@@ -18,53 +21,55 @@ namespace ClinicaVeterinaria.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
-        public IActionResult Register()
+        [HttpGet("Login")]
+        public IActionResult Login()
         {
-            bool isAdmin = User.Identity.IsAuthenticated && User.IsInRole("Admin");
-            ViewBag.IsAdmin = isAdmin;
-            return View();
+            return View("~/Views/User/Login.cshtml");
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Register(Utente model)
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
-            _logger.LogInformation("Register attempt for username: {Username}", model.Username);
+            _logger.LogInformation("Tentativo di login per l'utente: {Username}", model.Username);
 
             if (ModelState.IsValid)
             {
-                try
+                var user = await _utenteService.LoginAsync(model.Username, model.Password);
+                if (user != null)
                 {
-                    // Imposta la password e i valori di hash/salt
-                    if (!string.IsNullOrEmpty(model.Password))
-                    {
-                        model.SetPassword(model.Password);
-                    }
-
-                    // Salva l'utente nel database
-                    await _utenteService.CreateUtenteAsync(model);
-                    _logger.LogInformation("User registered successfully: {Username}", model.Username);
-                    return RedirectToAction("Login");
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Error occurred while registering user: {Username}", model.Username);
-                    ModelState.AddModelError(string.Empty, "Errore durante la registrazione.");
-                }
-            }
-            else
+                    // Logica per la gestione delle claims e l'autenticazione
+                    var claims = new List<Claim>
             {
-                foreach (var error in ModelState)
-                {
-                    foreach (var errorMessage in error.Value.Errors)
-                    {
-                        _logger.LogWarning("ModelState error for field {Field}: {Error}", error.Key, errorMessage.ErrorMessage);
-                    }
+                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.Role, user.Ruolo)
+            };
+
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var authProperties = new AuthenticationProperties { };
+
+                    await HttpContext.SignInAsync(
+                        CookieAuthenticationDefaults.AuthenticationScheme,
+                        new ClaimsPrincipal(claimsIdentity),
+                        authProperties);
+
+                    _logger.LogInformation("Login riuscito per l'utente: {Username}", model.Username);
+                    return RedirectToAction("Index", "Home");
                 }
-                _logger.LogWarning("Model state is invalid for username: {Username}", model.Username);
+
+                _logger.LogWarning("Tentativo di login fallito per l'utente: {Username}", model.Username);
+                ModelState.AddModelError(string.Empty, "Username o password errati.");
             }
 
             return View(model);
+        }
+        [HttpPost("Logout")]
+        public async Task<IActionResult> Logout()
+        {
+            // Effettua il logout dell'utente
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            // Reindirizza alla homepage
+            return RedirectToAction("Index", "Home");
         }
     }
 }
