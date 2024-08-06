@@ -1,10 +1,9 @@
-﻿using ClinicaVeterinaria.Interface;
-using ClinicaVeterinaria.Models;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
+﻿using ClinicaVeterinaria.Models;
+using ClinicaVeterinaria.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System.Security.Claims;
+using ClinicaVeterinaria.Intertface;
+using System;
 using System.Threading.Tasks;
 
 namespace ClinicaVeterinaria.Controllers
