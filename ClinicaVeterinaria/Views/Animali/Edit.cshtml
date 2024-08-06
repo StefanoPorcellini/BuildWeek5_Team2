@@ -79,6 +79,15 @@
         document.addEventListener('DOMContentLoaded', function () {
             const searchInput = document.getElementById('ProprietarioSearch');
             const select = document.getElementById('ProprietarioSelect');
+            const searchButton = document.getElementById('searchButton');
+
+            // Prevenire l'invio del form premendo "Enter" nella casella di ricerca
+            searchInput.addEventListener('keydown', function (event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    searchButton.click();
+                }
+            });
 
             if (!searchInput || !select) {
                 console.error('Elemento ProprietarioSearch o ProprietarioSelect non trovato nel DOM.');
@@ -117,8 +126,8 @@
                     });
 
                     // Pre-seleziona il proprietario corrente se già impostato
-                    const currentProprietarioId = @Model.ProprietarioId;
-                    if (currentProprietarioId) {
+                    const currentProprietarioId = '@Model.ProprietarioId?.ToString()';
+                    if (currentProprietarioId && currentProprietarioId !== "null") {
                         select.value = currentProprietarioId;
                     }
 
@@ -128,8 +137,8 @@
             });
 
             // Pre-seleziona il proprietario corrente al caricamento della pagina
-            const currentProprietarioId = @Model.ProprietarioId;
-            if (currentProprietarioId) {
+            const currentProprietarioId = '@Model.ProprietarioId?.ToString()';
+            if (currentProprietarioId && currentProprietarioId !== "null") {
                 select.value = currentProprietarioId;
             }
         });

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
-using ClinicaVeterinaria.Intertface;
+using ClinicaVeterinaria.Interface;
 using ClinicaVeterinaria.Service;
 
 namespace ClinicaVeterinaria.Services
