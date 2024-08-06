@@ -1,6 +1,10 @@
 ﻿using ClinicaVeterinaria.Models;
 using ClinicaVeterinaria.Interface;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
+using ClinicaVeterinaria.Interface;
 using ClinicaVeterinaria.Service;
 
 namespace ClinicaVeterinaria.Services
