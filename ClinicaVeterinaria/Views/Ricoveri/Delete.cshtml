@@ -11,38 +11,38 @@
     <h4>Ricovero</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.DataInizio)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DataInizio)
+        <dd class="col-sm-10">
+            @Model.DataInizio.ToString("dd/MM/yyyy")
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.DataFine)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DataFine)
+        <dd class="col-sm-10">
+            @(Model.DataFine.HasValue ? Model.DataFine.Value.ToString("dd/MM/yyyy") : "Non disponibile")
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Animale)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Animale.Id)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Animale.Nome) <!-- Visualizza il nome dell'animale invece dell'ID -->
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Rimborso)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Rimborso)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.CostoGiornaliero)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CostoGiornaliero)
+        <dd class="col-sm-10">
+            @Model.CostoGiornaliero.ToString("C")
         </dd>
     </dl>
-    
+
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |

@@ -189,8 +189,8 @@ namespace ClinicaVeterinaria.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DataInizio = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DataFine = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DataInizio = table.Column<DateTime>(type: "date", nullable: false),
+                    DataFine = table.Column<DateTime>(type: "date", nullable: true),
                     AnimaleId = table.Column<int>(type: "int", nullable: false),
                     Rimborso = table.Column<bool>(type: "bit", nullable: false),
                     CostoGiornaliero = table.Column<decimal>(type: "decimal(18,2)", nullable: false)

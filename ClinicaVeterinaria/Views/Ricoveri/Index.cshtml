@@ -41,10 +41,10 @@
         {
             <tr class="@(item.Dimesso ? "table-success" : "table-warning")">
                 <td>
-                    @Html.DisplayFor(_ => item.DataInizio)
+                    @item.DataInizio.ToString("dd/MM/yyyy")
                 </td>
                 <td>
-                    @Html.DisplayFor(_ => item.DataFine)
+                    @(item.DataFine.HasValue ? item.DataFine.Value.ToString("dd/MM/yyyy") : "N/A")
                 </td>
                 <td>
                     @Html.DisplayFor(_ => item.Animale.Nome)
@@ -53,10 +53,10 @@
                     @Html.DisplayFor(_ => item.Rimborso)
                 </td>
                 <td>
-                    @Html.DisplayFor(_ => item.CostoGiornaliero.ToString("C"))
+                    @item.CostoGiornaliero.ToString("C")
                 </td>
                 <td>
-                    @Html.DisplayFor(_ => item.PrezzoTotale.ToString("C"))
+                    @((item.PrezzoTotale ?? 0).ToString("C"))
                 </td>
                 <td>
                     @Html.DisplayFor(_ => item.Dimesso)

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClinicaVeterinaria.Migrations
 {
     [DbContext(typeof(VeterinaryClinicContext))]
-    partial class VeterinaryClinicContextModelSnapshot : ModelSnapshot
+    [Migration("20240806135116_UpdateRicoveriDates")]
+    partial class UpdateRicoveriDates
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -276,8 +279,8 @@ namespace ClinicaVeterinaria.Migrations
                         new
                         {
                             Id = 1,
-                            PasswordHash = new byte[] { 230, 225, 165, 212, 234, 118, 142, 162, 208, 100, 182, 230, 92, 46, 6, 155, 136, 254, 224, 53, 119, 212, 108, 180, 173, 129, 66, 20, 97, 116, 151, 210 },
-                            PasswordSalt = new byte[] { 226, 110, 175, 56, 87, 181, 33, 46, 215, 210, 166, 134, 230, 192, 110, 187 },
+                            PasswordHash = new byte[] { 172, 149, 5, 125, 170, 64, 222, 225, 216, 181, 157, 89, 0, 15, 125, 236, 63, 174, 26, 200, 165, 215, 255, 210, 10, 138, 170, 98, 158, 141, 112, 106 },
+                            PasswordSalt = new byte[] { 48, 157, 187, 77, 196, 95, 244, 77, 205, 231, 25, 160, 15, 206, 107, 67 },
                             Ruolo = "Admin",
                             Username = "admin"
                         });

@@ -14,13 +14,13 @@
             @Html.DisplayNameFor(model => model.DataInizio)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.DataInizio)
+            @Model.DataInizio.ToString("dd/MM/yyyy")
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.DataFine)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.DataFine)
+            @(Model.DataFine.HasValue ? Model.DataFine.Value.ToString("dd/MM/yyyy") : "In Corso")
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Animale)
@@ -38,7 +38,7 @@
             @Html.DisplayNameFor(model => model.CostoGiornaliero)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CostoGiornaliero)
+            @Model.CostoGiornaliero.ToString("C")
         </dd>
     </dl>
 </div>

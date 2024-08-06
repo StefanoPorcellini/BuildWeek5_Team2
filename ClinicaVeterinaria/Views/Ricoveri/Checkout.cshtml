@@ -8,7 +8,7 @@
 
 <div>
     <h4>Animale: @Model.Animale.Nome</h4>
-    <p><strong>Data Inizio:</strong> @Model.DataInizio.ToShortDateString()</p>
+    <p><strong>Data Inizio:</strong> @Model.DataInizio.ToString("dd/MM/yyyy")</p>
 
     <p><strong>Costo Giornaliero:</strong> @Model.CostoGiornaliero.ToString("C")</p>
     <p><strong>Costo Totale:</strong> <span id="CostoTotale">@ViewBag.CostoTotale</span></p>
@@ -17,7 +17,7 @@
         <input type="hidden" asp-for="Id" />
         <p>
             <strong>Data Fine:</strong>
-            <input type="datetime-local" id="DataFine" name="dataFine" value="" />
+            <input type="date" id="DataFine" name="dataFine" value="" />
         </p>
         <input type="hidden" id="HiddenDataFine" name="dataFine" />
         <button type="button" id="CalcolaCostoTotale" class="btn btn-secondary">Calcola Costo Totale</button>
@@ -39,7 +39,7 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        dataInizio: '@Model.DataInizio.ToString("o")',
+                        dataInizio: '@Model.DataInizio.ToString("yyyy-MM-dd")',
                         dataFine: dataFine,
                         costoGiornaliero: costoGiornaliero
                     })
