@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 public class AnimaliController : Controller
 {
-    private readonly IAnimaleService _animaleService;
     private readonly ILogger<AnimaliController> _logger;
-
+    private readonly IAnimaleService _animaleService;
     public AnimaliController(IAnimaleService animaleService, ILogger<AnimaliController> logger)
     {
         _animaleService = animaleService;
@@ -21,6 +20,8 @@ public class AnimaliController : Controller
         var animali = await _animaleService.GetAllAsync();
         return View(animali);
     }
+
+
 
     // GET: Animali/Details/5
     public async Task<IActionResult> Details(int? id)
@@ -60,7 +61,7 @@ public class AnimaliController : Controller
                 _logger.LogInformation("Modello valido. Inizio del processo di creazione per l'animale con Nome: {Nome}, Tipologia: {Tipologia}, ProprietarioId: {ProprietarioId}.", animale.Nome, animale.TipologiaAnimale, animale.ProprietarioId);
 
                 // Carica il proprietario associato tramite il servizio
-                animale.Proprietario = await _animaleService.GetProprietarioByIdAsync(animale.ProprietarioId);
+                animale.Proprietario = await _animaleService.GetProprietarioByIdAsync(animale.ProprietarioId.Value);
 
                 await _animaleService.CreateAsync(animale);
                 _logger.LogInformation("Animale creato con successo. Nome: {Nome}, ID: {Id}.", animale.Nome, animale.Id);

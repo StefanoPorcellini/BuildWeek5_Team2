@@ -2,16 +2,21 @@
     ViewData["Title"] = "Home Page";
 }
 
-<h1>Trova il tuo animale</h1>
+<h1>VetCare - Homepage</h1>
 
-<form method="post" asp-action="SearchAnimal">
-    <div class="form-group">
+
+<form method="post" asp-action="SearchAnimal" class="border rounded">
+
+    <div class="form-group m-2">
+        <h4>Trova animale</h4>
         <label for="chipNumber">Chip Number</label>
         <input type="text" class="form-control" id="chipNumber" name="chipNumber" required />
+    <button type="submit" class="btn btn-primary my-3"><i class="bi bi-search"></i> Search</button>
     </div>
-    <button type="submit" class="btn btn-primary">Search</button>
 </form>
 
+@* @await Html.PartialAsync("~/Views/Animali/Index.cshtml")
+ *@
 @if (ViewBag.Message != null)
 {
     <div class="alert alert-info">@ViewBag.Message</div>
