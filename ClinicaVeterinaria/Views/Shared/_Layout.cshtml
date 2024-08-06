@@ -1,4 +1,26 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var currentUser = (User.Identity?.IsAuthenticated ?? false) ? User.Identity.Name : "Anonimo";
+    var isAdmin = User.IsInRole("Admin");
+    var isFarmacista = User.IsInRole("Farmacista");
+    var isVeterinario = User.IsInRole("Veterinario");
+
+    string roleClass = "text-primary"; // Default class
+
+    if (isAdmin)
+    {
+        roleClass = "text-danger";
+    }
+    else if (isFarmacista)
+    {
+        roleClass = "text-success";
+    }
+    else if (isVeterinario)
+    {
+        roleClass = "text-primary";
+    }
+
+}
+    <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -24,13 +46,15 @@
                 </div>
                     @if (User.Identity.IsAuthenticated)
                     {
-                       <form asp-area="" asp-controller="User" asp-action="Logout" method="post" 
-                        asp-antiforgery="true" class="d-flex gap-3 align-items-center">
+                    <form asp-area="" asp-controller="User" asp-action="Logout" method="post" 
+                    asp-antiforgery="true" class="d-flex gap-3 align-items-center">
 
-                        @if (User.IsInRole("Admin"))
+                        <span class="@roleClass ">
+                            <i class="bi bi-person-circle"></i> @currentUser</span>
+                        @if (isAdmin)
                         {
                             <a class="button text-decoration-none" asp-area=""  asp-antifo="" 
-                            asp-controller="User" asp-action="CreateAdmin">Crea Admin</a>
+                            asp-controller="User" asp-action="CreateAdmin">Crea nuovo utente</a>
                         }
                         <button class="Btn red" type="submit">
                             <div class="sign">
