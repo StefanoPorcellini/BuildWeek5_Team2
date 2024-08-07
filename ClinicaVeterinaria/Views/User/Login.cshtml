@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Login";
 }
-
+@*
 <h2>@ViewData["Title"]</h2>
 
 <div class="row">
@@ -25,7 +25,24 @@
         </form>
     </div>
 </div>
+ *@
 
+ <div class="container mt-5">
+    <form asp-action="Login" method="post">
+        <div class="title">@ViewData["Title"]</div>
+        <div class="input-box underline">
+            <input type="text" placeholder="Inserisci il tuo Username" required asp-for="Username" class="input">
+            <div class="underline"></div>
+        </div>
+    <div class="input-box">
+            <input type="password" placeholder="Inserisci la tua Password" required asp-for="Password" class="input">
+        <div class="underline"></div>
+    </div>
+    <div class="input-box Btn button">
+        <input type="submit" name="" value="Login">
+    </div>
+</form>
+ </div>
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
