@@ -13,5 +13,6 @@ namespace ClinicaVeterinaria.Interface
         Task CreateAsync(Ricovero ricovero);
         Task UpdateAsync(Ricovero ricovero);
         Task DeleteAsync(int id);
+        Task<List<Ricovero>> GetRicoveriAttiviAsync();
     }
 }
