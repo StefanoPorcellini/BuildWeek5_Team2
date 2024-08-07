@@ -75,6 +75,22 @@
     </div>
 </form>
 
+@*
+    Questo script JavaScript gestisce il comportamento dinamico della sezione del form dedicata alla creazione di una nuova casa farmaceutica.
+
+    Funzionalità principali:
+    - La funzione `toggleNuovaCasaSection()` controlla se una casa farmaceutica è stata selezionata dal menu a tendina. Se è stata selezionata, 
+      la sezione per la creazione di una nuova casa farmaceutica viene nascosta. Se non è stata selezionata, la sezione viene mostrata.
+
+    - L'evento `change` è collegato al menu a tendina (`#casaFarmaceuticaSelect`). Ogni volta che l'utente cambia la selezione, 
+      viene eseguita la funzione `toggleNuovaCasaSection()` per determinare se mostrare o nascondere la sezione per la nuova casa farmaceutica.
+
+    - Quando la pagina viene caricata, `toggleNuovaCasaSection()` viene chiamata per impostare correttamente la visibilità della sezione in base allo stato iniziale del menu a tendina.
+
+    In sintesi, questo script assicura che l'utente debba compilare i campi della nuova casa farmaceutica solo se non ha selezionato una casa farmaceutica esistente dal menu a tendina.
+*@
+
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 

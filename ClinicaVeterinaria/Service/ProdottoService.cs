@@ -8,21 +8,23 @@ namespace ClinicaVeterinaria.Services
     public class ProdottoService : IProdottoService
     {
         private readonly VeterinaryClinicContext _context;
-        private readonly ILogger<ProdottoService> _logger;
 
-        public ProdottoService(VeterinaryClinicContext context, ILogger<ProdottoService> logger)
+        // Costruttore che inietta il contesto del database
+        public ProdottoService(VeterinaryClinicContext context)
         {
             _context = context;
-            _logger = logger;
         }
 
+        // Metodo per ottenere tutte le case farmaceutiche dal database
         public async Task<IEnumerable<CasaFarmaceutica>> GetCaseFarmaceuticheAsync()
         {
-            _logger.LogInformation("Caricamento delle case farmaceutiche dal database.");
             return await _context.CaseFarmaceutiche.ToListAsync();
         }
+
+        // Metodo per aggiungere un nuovo prodotto nel database
         public async Task AddProdottoAsync(ProdottoViewModel prodottoViewModel)
         {
+            // Creazione di un oggetto Prodotto dal ViewModel
             var prodotto = new Prodotto
             {
                 Nome = prodottoViewModel.Nome,
@@ -33,81 +35,71 @@ namespace ClinicaVeterinaria.Services
                 CasaFarmaceuticaId = prodottoViewModel.SelectedCasaFarmaceuticaId.Value
             };
 
+            // Aggiunta del prodotto al contesto e salvataggio nel database
             _context.Prodotti.Add(prodotto);
             await _context.SaveChangesAsync();
-            _logger.LogInformation("Prodotto aggiunto con successo.");
         }
 
+        // Metodo per aggiungere una nuova casa farmaceutica nel database
         public async Task<int> AddCasaFarmaceuticaAsync(CasaFarmaceutica casaFarmaceutica)
         {
             _context.CaseFarmaceutiche.Add(casaFarmaceutica);
             await _context.SaveChangesAsync();
-            _logger.LogInformation($"Casa farmaceutica '{casaFarmaceutica.Nome}' aggiunta con successo.");
-            return casaFarmaceutica.Id;
+            return casaFarmaceutica.Id; // Restituisce l'ID della nuova casa farmaceutica
         }
 
+        // Metodo per ottenere tutti i prodotti dal database, inclusa la casa farmaceutica associata
         public async Task<IEnumerable<Prodotto>> GetAllProdottiAsync()
         {
-            _logger.LogInformation("Caricamento di tutti i prodotti dal database.");
             return await _context.Prodotti.Include(p => p.CasaFarmaceutica).ToListAsync();
         }
 
+        // Metodo per ottenere un prodotto specifico dal database in base al suo ID
         public async Task<Prodotto> GetProdottoByIdAsync(int id)
         {
-            _logger.LogInformation($"Ricerca del prodotto con ID {id}.");
             return await _context.Prodotti.Include(p => p.CasaFarmaceutica)
                                           .FirstOrDefaultAsync(p => p.Id == id);
         }
 
+        // Metodo per aggiornare un prodotto esistente nel database
         public async Task UpdateProdottoAsync(Prodotto prodotto)
         {
-            _logger.LogInformation($"Aggiornamento del prodotto con ID {prodotto.Id}.");
             _context.Prodotti.Update(prodotto);
             await _context.SaveChangesAsync();
         }
 
+        // Metodo per cancellare un prodotto dal database in base al suo ID
         public async Task DeleteProdottoAsync(int id)
         {
-            _logger.LogInformation($"Cancellazione del prodotto con ID {id}.");
             var prodotto = await _context.Prodotti.FindAsync(id);
             if (prodotto != null)
             {
                 _context.Prodotti.Remove(prodotto);
                 await _context.SaveChangesAsync();
-                _logger.LogInformation($"Prodotto con ID {id} cancellato con successo.");
-            }
-            else
-            {
-                _logger.LogWarning($"Prodotto con ID {id} non trovato.");
             }
         }
 
+        // Metodo per ottenere una casa farmaceutica specifica dal database in base al suo ID
         public async Task<CasaFarmaceutica> GetCasaFarmaceuticaByIdAsync(int id)
         {
-            _logger.LogInformation($"Ricerca della casa farmaceutica con ID {id}.");
             return await _context.CaseFarmaceutiche.FindAsync(id);
         }
 
+        // Metodo per aggiornare una casa farmaceutica esistente nel database
         public async Task UpdateCasaFarmaceuticaAsync(CasaFarmaceutica casaFarmaceutica)
         {
-            _logger.LogInformation($"Aggiornamento della casa farmaceutica con ID {casaFarmaceutica.Id}.");
             _context.CaseFarmaceutiche.Update(casaFarmaceutica);
             await _context.SaveChangesAsync();
         }
 
+        // Metodo per cancellare una casa farmaceutica dal database in base al suo ID
         public async Task DeleteCasaFarmaceuticaAsync(int id)
         {
-            _logger.LogInformation($"Cancellazione della casa farmaceutica con ID {id}.");
             var casaFarmaceutica = await _context.CaseFarmaceutiche.FindAsync(id);
             if (casaFarmaceutica != null)
             {
                 _context.CaseFarmaceutiche.Remove(casaFarmaceutica);
                 await _context.SaveChangesAsync();
-                _logger.LogInformation($"Casa farmaceutica con ID {id} cancellata con successo.");
-            }
-            else
-            {
-                _logger.LogWarning($"Casa farmaceutica con ID {id} non trovata.");
             }
         }
     }

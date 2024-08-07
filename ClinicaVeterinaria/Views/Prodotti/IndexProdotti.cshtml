@@ -1,32 +1,36 @@
 ﻿@model IEnumerable<ClinicaVeterinaria.Models.Prodotto>
 
-<h2>Lista Prodotti</h2>
+@{
+    ViewData["Title"] = "Lista Prodotti";
+}
 
-<table class="table">
+<h2>@ViewData["Title"]</h2>
+
+<table class="table table-striped">
     <thead>
         <tr>
             <th>Nome</th>
             <th>Prezzo</th>
+            <th>Tipologia</th>
             <th>Numero Armadietto</th>
             <th>Numero Cassetto</th>
-            <th>Tipologia</th>
             <th>Casa Farmaceutica</th>
             <th>Azioni</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var prodotto in Model)
+        @foreach (var item in Model)
         {
             <tr>
-                <td>@prodotto.Nome</td>
-                <td>@prodotto.Prezzo</td>
-                <td>@prodotto.NumeroArmadietto</td>
-                <td>@prodotto.NumeroCassetto</td>
-                <td>@prodotto.Tipologia</td>
-                <td>@prodotto.CasaFarmaceutica.Nome</td>
+                <td>@item.Nome</td>
+                <td>@item.Prezzo</td>
+                <td>@item.Tipologia</td>
+                <td>@item.NumeroArmadietto</td>
+                <td>@item.NumeroCassetto</td>
+                <td>@item.CasaFarmaceutica.Nome</td>
                 <td>
-                    <a asp-action="EditProdotto" asp-route-id="@prodotto.Id" class="btn btn-warning">Modifica</a>
-                    <form asp-action="DeleteProdotto" asp-route-id="@prodotto.Id" method="post" style="display:inline;">
+                    <a asp-action="EditProdotto" asp-route-id="@item.Id" class="btn btn-warning">Modifica</a>
+                    <form asp-action="DeleteProdotto" asp-route-id="@item.Id" method="post" style="display:inline;">
                         <button type="submit" class="btn btn-danger">Elimina</button>
                     </form>
                 </td>

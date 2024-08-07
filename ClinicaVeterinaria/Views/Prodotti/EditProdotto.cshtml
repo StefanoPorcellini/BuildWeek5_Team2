@@ -1,0 +1,60 @@
+﻿@model ClinicaVeterinaria.Models.Prodotto
+
+@{
+    ViewData["Title"] = "Modifica Prodotto";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="EditProdotto" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label asp-for="Nome" class="control-label">Nome del Prodotto</label>
+        <input asp-for="Nome" class="form-control" />
+        <span asp-validation-for="Nome" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Prezzo" class="control-label">Prezzo</label>
+        <input asp-for="Prezzo" class="form-control" />
+        <span asp-validation-for="Prezzo" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="NumeroArmadietto" class="control-label">Numero Armadietto</label>
+        <input asp-for="NumeroArmadietto" class="form-control" />
+        <span asp-validation-for="NumeroArmadietto" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="NumeroCassetto" class="control-label">Numero Cassetto</label>
+        <input asp-for="NumeroCassetto" class="form-control" />
+        <span asp-validation-for="NumeroCassetto" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Tipologia" class="control-label">Tipologia</label>
+        <select asp-for="Tipologia" class="form-control">
+            <option value="Medicinale">Medicinale</option>
+            <option value="Alimentare">Alimentare</option>
+        </select>
+        <span asp-validation-for="Tipologia" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Seleziona Casa Farmaceutica</label>
+        <select name="CasaFarmaceuticaId" class="form-control">
+            <option value="">-- Seleziona una casa farmaceutica --</option>
+            @foreach (var casa in ViewBag.CaseFarmaceutiche)
+            {
+                var selectedAttribute = casa.Id == Model.CasaFarmaceuticaId ? "selected=\"selected\"" : "";
+                @Html.Raw($"<option value=\"{casa.Id}\" {selectedAttribute}>{casa.Nome}</option>")
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Salva Modifiche" class="btn btn-primary" />
+    </div>
+</form>

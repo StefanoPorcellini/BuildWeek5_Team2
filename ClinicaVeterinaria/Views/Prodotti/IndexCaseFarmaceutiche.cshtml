@@ -1,8 +1,12 @@
 ﻿@model IEnumerable<ClinicaVeterinaria.Models.CasaFarmaceutica>
 
-<h2>Lista Case Farmaceutiche</h2>
+@{
+    ViewData["Title"] = "Lista Case Farmaceutiche";
+}
 
-<table class="table">
+<h2>@ViewData["Title"]</h2>
+
+<table class="table table-striped">
     <thead>
         <tr>
             <th>Nome</th>
@@ -12,15 +16,15 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var casa in Model)
+        @foreach (var item in Model)
         {
             <tr>
-                <td>@casa.Nome</td>
-                <td>@casa.Indirizzo</td>
-                <td>@casa.Email</td>
+                <td>@item.Nome</td>
+                <td>@item.Indirizzo</td>
+                <td>@item.Email</td>
                 <td>
-                    <a asp-action="EditCasaFarmaceutica" asp-route-id="@casa.Id" class="btn btn-warning">Modifica</a>
-                    <form asp-action="DeleteCasaFarmaceutica" asp-route-id="@casa.Id" method="post" style="display:inline;">
+                    <a asp-action="EditCasaFarmaceutica" asp-route-id="@item.Id" class="btn btn-warning">Modifica</a>
+                    <form asp-action="DeleteCasaFarmaceutica" asp-route-id="@item.Id" method="post" style="display:inline;">
                         <button type="submit" class="btn btn-danger">Elimina</button>
                     </form>
                 </td>
