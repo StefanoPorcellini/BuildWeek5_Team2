@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Threading.Tasks;
+
 
 namespace ClinicaVeterinaria.Controllers
 {
@@ -48,8 +50,14 @@ namespace ClinicaVeterinaria.Controllers
                         new ClaimsPrincipal(claimsIdentity),
                         authProperties);
 
-                    // Reindirizza l'utente alla homepage
-                    return RedirectToAction("Index", "Home");
+                    // Reindirizza l'utente in base al ruolo
+                    return user.Ruolo switch
+                    {
+                        "Admin" => RedirectToAction("AdminDashboard"),
+                        "Farmacista" => RedirectToAction("FarmacistaDashboard"),
+                        "Veterinario" => RedirectToAction("VeterinarioDashboard"),
+                        _ => RedirectToAction("Index", "Home"),
+                    };
                 }
 
                 // Se la combinazione username/password non è valida, aggiungi un errore al ModelState
@@ -109,6 +117,25 @@ namespace ClinicaVeterinaria.Controllers
 
             // Se il ModelState non è valido, ritorna alla vista CreateAdmin con gli errori
             return View(model);
+        }
+
+        // Aggiungi le azioni delle dashboard
+        [HttpGet("AdminDashboard")]
+        public IActionResult AdminDashboard()
+        {
+            return View("~/Views/User/AdminDashboard.cshtml");
+        }
+
+        [HttpGet("FarmacistaDashboard")]
+        public IActionResult FarmacistaDashboard()
+        {
+            return View("~/Views/User/FarmacistaDashboard.cshtml");
+        }
+
+        [HttpGet("VeterinarioDashboard")]
+        public IActionResult VeterinarioDashboard()
+        {
+            return View("~/Views/User/VeterinarioDashboard.cshtml");
         }
     }
 }

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClinicaVeterinaria.Migrations
 {
     [DbContext(typeof(VeterinaryClinicContext))]
-    [Migration("20240805140254_Update")]
-    partial class Update
+    [Migration("20240806135614_UpdateRicoveriDatesManual")]
+    partial class UpdateRicoveriDatesManual
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,13 +44,12 @@ namespace ClinicaVeterinaria.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NumeroChip")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PossiedeChip")
                         .HasColumnType("bit");
 
-                    b.Property<int>("ProprietarioId")
+                    b.Property<int?>("ProprietarioId")
                         .HasColumnType("int");
 
                     b.Property<bool>("Randagio")
@@ -231,6 +230,12 @@ namespace ClinicaVeterinaria.Migrations
                     b.Property<DateTime>("DataInizio")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("Dimesso")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal?>("PrezzoTotale")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<bool>("Rimborso")
                         .HasColumnType("bit");
 
@@ -269,6 +274,16 @@ namespace ClinicaVeterinaria.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Utenti");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            PasswordHash = new byte[] { 230, 225, 165, 212, 234, 118, 142, 162, 208, 100, 182, 230, 92, 46, 6, 155, 136, 254, 224, 53, 119, 212, 108, 180, 173, 129, 66, 20, 97, 116, 151, 210 },
+                            PasswordSalt = new byte[] { 226, 110, 175, 56, 87, 181, 33, 46, 215, 210, 166, 134, 230, 192, 110, 187 },
+                            Ruolo = "Admin",
+                            Username = "admin"
+                        });
                 });
 
             modelBuilder.Entity("ClinicaVeterinaria.Models.Vendita", b =>
@@ -364,9 +379,7 @@ namespace ClinicaVeterinaria.Migrations
                 {
                     b.HasOne("ClinicaVeterinaria.Models.Proprietario", "Proprietario")
                         .WithMany("Animali")
-                        .HasForeignKey("ProprietarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProprietarioId");
 
                     b.Navigation("Proprietario");
                 });

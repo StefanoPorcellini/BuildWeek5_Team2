@@ -15,18 +15,42 @@ namespace ClinicaVeterinaria.Service
 
         public async Task<IEnumerable<Visita>> GetAllByAnimaleIdAsync(int animaleId)
         {
-            return await _context.Visite
+            var visite = await _context.Visite
                 .Where(v => v.AnimaleId == animaleId)
                 .OrderByDescending(v => v.DataVisita)
-                .Include(v => v.Animale)
                 .ToListAsync();
+
+            var animali = await _context.Animali
+                .Where(a => visite.Select(v => v.AnimaleId).Contains(a.Id))
+                .ToDictionaryAsync(a => a.Id, a => a.Nome ?? "Senza Nome");
+
+            foreach (var visita in visite)
+            {
+                visita.Animale = new Animale { Id = visita.AnimaleId, Nome = animali[visita.AnimaleId] };
+            }
+
+            return visite;
         }
 
         public async Task<Visita> GetByIdAsync(int id)
         {
-            return await _context.Visite
-                .Include(v => v.Animale)
+            var visita = await _context.Visite
                 .FirstOrDefaultAsync(v => v.Id == id);
+
+            if (visita != null)
+            {
+                var animale = await _context.Animali
+                    .Where(a => a.Id == visita.AnimaleId)
+                    .Select(a => new { a.Id, Nome = a.Nome ?? "Senza Nome" })
+                    .FirstOrDefaultAsync();
+
+                if (animale != null)
+                {
+                    visita.Animale = new Animale { Id = animale.Id, Nome = animale.Nome };
+                }
+            }
+
+            return visita;
         }
 
         public async Task<Visita> CreateAsync(Visita visita)
@@ -43,20 +67,10 @@ namespace ClinicaVeterinaria.Service
             return visita;
         }
 
-        public async Task DeleteAsync(int id)
-        {
-            var visita = await _context.Visite.FindAsync(id);
-            if (visita != null)
-            {
-                _context.Visite.Remove(visita);
-                await _context.SaveChangesAsync();
-            }
-        }
-
         public bool VisitaExists(int id)
         {
             return _context.Visite.Any(e => e.Id == id);
         }
     }
-
 }
+

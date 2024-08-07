@@ -8,7 +8,6 @@ namespace ClinicaVeterinaria.Service.Intertface
         Task<Visita> GetByIdAsync(int id);
         Task<Visita> CreateAsync(Visita visita);
         Task<Visita> UpdateAsync(Visita visita);
-        Task DeleteAsync(int id);
         bool VisitaExists(int id);
     }
 
