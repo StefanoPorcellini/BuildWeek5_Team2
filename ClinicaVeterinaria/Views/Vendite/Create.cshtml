@@ -1,0 +1,114 @@
+﻿@model ClinicaVeterinaria.Models.Vendita
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Vendita</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+            <div class="form-group">
+                <label for="searchCliente" class="control-label">Search Cliente</label>
+                <div class="input-group">
+                    <input type="text" id="searchCliente" class="form-control" placeholder="Inserisci nome o codice fiscale" autocomplete="off" />
+                </div>
+                <div class="position-relative">
+                    <select id="selectCliente" class="form-control mt-2 position-absolute w-100" size="4" style="display: none; z-index: 1000;"></select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CodiceFiscaleCliente" class="control-label">Codice Fiscale Cliente</label>
+                <input asp-for="CodiceFiscaleCliente" class="form-control" readonly />
+                <span asp-validation-for="CodiceFiscaleCliente" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DataVendita" class="control-label">Data Vendita</label>
+                <input asp-for="DataVendita" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                <span asp-validation-for="DataVendita" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ProdottoId" class="control-label">Prodotto</label>
+                <select asp-for="ProdottoId" class="form-control" asp-items="ViewBag.ProdottoId"></select>
+                <span asp-validation-for="ProdottoId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="NumeroRicetta" class="control-label">Numero Ricetta</label>
+                <input asp-for="NumeroRicetta" class="form-control" />
+                <span asp-validation-for="NumeroRicetta" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Quantita" class="control-label">Quantità</label>
+                <input asp-for="Quantita" class="form-control" />
+                <span asp-validation-for="Quantita" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        const searchInput = document.getElementById('searchCliente');
+        const selectCliente = document.getElementById('selectCliente');
+
+        searchInput.addEventListener('input', async function () {
+            const searchTerm = this.value;
+
+            if (searchTerm.length >= 3) {
+                try {
+                    const response = await fetch(`/Clienti/Search?term=${encodeURIComponent(searchTerm)}`);
+                    const risultati = await response.json();
+
+                    selectCliente.innerHTML = '';
+
+                    if (risultati.length > 0) {
+                        risultati.forEach(risultato => {
+                            const option = document.createElement('option');
+                            option.value = risultato.codiceFiscale;
+                            option.text = `${risultato.nome} ${risultato.cognome} - ${risultato.codiceFiscale}`;
+                            selectCliente.appendChild(option);
+                        });
+
+                        selectCliente.style.display = 'block';
+                    } else {
+                        selectCliente.style.display = 'none';
+                    }
+                } catch (error) {
+                    console.error('Errore nella ricerca:', error);
+                }
+            } else {
+                selectCliente.style.display = 'none';
+            }
+        });
+
+        selectCliente.addEventListener('change', function () {
+            const selectedCodiceFiscale = this.value;
+            searchInput.value = this.options[this.selectedIndex].text;
+            document.getElementById('CodiceFiscaleCliente').value = selectedCodiceFiscale;
+            selectCliente.style.display = 'none';
+        });
+    </script>
+}
+

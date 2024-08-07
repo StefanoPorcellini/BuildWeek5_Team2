@@ -15,7 +15,7 @@ public class ContabilizzazioneController : Controller
         _ricoveroService = ricoveroService;
     }
 
-    public async Task<IActionResult> ReportRicoveriAttivi()
+    public async Task<IActionResult> Index()
     {
         var ricoveriAttivi = await _ricoveroService.GetRicoveriAttiviAsync();
         return View(ricoveriAttivi);
@@ -28,4 +28,5 @@ public class ContabilizzazioneController : Controller
         var ricoveriAttivi = await _ricoveroService.GetRicoveriAttiviAsync();
         return PartialView("_RicoveriAttiviPartial", ricoveriAttivi);
     }
+
 }
