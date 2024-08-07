@@ -4,7 +4,7 @@ namespace ClinicaVeterinaria.Models.ViewModels
 {
     public class EditCasaFarmaceuticaViewModel
     {
-        public int Id { get; set; } // ID della casa farmaceutica
+        public int Id { get; set; }
 
         [Required(ErrorMessage = "Il nome della casa farmaceutica è obbligatorio.")]
         public string Nome { get; set; }

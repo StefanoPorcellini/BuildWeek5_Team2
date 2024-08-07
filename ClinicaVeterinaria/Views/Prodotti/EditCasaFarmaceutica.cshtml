@@ -1,4 +1,4 @@
-﻿@model ClinicaVeterinaria.Models.CasaFarmaceutica
+﻿@model ClinicaVeterinaria.Models.ViewModels.EditCasaFarmaceuticaViewModel
 
 @{
     ViewData["Title"] = "Modifica Casa Farmaceutica";
@@ -31,3 +31,7 @@
         <input type="submit" value="Salva Modifiche" class="btn btn-primary" />
     </div>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

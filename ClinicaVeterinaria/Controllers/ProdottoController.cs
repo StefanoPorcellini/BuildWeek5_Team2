@@ -3,6 +3,7 @@ using ClinicaVeterinaria.Models;
 using ClinicaVeterinaria.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace ClinicaVeterinaria.Controllers
 {
@@ -10,11 +11,13 @@ namespace ClinicaVeterinaria.Controllers
     public class ProdottoController : Controller
     {
         private readonly IProdottoService _prodottoService;
+        private readonly ILogger<ProdottoController> _logger; // Aggiungi il logger
 
         // Costruttore che inietta i servizi necessari
-        public ProdottoController(IProdottoService prodottoService)
+        public ProdottoController(IProdottoService prodottoService, ILogger<ProdottoController> logger)
         {
             _prodottoService = prodottoService;
+            _logger = logger; // Inizializza il logger
         }
 
         // Metodo per gestire la richiesta GET per la creazione di un nuovo prodotto
@@ -117,6 +120,9 @@ namespace ClinicaVeterinaria.Controllers
                 return NotFound();
             }
 
+            // Assicurati che ViewBag.CaseFarmaceutiche sia popolato
+            ViewBag.CaseFarmaceutiche = await _prodottoService.GetCaseFarmaceuticheAsync();
+
             var viewModel = new EditProdottoViewModel
             {
                 Id = prodotto.Id,
@@ -126,7 +132,7 @@ namespace ClinicaVeterinaria.Controllers
                 NumeroCassetto = prodotto.NumeroCassetto,
                 Tipologia = prodotto.Tipologia,
                 CasaFarmaceuticaId = prodotto.CasaFarmaceuticaId,
-                CaseFarmaceutiche = await _prodottoService.GetCaseFarmaceuticheAsync()
+                CaseFarmaceutiche = ViewBag.CaseFarmaceutiche // Inizializza il ViewBag qui
             };
 
             return View("~/Views/Prodotti/EditProdotto.cshtml", viewModel);
@@ -135,36 +141,73 @@ namespace ClinicaVeterinaria.Controllers
         [HttpPost]
         public async Task<IActionResult> EditProdotto(EditProdottoViewModel viewModel)
         {
+            _logger.LogInformation("Inizio del metodo POST per la modifica del prodotto con ID {Id}", viewModel.Id);
+
+            // Rimuovi eventuali campi non necessari dal ModelState
+            ModelState.Remove("CaseFarmaceutiche");
+
             if (ModelState.IsValid)
             {
-                var prodotto = new Prodotto
-                {
-                    Id = viewModel.Id,
-                    Nome = viewModel.Nome,
-                    Prezzo = viewModel.Prezzo,
-                    NumeroArmadietto = viewModel.NumeroArmadietto,
-                    NumeroCassetto = viewModel.NumeroCassetto,
-                    Tipologia = viewModel.Tipologia,
-                    CasaFarmaceuticaId = viewModel.CasaFarmaceuticaId
-                };
+                _logger.LogInformation("ModelState valido per la modifica del prodotto con ID {Id}", viewModel.Id);
 
-                await _prodottoService.UpdateProdottoAsync(prodotto);
+                var prodotto = await _prodottoService.GetProdottoByIdAsync(viewModel.Id);
+
+                if (prodotto == null)
+                {
+                    _logger.LogWarning("Prodotto con ID {Id} non trovato", viewModel.Id);
+                    return NotFound();
+                }
+
+                _logger.LogInformation("Prodotto con ID {Id} trovato", viewModel.Id);
+
+                // Aggiorna i campi del prodotto
+                prodotto.Nome = viewModel.Nome;
+                prodotto.Prezzo = viewModel.Prezzo;
+                prodotto.NumeroArmadietto = viewModel.NumeroArmadietto;
+                prodotto.NumeroCassetto = viewModel.NumeroCassetto;
+                prodotto.Tipologia = viewModel.Tipologia;
+                prodotto.CasaFarmaceuticaId = viewModel.CasaFarmaceuticaId;
+
+                try
+                {
+                    _logger.LogInformation("Tentativo di aggiornamento del prodotto con ID {Id}", viewModel.Id);
+                    await _prodottoService.UpdateProdottoAsync(prodotto);
+                    _logger.LogInformation("Prodotto con ID {Id} aggiornato con successo", viewModel.Id);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Errore durante l'aggiornamento del prodotto con ID {Id}", viewModel.Id);
+                    ModelState.AddModelError("", "Errore durante l'aggiornamento del prodotto: " + ex.Message);
+                    ViewBag.CaseFarmaceutiche = await _prodottoService.GetCaseFarmaceuticheAsync();
+                    return View("~/Views/Prodotti/EditProdotto.cshtml", viewModel);
+                }
+
                 return RedirectToAction("IndexProdotti");
             }
+            else
+            {
+                _logger.LogWarning("ModelState non valido per la modifica del prodotto con ID {Id}", viewModel.Id);
+            }
 
-            viewModel.CaseFarmaceutiche = await _prodottoService.GetCaseFarmaceuticheAsync();
+            // Se il ModelState non è valido, ripopola ViewBag.CaseFarmaceutiche e torna alla vista di modifica
+            ViewBag.CaseFarmaceutiche = await _prodottoService.GetCaseFarmaceuticheAsync();
             return View("~/Views/Prodotti/EditProdotto.cshtml", viewModel);
         }
 
         [HttpGet]
         public async Task<IActionResult> EditCasaFarmaceutica(int id)
         {
+            _logger.LogInformation("Richiesta GET per la modifica della casa farmaceutica con ID {Id}", id);
+
+            // Recupera la casa farmaceutica dal database
             var casaFarmaceutica = await _prodottoService.GetCasaFarmaceuticaByIdAsync(id);
             if (casaFarmaceutica == null)
             {
+                _logger.LogWarning("Casa farmaceutica con ID {Id} non trovata", id);
                 return NotFound();
             }
 
+            // Popola il ViewModel con i dati della casa farmaceutica esistente
             var viewModel = new EditCasaFarmaceuticaViewModel
             {
                 Id = casaFarmaceutica.Id,
@@ -173,26 +216,57 @@ namespace ClinicaVeterinaria.Controllers
                 Email = casaFarmaceutica.Email
             };
 
+            _logger.LogInformation("Vista di modifica della casa farmaceutica con ID {Id} caricata con successo", id);
+
             return View("~/Views/Prodotti/EditCasaFarmaceutica.cshtml", viewModel);
         }
 
         [HttpPost]
         public async Task<IActionResult> EditCasaFarmaceutica(EditCasaFarmaceuticaViewModel viewModel)
         {
+            _logger.LogInformation("Inizio del metodo POST per la modifica della casa farmaceutica con ID {Id}", viewModel.Id);
+
             if (ModelState.IsValid)
             {
-                var casaFarmaceutica = new CasaFarmaceutica
-                {
-                    Id = viewModel.Id,
-                    Nome = viewModel.Nome,
-                    Indirizzo = viewModel.Indirizzo,
-                    Email = viewModel.Email
-                };
+                _logger.LogInformation("ModelState valido per la modifica della casa farmaceutica con ID {Id}", viewModel.Id);
 
-                await _prodottoService.UpdateCasaFarmaceuticaAsync(casaFarmaceutica);
-                return RedirectToAction("IndexCaseFarmaceutiche");
+                // Recupera la casa farmaceutica esistente dal database
+                var casaFarmaceutica = await _prodottoService.GetCasaFarmaceuticaByIdAsync(viewModel.Id);
+                if (casaFarmaceutica == null)
+                {
+                    _logger.LogWarning("Casa farmaceutica con ID {Id} non trovata", viewModel.Id);
+                    return NotFound();
+                }
+
+                // Aggiorna i campi della casa farmaceutica
+                casaFarmaceutica.Nome = viewModel.Nome;
+                casaFarmaceutica.Indirizzo = viewModel.Indirizzo;
+                casaFarmaceutica.Email = viewModel.Email;
+
+                try
+                {
+                    _logger.LogInformation("Tentativo di aggiornamento della casa farmaceutica con ID {Id}", viewModel.Id);
+
+                    // Salva le modifiche nel database
+                    await _prodottoService.UpdateCasaFarmaceuticaAsync(casaFarmaceutica);
+
+                    _logger.LogInformation("Casa farmaceutica con ID {Id} aggiornata con successo", viewModel.Id);
+
+                    return RedirectToAction("IndexCaseFarmaceutiche");
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Errore durante l'aggiornamento della casa farmaceutica con ID {Id}", viewModel.Id);
+                    ModelState.AddModelError("", "Errore durante l'aggiornamento della casa farmaceutica: " + ex.Message);
+                    return View("~/Views/Prodotti/EditCasaFarmaceutica.cshtml", viewModel);
+                }
+            }
+            else
+            {
+                _logger.LogWarning("ModelState non valido per la modifica della casa farmaceutica con ID {Id}", viewModel.Id);
             }
 
+            // Se il ModelState non è valido, torna alla vista di modifica
             return View("~/Views/Prodotti/EditCasaFarmaceutica.cshtml", viewModel);
         }
     }

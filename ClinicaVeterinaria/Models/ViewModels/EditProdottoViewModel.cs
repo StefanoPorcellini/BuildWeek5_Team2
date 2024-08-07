@@ -23,10 +23,9 @@ namespace ClinicaVeterinaria.Models.ViewModels
         [Required(ErrorMessage = "La tipologia è obbligatoria.")]
         public string Tipologia { get; set; } // Medicinale o Alimentare
 
-        // Per selezionare la casa farmaceutica
+        [Required(ErrorMessage = "La selezione della casa farmaceutica è obbligatoria.")]
         public int CasaFarmaceuticaId { get; set; } // Id della casa farmaceutica selezionata
 
-        // Lista delle case farmaceutiche esistenti
         public IEnumerable<CasaFarmaceutica> CaseFarmaceutiche { get; set; }
     }
 }
