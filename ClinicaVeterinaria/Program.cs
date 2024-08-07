@@ -1,5 +1,6 @@
 using ClinicaVeterinaria.Interface;
 using ClinicaVeterinaria.Service;
+using ClinicaVeterinaria.Service.Interface;
 using ClinicaVeterinaria.Service.Intertface;
 using ClinicaVeterinaria.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -16,8 +17,10 @@ builder.Services.AddScoped<IAnimaleService, AnimaleService>();
 builder.Services.AddScoped<IVisitaService, VisitaService>();
 builder.Services.AddScoped<IUtenteService, UtenteService>();
 builder.Services.AddScoped<IRicoveroService, RicoveroService>();
+builder.Services.AddScoped<IVenditaService, VenditaService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(opt =>

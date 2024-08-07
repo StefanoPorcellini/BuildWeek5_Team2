@@ -1,0 +1,43 @@
+﻿@model IEnumerable<ClinicaVeterinaria.Models.Vendita>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Codice Fiscale Cliente</th>
+            <th>Data Vendita</th>
+            <th>Prodotto</th>
+            <th>Numero Ricetta</th>
+            <th>Quantita</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.CodiceFiscaleCliente</td>
+                <td>@item.DataVendita.ToString("dd/MM/yyyy")</td>
+                <td>@item.Prodotto.Nome</td>
+                <td>@item.NumeroRicetta</td>
+                <td>@item.Quantita</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a> |
+                    <!-- Bottone per generare il PDF per la singola vendita -->
+                    <a asp-action="GeneratePDFPerVendita" asp-route-id="@item.Id" class="btn btn-sm btn-secondary">Genera PDF</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
