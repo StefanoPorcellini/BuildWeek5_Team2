@@ -200,24 +200,24 @@ public class AnimaliController : Controller
     [HttpPost]
     public async Task<IActionResult> SearchAnimal(string chipNumber)
     {
-        if (string.IsNullOrEmpty(chipNumber))
-        {
-            ViewBag.Message = "Please enter a chip number.";
-            return View("Index");
-        }
+        TempData["SearchInit"] = true;
+        var animal = await _animaleService.SearchByChipNumberAsync(chipNumber);
 
-        var animale = await _animaleService.SearchByChipNumberAsync(chipNumber);
-
-        if (animale == null)
+        if (animal != null)
         {
-            ViewBag.Message = "Animal not found.";
+            TempData["AnimalFound"] = true;
+            TempData["AnimalName"] = animal.Nome;
+            TempData["AnimalType"] = animal.TipologiaAnimale;
+            TempData["AnimalColor"] = animal.ColoreManto;
+            TempData["AnimalBirthDate"] = animal.DataNascita?.ToString("dd/MM/yyyy");
+            TempData["AnimalChipNumber"] = animal.NumeroChip;
         }
         else
         {
-            ViewBag.Animale = animale;
+            TempData["AnimalFound"] = false;
         }
 
-        var animali = await _animaleService.GetAllAsync();
-        return View("Index", animali);
+        return RedirectToAction("Index", "Home");
     }
+
 }

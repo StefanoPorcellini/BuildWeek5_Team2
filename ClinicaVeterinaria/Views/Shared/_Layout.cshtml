@@ -34,6 +34,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ClinicaVeterinaria.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <header>
@@ -80,25 +82,7 @@
                                     </span>
                                 } *@
                     @if (User.Identity.IsAuthenticated)
-                    {
-                    @if (isAdmin || isFarmacista)
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Prodotto" asp-action="Create">Aggiungi Prodotto</a>
-                        </li>
-                    }
-
-                    @if (User.Identity.IsAuthenticated && (isAdmin || isFarmacista))
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Prodotto" asp-action="IndexProdotti">Visualizza Prodotti</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Prodotto" asp-action="IndexCaseFarmaceutiche">Visualizza Case Farmaceutiche</a>
-                        </li>
-                    }
-
-
+                    {                    
                     <form asp-area="" asp-controller="User" asp-action="Logout" method="post" 
                     asp-antiforgery="true" class="d-flex gap-3 align-items-center">
                         <button class="Btn red" type="submit">
