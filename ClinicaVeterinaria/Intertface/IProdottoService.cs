@@ -17,5 +17,6 @@ namespace ClinicaVeterinaria.Interface
         Task<CasaFarmaceutica> GetCasaFarmaceuticaByIdAsync(int id);
         Task UpdateCasaFarmaceuticaAsync(CasaFarmaceutica casaFarmaceutica);
         Task DeleteCasaFarmaceuticaAsync(int id);
+        List<Prodotto> GetProdottiMemoria();
     }
 }
