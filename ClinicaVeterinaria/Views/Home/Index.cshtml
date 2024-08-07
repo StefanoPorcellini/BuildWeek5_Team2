@@ -4,20 +4,14 @@
 
 <h1>Trova il tuo animale</h1>
 
-<form method="post" asp-action="SearchAnimal">
-    <div class="form-group">
-        <label for="chipNumber">Chip Number</label>
-        <input type="text" class="form-control" id="chipNumber" name="chipNumber" required />
+<form method="post" asp-action="SearchAnimal" asp-controller="Animali">
+    <div class="group">
+        <input type="text" class="input" id="chipNumber" name="chipNumber" required placeholder="Inserisci il numero del chip"/>
+        <button type="submit" class="btn"><i class="bi bi-search"></i></button>
     </div>
-    <button type="submit" class="btn btn-primary">Search</button>
 </form>
 
 @if (ViewBag.Message != null)
-{
-    <div class="alert alert-info">@ViewBag.Message</div>
-}
-
-@if (ViewBag.Animal != null)
 {
     var animal = (ClinicaVeterinaria.Models.Animale)ViewBag.Animal;
     <div class="card mt-3">
@@ -32,4 +26,8 @@
             <p><strong>Chip Number:</strong> @animal.NumeroChip</p>
         </div>
     </div>
+}
+else
+{
+        <div class="alert alert-info text-center">Il tuo animale non è qui</div>
 }

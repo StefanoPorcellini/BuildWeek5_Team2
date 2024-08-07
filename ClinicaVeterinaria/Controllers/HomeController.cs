@@ -3,6 +3,7 @@ using ClinicaVeterinaria.Service;
 using ClinicaVeterinaria.Service.Intertface;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace ClinicaVeterinaria.Controllers
 {
@@ -20,31 +21,27 @@ namespace ClinicaVeterinaria.Controllers
 
         public IActionResult Index()
         {
+            // Verifica se l'utente è autenticato
+            if (User.Identity.IsAuthenticated)
+            {
+                // Ottiene il ruolo dell'utente
+                var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+                // Reindirizza l'utente alla dashboard appropriata in base al ruolo
+                return role switch
+                {
+                    "Admin" => RedirectToAction("AdminDashboard", "User"),
+                    "Farmacista" => RedirectToAction("FarmacistaDashboard", "User"),
+                    "Veterinario" => RedirectToAction("VeterinarioDashboard", "User"),
+                    _ => RedirectToAction("Index"), // Reindirizza alla home page se il ruolo non è riconosciuto
+                };
+            }
+
+            // Se l'utente non è autenticato, mostra la home page
             return View();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> SearchAnimal(string chipNumber)
-        {
-            if (string.IsNullOrEmpty(chipNumber))
-            {
-                ViewBag.Message = "Please enter a chip number.";
-                return View("Index");
-            }
 
-            var animal = await _animaleService.SearchByChipNumberAsync(chipNumber);
-
-            if (animal == null)
-            {
-                ViewBag.Message = "Animal not found.";
-            }
-            else
-            {
-                ViewBag.Animal = animal;
-            }
-
-            return View("Index");
-        }
 
 
         public IActionResult Privacy()

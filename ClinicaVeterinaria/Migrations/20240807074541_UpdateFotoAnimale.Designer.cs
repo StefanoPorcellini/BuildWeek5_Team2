@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClinicaVeterinaria.Migrations
 {
     [DbContext(typeof(VeterinaryClinicContext))]
-    partial class VeterinaryClinicContextModelSnapshot : ModelSnapshot
+    [Migration("20240807074541_UpdateFotoAnimale")]
+    partial class UpdateFotoAnimale
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,32 +103,8 @@ namespace ClinicaVeterinaria.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Citta")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CodiceFiscale")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Cognome")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Indirizzo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("ProprietarioId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Telefono")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TipologiaAnimale")
                         .IsRequired()
@@ -279,8 +258,8 @@ namespace ClinicaVeterinaria.Migrations
                         new
                         {
                             Id = 1,
-                            PasswordHash = new byte[] { 196, 192, 108, 253, 108, 106, 96, 18, 65, 111, 249, 214, 231, 135, 21, 127, 136, 144, 42, 238, 177, 96, 42, 217, 194, 235, 98, 13, 229, 198, 93, 212 },
-                            PasswordSalt = new byte[] { 183, 76, 233, 96, 160, 164, 152, 45, 209, 147, 91, 100, 1, 249, 95, 184 },
+                            PasswordHash = new byte[] { 126, 21, 229, 184, 42, 198, 80, 115, 44, 244, 89, 111, 134, 22, 41, 48, 189, 139, 113, 53, 225, 136, 137, 32, 251, 127, 159, 215, 240, 245, 44, 237 },
+                            PasswordSalt = new byte[] { 51, 230, 244, 114, 37, 175, 95, 224, 112, 3, 110, 250, 239, 32, 182, 89 },
                             Ruolo = "Admin",
                             Username = "admin"
                         });

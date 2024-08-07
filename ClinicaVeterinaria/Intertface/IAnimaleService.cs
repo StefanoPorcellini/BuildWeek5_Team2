@@ -12,6 +12,7 @@ namespace ClinicaVeterinaria.Service.Intertface
         bool AnimaleExists(int id);
         Task<Proprietario> GetProprietarioByIdAsync(int proprietarioId);
         Task<Animale> SearchByChipNumberAsync(string chipNumber);
+        void SaveImg(int idAnimale, IFormFile img);
     }
 
 }
