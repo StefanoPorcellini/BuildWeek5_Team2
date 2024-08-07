@@ -1,0 +1,40 @@
+﻿@model IEnumerable<ClinicaVeterinaria.Models.Prodotto>
+
+@{
+    ViewData["Title"] = "Lista Prodotti";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Prezzo</th>
+            <th>Tipologia</th>
+            <th>Numero Armadietto</th>
+            <th>Numero Cassetto</th>
+            <th>Casa Farmaceutica</th>
+            <th>Azioni</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Nome</td>
+                <td>@item.Prezzo</td>
+                <td>@item.Tipologia</td>
+                <td>@item.NumeroArmadietto</td>
+                <td>@item.NumeroCassetto</td>
+                <td>@item.CasaFarmaceutica.Nome</td>
+                <td>
+                    <a asp-action="EditProdotto" asp-route-id="@item.Id" class="btn btn-warning">Modifica</a>
+                    <form asp-action="DeleteProdotto" asp-route-id="@item.Id" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger">Elimina</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -20,6 +20,8 @@ builder.Services.AddScoped<IRicoveroService, RicoveroService>();
 builder.Services.AddScoped<IVenditaService, VenditaService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped<IProdottoService, ProdottoService>();
+
 
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
