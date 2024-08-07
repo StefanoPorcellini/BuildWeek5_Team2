@@ -69,6 +69,14 @@ namespace ClinicaVeterinaria.Service
             return costoTotale;
         }
 
+        public async Task<List<Ricovero>> GetRicoveriAttiviAsync() 
+        {
+            return await _context.Ricoveri
+                .Include(r => r.Animale)
+                .Where(r => (r.DataFine == null || r.DataFine > DateTime.Now) && !r.Dimesso) 
+                .ToListAsync();
+        }
+
 
 
 

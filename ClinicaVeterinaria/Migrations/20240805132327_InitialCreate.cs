@@ -123,7 +123,7 @@ namespace ClinicaVeterinaria.Migrations
                     Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TipologiaAnimale = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ColoreManto = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DataNascita = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DataNascita = table.Column<DateTime>(type: "date", nullable: true),
                     PossiedeChip = table.Column<bool>(type: "bit", nullable: false),
                     NumeroChip = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Randagio = table.Column<bool>(type: "bit", nullable: false),

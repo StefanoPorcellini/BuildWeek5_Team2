@@ -1,0 +1,58 @@
+﻿@model IEnumerable<ClinicaVeterinaria.Models.Ricovero>
+
+@{
+    ViewData["Title"] = "Ricoveri Attivi";
+}
+
+<h1>Ricoveri Attivi</h1>
+
+<div id="reportContainer">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nome Animale</th>
+                <th>Tipologia Animale</th>
+                <th>Colore Manto</th>
+                <th>Data Di Nascita</th>
+                <th>Possiede Chip</th>
+                <th>Numero Chip</th>
+                <th>Data Inizio Ricovero</th>
+            </tr>
+        </thead>
+        <tbody id="reportBody">
+            @foreach (var ricovero in Model)
+            {
+                <tr>
+                    <td>@ricovero.Animale.Nome</td>
+                    <td>@ricovero.Animale.TipologiaAnimale</td>
+                    <td>@ricovero.Animale.ColoreManto</td>
+                    <td>@ricovero.Animale.DataNascita</td>
+                    <td>
+                        <input type="checkbox" disabled @(ricovero.Animale.PossiedeChip ? "checked" : "") />
+                    </td>
+                    <td>
+                        @(ricovero.Animale.NumeroChip ?? "Non disponibile")
+                    </td>
+                    <td>@ricovero.DataInizio.ToString("dd/MM/yyyy")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<button id="refreshReport" class="btn btn-primary">Aggiorna Report</button>
+
+@section Scripts {
+    <script>
+        document.getElementById('refreshReport').addEventListener('click', async function () {
+            try {
+                const response = await fetch('@Url.Action("GetRicoveriAttiviReport", "Contabilizzazione")');
+                const data = await response.text();
+                document.getElementById('reportBody').innerHTML = data;
+            } catch (error) {
+                console.error('Errore durante l\'aggiornamento del report:', error);
+            }
+        });
+    </script>
+}
+
