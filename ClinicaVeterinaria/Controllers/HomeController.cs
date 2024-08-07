@@ -3,6 +3,7 @@ using ClinicaVeterinaria.Service;
 using ClinicaVeterinaria.Service.Intertface;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace ClinicaVeterinaria.Controllers
 {
@@ -20,10 +21,27 @@ namespace ClinicaVeterinaria.Controllers
 
         public IActionResult Index()
         {
+            // Verifica se l'utente è autenticato
+            if (User.Identity.IsAuthenticated)
+            {
+                // Ottiene il ruolo dell'utente
+                var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+                // Reindirizza l'utente alla dashboard appropriata in base al ruolo
+                return role switch
+                {
+                    "Admin" => RedirectToAction("AdminDashboard", "User"),
+                    "Farmacista" => RedirectToAction("FarmacistaDashboard", "User"),
+                    "Veterinario" => RedirectToAction("VeterinarioDashboard", "User"),
+                    _ => RedirectToAction("Index"), // Reindirizza alla home page se il ruolo non è riconosciuto
+                };
+            }
+
+            // Se l'utente non è autenticato, mostra la home page
             return View();
         }
 
-       
+
 
 
         public IActionResult Privacy()

@@ -10,6 +10,7 @@
         public bool PossiedeChip { get; set; }
         public string? NumeroChip { get; set; } 
         public bool Randagio { get; set; }
+        public string? Foto { get; set; }
 
        
         public int? ProprietarioId { get; set; }

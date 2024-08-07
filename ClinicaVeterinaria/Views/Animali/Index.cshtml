@@ -13,59 +13,73 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Nome)
+                @Html.DisplayNameFor(model => model.First().Nome)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TipologiaAnimale)
+                @Html.DisplayNameFor(model => model.First().TipologiaAnimale)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ColoreManto)
+                @Html.DisplayNameFor(model => model.First().ColoreManto)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DataNascita)
+                @Html.DisplayNameFor(model => model.First().DataNascita)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PossiedeChip)
+                @Html.DisplayNameFor(model => model.First().PossiedeChip)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NumeroChip)
+                @Html.DisplayNameFor(model => model.First().NumeroChip)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Randagio)
+                @Html.DisplayNameFor(model => model.First().Randagio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Foto)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TipologiaAnimale)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ColoreManto)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataNascita)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PossiedeChip)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumeroChip)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Randagio)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TipologiaAnimale)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ColoreManto)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataNascita)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PossiedeChip)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumeroChip)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Randagio)
+                </td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.Foto))
+                    {
+                        <img src="~/@item.Foto" alt="Foto di @item.Nome" style="max-width: 100px; height: auto;" />
+                    }
+                    else
+                    {
+                        <span>No Photo</span>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

@@ -5,11 +5,10 @@
 <h1>Trova il tuo animale</h1>
 
 <form method="post" asp-action="SearchAnimal" asp-controller="Animali">
-    <div class="form-group">
-        <label for="chipNumber">Chip Number</label>
-        <input type="text" class="form-control" id="chipNumber" name="chipNumber" required />
+    <div class="group">
+        <input type="text" class="input" id="chipNumber" name="chipNumber" required placeholder="Inserisci il numero del chip"/>
+        <button type="submit" class="btn"><i class="bi bi-search"></i></button>
     </div>
-    <button type="submit" class="btn btn-primary">Search</button>
 </form>
 
 @if (ViewBag.Message != null)
