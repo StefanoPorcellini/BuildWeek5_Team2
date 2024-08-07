@@ -5,3 +5,13 @@
 <h2>@ViewData["Title"]</h2>
 <p>Benvenuto @User.Identity.Name</p>
 
+<div class="d-flex justify-content-center gap-3">
+    <a class="button text-decoration-none" asp-area="" asp-antifo=""
+       asp-controller="Prodotto" asp-action="Create">Aggiungi Prodotto</a>
+    <a class="button text-decoration-none" asp-area="" asp-antifo=""
+       asp-controller="Prodotto" asp-action="IndexProdotti">Visualizza Prodotti</a>
+    <a class="button text-decoration-none text-center" asp-area="" asp-antifo=""
+       asp-controller="Prodotto" asp-action="IndexCaseFarmaceutiche">
+        Visualizza<br>Case Farmaceutiche
+    </a>
+</div>

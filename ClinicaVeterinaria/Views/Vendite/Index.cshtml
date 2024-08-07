@@ -16,6 +16,7 @@
             <th>Codice Fiscale Cliente</th>
             <th>Data Vendita</th>
             <th>Prodotto</th>
+            <th>Prezzo</th>
             <th>Numero Ricetta</th>
             <th>Quantita</th>
             <th></th>
@@ -28,6 +29,7 @@
                 <td>@item.CodiceFiscaleCliente</td>
                 <td>@item.DataVendita.ToString("dd/MM/yyyy HH:mm")</td>
                 <td>@item.Prodotto.Nome</td>
+                <td>@item.Prodotto.Prezzo.ToString("C")</td>
                 <td>@item.NumeroRicetta</td>
                 <td>@item.Quantita</td>
                 <td>
