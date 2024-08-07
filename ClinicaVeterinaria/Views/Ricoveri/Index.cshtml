@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>VetCare - Gestione Ricoveri &#10084</h1>
 
 <p>
     <a asp-action="Create" class="btn btn-primary">Create New</a>
@@ -62,9 +62,9 @@
                     @Html.DisplayFor(_ => item.Dimesso)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a> |
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Modifica</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Dettagli</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Elimina</a> |
                     <a asp-action="Checkout" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Checkout</a>
                 </td>
             </tr>
