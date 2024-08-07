@@ -21,15 +21,6 @@ namespace ClinicaVeterinaria.Services
             _logger.LogInformation("Caricamento delle case farmaceutiche dal database.");
             return await _context.CaseFarmaceutiche.ToListAsync();
         }
-
-        public async Task<int> AddCasaFarmaceuticaAsync(CasaFarmaceutica casaFarmaceutica)
-        {
-            _context.CaseFarmaceutiche.Add(casaFarmaceutica);
-            await _context.SaveChangesAsync();
-            _logger.LogInformation($"Casa farmaceutica '{casaFarmaceutica.Nome}' aggiunta con successo.");
-            return casaFarmaceutica.Id;
-        }
-
         public async Task AddProdottoAsync(ProdottoViewModel prodottoViewModel)
         {
             var prodotto = new Prodotto
@@ -45,6 +36,14 @@ namespace ClinicaVeterinaria.Services
             _context.Prodotti.Add(prodotto);
             await _context.SaveChangesAsync();
             _logger.LogInformation("Prodotto aggiunto con successo.");
+        }
+
+        public async Task<int> AddCasaFarmaceuticaAsync(CasaFarmaceutica casaFarmaceutica)
+        {
+            _context.CaseFarmaceutiche.Add(casaFarmaceutica);
+            await _context.SaveChangesAsync();
+            _logger.LogInformation($"Casa farmaceutica '{casaFarmaceutica.Nome}' aggiunta con successo.");
+            return casaFarmaceutica.Id;
         }
 
         public async Task<IEnumerable<Prodotto>> GetAllProdottiAsync()
@@ -75,6 +74,11 @@ namespace ClinicaVeterinaria.Services
             {
                 _context.Prodotti.Remove(prodotto);
                 await _context.SaveChangesAsync();
+                _logger.LogInformation($"Prodotto con ID {id} cancellato con successo.");
+            }
+            else
+            {
+                _logger.LogWarning($"Prodotto con ID {id} non trovato.");
             }
         }
 
@@ -99,6 +103,11 @@ namespace ClinicaVeterinaria.Services
             {
                 _context.CaseFarmaceutiche.Remove(casaFarmaceutica);
                 await _context.SaveChangesAsync();
+                _logger.LogInformation($"Casa farmaceutica con ID {id} cancellata con successo.");
+            }
+            else
+            {
+                _logger.LogWarning($"Casa farmaceutica con ID {id} non trovata.");
             }
         }
     }

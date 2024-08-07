@@ -40,7 +40,7 @@
     <!-- Seleziona o crea una casa farmaceutica -->
     <div class="form-group">
         <label class="control-label">Seleziona Casa Farmaceutica</label>
-        <select asp-for="SelectedCasaFarmaceuticaId" class="form-control">
+        <select asp-for="SelectedCasaFarmaceuticaId" class="form-control" id="casaFarmaceuticaSelect">
             <option value="">-- Seleziona una casa farmaceutica --</option>
             @foreach (var casa in Model.CaseFarmaceutiche)
             {
@@ -49,22 +49,25 @@
         </select>
     </div>
 
-    <h4>O crea una nuova Casa Farmaceutica:</h4>
+    <!-- Sezione per creare una nuova casa farmaceutica -->
+    <div id="nuovaCasaSection">
+        <h4>O crea una nuova Casa Farmaceutica:</h4>
 
-    <div class="form-group">
-        <label asp-for="NuovaCasaNome" class="control-label">Nome</label>
-        <input asp-for="NuovaCasaNome" class="form-control" />
-        <span asp-validation-for="NuovaCasaNome" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="NuovaCasaIndirizzo" class="control-label">Indirizzo</label>
-        <input asp-for="NuovaCasaIndirizzo" class="form-control" />
-        <span asp-validation-for="NuovaCasaIndirizzo" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="NuovaCasaEmail" class="control-label">Email</label>
-        <input asp-for="NuovaCasaEmail" class="form-control" />
-        <span asp-validation-for="NuovaCasaEmail" class="text-danger"></span>
+        <div class="form-group">
+            <label asp-for="NuovaCasaNome" class="control-label">Nome</label>
+            <input asp-for="NuovaCasaNome" class="form-control" />
+            <span asp-validation-for="NuovaCasaNome" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="NuovaCasaIndirizzo" class="control-label">Indirizzo</label>
+            <input asp-for="NuovaCasaIndirizzo" class="form-control" />
+            <span asp-validation-for="NuovaCasaIndirizzo" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="NuovaCasaEmail" class="control-label">Email</label>
+            <input asp-for="NuovaCasaEmail" class="form-control" />
+            <span asp-validation-for="NuovaCasaEmail" class="text-danger"></span>
+        </div>
     </div>
 
     <div class="form-group">
@@ -74,4 +77,23 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(document).ready(function() {
+            function toggleNuovaCasaSection() {
+                var selectedValue = $('#casaFarmaceuticaSelect').val();
+                if (selectedValue) {
+                    $('#nuovaCasaSection').hide();
+                } else {
+                    $('#nuovaCasaSection').show();
+                }
+            }
+
+            $('#casaFarmaceuticaSelect').change(function() {
+                toggleNuovaCasaSection();
+            });
+
+            toggleNuovaCasaSection();
+        });
+    </script>
 }
