@@ -222,7 +222,7 @@ public class VenditeController : Controller
         document.Close();
 
         memoryStream.Position = 0;
-        return File(memoryStream, "application/pdf", $"Vendita_{id}.pdf");
+        return File(memoryStream, "application/pdf", $"Vendita_{DateTime.Now}_{id}.pdf");
     }
 
     private void AddCellToHeader(PdfPTable table, string text)
