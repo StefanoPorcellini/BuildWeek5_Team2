@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Ricerca Prodotto";
+}
+
+<h2>Ricerca Prodotto</h2>
+
+<div class="form-group">
+    <label for="query">Nome del Prodotto:</label>
+    <input type="text" id="query" class="form-control" placeholder="Inserisci il nome del prodotto..." />
+</div>
+
+<div id="risultati">
+    <!-- Risultati della ricerca saranno visualizzati qui -->
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#query').on('input', function () {
+                var query = $(this).val();
+
+                $.ajax({
+                    url: '@Url.Action("CercaProdotto", "Prodotto")',
+                    type: 'POST',
+                    data: { query: query },
+                    success: function (data) {
+                        $('#risultati').empty();
+
+                        if (data.length > 0) {
+                            $.each(data, function (i, prodotto) {
+                                $('#risultati').append(
+                                    '<p><strong>' + prodotto.nome + '</strong>: Armadietto ' + prodotto.numeroArmadietto + ', Cassetto ' + prodotto.numeroCassetto + '</p>'
+                                );
+                            });
+                        } else {
+                            $('#risultati').append('<p>Nessun prodotto trovato.</p>');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

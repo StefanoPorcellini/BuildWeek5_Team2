@@ -269,5 +269,57 @@ namespace ClinicaVeterinaria.Controllers
             // Se il ModelState non è valido, torna alla vista di modifica
             return View("~/Views/Prodotti/EditCasaFarmaceutica.cshtml", viewModel);
         }
+        [HttpGet]
+        public IActionResult RicercaProdotti(string query)
+        {
+            // Simula il recupero dei prodotti dalla memoria
+            var prodotti = _prodottoService.GetProdottiMemoria();
+
+            // Se la query è null o vuota, restituisci tutti i prodotti oppure un elenco vuoto.
+            if (string.IsNullOrEmpty(query))
+            {
+                // Restituisci un elenco vuoto per evitare l'errore.
+                return Json(new List<object>());
+            }
+
+            // Filtra i prodotti in base alla query
+            var risultati = prodotti
+                .Where(p => !string.IsNullOrEmpty(p.Nome) && p.Nome.Contains(query, StringComparison.OrdinalIgnoreCase))
+                .Select(p => new { p.Nome, p.NumeroArmadietto, p.NumeroCassetto })
+                .ToList();
+
+            return Json(risultati);
+        }
+
+        [HttpGet]
+        public IActionResult RicercaProdotto()
+        {
+            // Specifichiamo esplicitamente il percorso completo della vista, che si trova nella cartella "Prodotti"
+            return View("~/Views/Prodotti/RicercaProdotto.cshtml");
+        }
+
+
+        [HttpPost]
+        public IActionResult CercaProdotto(string query)
+        {
+            // Simula il recupero dei prodotti dalla memoria (in un contesto reale, questo potrebbe essere una cache o una lista già caricata)
+            var prodotti = _prodottoService.GetProdottiMemoria();
+
+            // Se la query è null o vuota, restituisci tutti i prodotti o un elenco vuoto
+            if (string.IsNullOrEmpty(query))
+            {
+                // Restituisci un elenco vuoto per evitare l'errore, oppure restituisci tutti i prodotti.
+                return Json(new List<object>());
+            }
+
+            // Filtra i prodotti in base alla query, ignorando i prodotti con Nome null
+            var risultatiFiltrati = prodotti
+                .Where(p => !string.IsNullOrEmpty(p.Nome) && p.Nome.Contains(query, StringComparison.OrdinalIgnoreCase))
+                .Select(p => new { p.Nome, p.NumeroArmadietto, p.NumeroCassetto })
+                .ToList();
+
+            return Json(risultatiFiltrati);
+        }
+
     }
 }

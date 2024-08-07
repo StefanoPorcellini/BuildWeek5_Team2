@@ -1,33 +1,46 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    var searchInit = TempData["SearchInit"] != null && (bool)TempData["SearchInit"];
+    var animalFound = TempData["AnimalFound"] != null && (bool)TempData["AnimalFound"];
+    var imageUrl = Url.Content("~/img/petpc.svg");
 }
 
 <h1>Trova il tuo animale</h1>
 
 <form method="post" asp-action="SearchAnimal" asp-controller="Animali">
     <div class="group">
-        <input type="text" class="input" id="chipNumber" name="chipNumber" required placeholder="Inserisci il numero del chip"/>
+        <input type="text" class="input" id="chipNumber" name="chipNumber" required placeholder="Inserisci il numero del chip" />
         <button type="submit" class="btn"><i class="bi bi-search"></i></button>
     </div>
 </form>
 
-@if (ViewBag.Message != null)
+
+@if (searchInit)
 {
-    var animal = (ClinicaVeterinaria.Models.Animale)ViewBag.Animal;
-    <div class="card mt-3">
-        <div class="card-header">
-            Animal Details
+    if (animalFound)
+    {
+        <div class="card mt-3">
+            <div class="card-header">
+                Dettagli Animale
+            </div>
+            <div class="card-body">
+                <p><strong>Nome:</strong> @TempData["AnimalName"]</p>
+                <p><strong>Tipo:</strong> @TempData["AnimalType"]</p>
+                <p><strong>Colore:</strong> @TempData["AnimalColor"]</p>
+                <p><strong>Data di Nascita:</strong> @TempData["AnimalBirthDate"]</p>
+                <p><strong>Numero Chip:</strong> @TempData["AnimalChipNumber"]</p>
+            </div>
         </div>
-        <div class="card-body">
-            <p><strong>Name:</strong> @animal.Nome</p>
-            <p><strong>Type:</strong> @animal.TipologiaAnimale</p>
-            <p><strong>Color:</strong> @animal.ColoreManto</p>
-            <p><strong>Birth Date:</strong> @animal.DataNascita?.ToString("dd/MM/yyyy")</p>
-            <p><strong>Chip Number:</strong> @animal.NumeroChip</p>
-        </div>
-    </div>
-}
-else
-{
-        <div class="alert alert-info text-center">Il tuo animale non è qui</div>
+    }
+    else
+    {
+        @section Scripts {
+    <script>
+        Swal.fire({
+            icon: 'error',
+            html: '<img src="@imageUrl" alt="Icona Animale" style="width: 150px; height: 150px;"/> <p>Il tuo animale non è qui</p> <p>Prova a cercare in questi altri veterinari:</p> <a target="_blank" href="https://pharmalabsrl.com/">PharmaLab</a> <br> <a target="_blank" href="https://www.anicura.it/cliniche/ospedale-veterinario-h24-abruzzo/">Ospedale Veterinario</a>'
+        });
+    </script>
+        }
+    }
 }

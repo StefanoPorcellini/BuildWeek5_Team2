@@ -2,12 +2,15 @@
 using ClinicaVeterinaria.Models;
 using ClinicaVeterinaria.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ClinicaVeterinaria.Services
 {
     public class ProdottoService : IProdottoService
     {
         private readonly VeterinaryClinicContext _context;
+        private List<Prodotto> _prodottiMemoria; // Lista per memorizzare i prodotti
 
         // Costruttore che inietta il contesto del database
         public ProdottoService(VeterinaryClinicContext context)
@@ -24,7 +27,6 @@ namespace ClinicaVeterinaria.Services
         // Metodo per aggiungere un nuovo prodotto nel database
         public async Task AddProdottoAsync(ProdottoViewModel prodottoViewModel)
         {
-            // Creazione di un oggetto Prodotto dal ViewModel
             var prodotto = new Prodotto
             {
                 Nome = prodottoViewModel.Nome,
@@ -35,7 +37,6 @@ namespace ClinicaVeterinaria.Services
                 CasaFarmaceuticaId = prodottoViewModel.SelectedCasaFarmaceuticaId.Value
             };
 
-            // Aggiunta del prodotto al contesto e salvataggio nel database
             _context.Prodotti.Add(prodotto);
             await _context.SaveChangesAsync();
         }
@@ -45,16 +46,16 @@ namespace ClinicaVeterinaria.Services
         {
             _context.CaseFarmaceutiche.Add(casaFarmaceutica);
             await _context.SaveChangesAsync();
-            return casaFarmaceutica.Id; // Restituisce l'ID della nuova casa farmaceutica
+            return casaFarmaceutica.Id;
         }
 
-        // Metodo per ottenere tutti i prodotti dal database, inclusa la casa farmaceutica associata
+        // Metodo per ottenere tutti i prodotti dal database
         public async Task<IEnumerable<Prodotto>> GetAllProdottiAsync()
         {
             return await _context.Prodotti.Include(p => p.CasaFarmaceutica).ToListAsync();
         }
 
-        // Metodo per ottenere un prodotto specifico dal database in base al suo ID
+        // Metodo per ottenere un prodotto specifico dal database
         public async Task<Prodotto> GetProdottoByIdAsync(int id)
         {
             return await _context.Prodotti.Include(p => p.CasaFarmaceutica)
@@ -68,7 +69,7 @@ namespace ClinicaVeterinaria.Services
             await _context.SaveChangesAsync();
         }
 
-        // Metodo per cancellare un prodotto dal database in base al suo ID
+        // Metodo per cancellare un prodotto dal database
         public async Task DeleteProdottoAsync(int id)
         {
             var prodotto = await _context.Prodotti.FindAsync(id);
@@ -79,7 +80,7 @@ namespace ClinicaVeterinaria.Services
             }
         }
 
-        // Metodo per ottenere una casa farmaceutica specifica dal database in base al suo ID
+        // Metodo per ottenere una casa farmaceutica specifica dal database
         public async Task<CasaFarmaceutica> GetCasaFarmaceuticaByIdAsync(int id)
         {
             return await _context.CaseFarmaceutiche.FindAsync(id);
@@ -92,7 +93,7 @@ namespace ClinicaVeterinaria.Services
             await _context.SaveChangesAsync();
         }
 
-        // Metodo per cancellare una casa farmaceutica dal database in base al suo ID
+        // Metodo per cancellare una casa farmaceutica dal database
         public async Task DeleteCasaFarmaceuticaAsync(int id)
         {
             var casaFarmaceutica = await _context.CaseFarmaceutiche.FindAsync(id);
@@ -101,6 +102,16 @@ namespace ClinicaVeterinaria.Services
                 _context.CaseFarmaceutiche.Remove(casaFarmaceutica);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        // Implementazione del metodo GetProdottiMemoria
+        public List<Prodotto> GetProdottiMemoria()
+        {
+            if (_prodottiMemoria == null)
+            {
+                _prodottiMemoria = _context.Prodotti.ToList(); // Carica i prodotti dal database
+            }
+            return _prodottiMemoria;
         }
     }
 }
