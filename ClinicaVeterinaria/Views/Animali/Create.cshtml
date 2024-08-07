@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Nome" class="control-label"></label>
@@ -32,6 +32,13 @@
                 <input asp-for="DataNascita" class="form-control" />
                 <span asp-validation-for="DataNascita" class="text-danger"></span>
             </div>
+
+            <div class="form-group mb-3">
+                <label class="control-label">Inserisci una Foto</label>
+                <input type="file" name="img" class="form-control-file" />
+                <span class="text-danger"></span>
+            </div>
+
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="PossiedeChip" /> @Html.DisplayNameFor(model => model.PossiedeChip)
@@ -120,6 +127,4 @@
             });
         });
     </script>
-
-
 }

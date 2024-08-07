@@ -42,11 +42,22 @@ namespace ClinicaVeterinaria.Service
 
         public async Task DeleteAsync(int id)
         {
+
+            DeleteImg(id);
             var animale = await _context.Animali.FindAsync(id);
             if (animale != null)
             {
                 _context.Animali.Remove(animale);
                 await _context.SaveChangesAsync();
+            }
+        }
+
+        private void DeleteImg(int idAnimale) 
+        {
+            var imgPath = Path.Combine("wwwroot", "foto", $"fotoAnimale{idAnimale}.jpg");
+            if (File.Exists(imgPath))
+            {
+                File.Delete(imgPath);
             }
         }
 
@@ -64,8 +75,15 @@ namespace ClinicaVeterinaria.Service
             return await _context.Animali
                 .FirstOrDefaultAsync(a => a.NumeroChip == chipNumber);
         }
+
+        public void SaveImg(int idAnimale, IFormFile img)
+        {
+            var imgPath = Path.Combine("wwwroot", "foto", $"fotoAnimale{idAnimale}.jpg");
+
+            using (var stream = new FileStream(imgPath, FileMode.Create))
+            {
+                img.CopyTo(stream);
+            }
+        }
     }
-
-
-
 }

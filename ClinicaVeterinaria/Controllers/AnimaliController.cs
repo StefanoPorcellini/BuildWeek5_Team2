@@ -52,7 +52,7 @@ public class AnimaliController : Controller
     // POST: Animali/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,Nome,TipologiaAnimale,ColoreManto,DataNascita,PossiedeChip,NumeroChip,ProprietarioId,Randagio")] Animale animale)
+    public async Task<IActionResult> Create([Bind("Id,Nome,TipologiaAnimale,ColoreManto,DataNascita,PossiedeChip,NumeroChip,ProprietarioId,Randagio")] Animale animale, IFormFile? img)
     {
         _logger.LogInformation("Avviata la creazione di un nuovo animale.");
 
@@ -76,7 +76,21 @@ public class AnimaliController : Controller
                     animale.Proprietario = await _proprietarioService.GetByIdAsync(animale.ProprietarioId.Value);
                 }
 
+                // Salva l'animale senza l'immagine
                 await _animaleService.CreateAsync(animale);
+
+                if (img != null && img.Length > 0)
+                {
+                    // Salva l'immagine sul disco
+                    _animaleService.SaveImg(animale.Id, img);
+
+                    // Aggiorna il percorso dell'immagine nel modello
+                    animale.Foto = $"foto/fotoAnimale{animale.Id}.jpg";
+
+                    // Aggiorna l'animale nel database con il percorso dell'immagine
+                    await _animaleService.UpdateAsync(animale);
+                }
+
                 _logger.LogInformation("Animale creato con successo. Nome: {Nome}, ID: {Id}.", animale.Nome, animale.Id);
                 return RedirectToAction(nameof(Index));
             }
@@ -105,6 +119,8 @@ public class AnimaliController : Controller
 
         return View(animale);
     }
+
+
 
     // GET: Animali/Edit/5
     public async Task<IActionResult> Edit(int? id)
@@ -178,5 +194,30 @@ public class AnimaliController : Controller
     {
         await _animaleService.DeleteAsync(id);
         return RedirectToAction(nameof(Index));
+    }
+
+    // POST: Animali/Search
+    [HttpPost]
+    public async Task<IActionResult> SearchAnimal(string chipNumber)
+    {
+        if (string.IsNullOrEmpty(chipNumber))
+        {
+            ViewBag.Message = "Please enter a chip number.";
+            return View("Index");
+        }
+
+        var animale = await _animaleService.SearchByChipNumberAsync(chipNumber);
+
+        if (animale == null)
+        {
+            ViewBag.Message = "Animal not found.";
+        }
+        else
+        {
+            ViewBag.Animale = animale;
+        }
+
+        var animali = await _animaleService.GetAllAsync();
+        return View("Index", animali);
     }
 }

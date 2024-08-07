@@ -4,6 +4,15 @@
 {
     <tr>
         <td>@ricovero.Animale.Nome</td>
+        <td>@ricovero.Animale.TipologiaAnimale</td>
+        <td>@ricovero.Animale.ColoreManto</td>
+        <td>@ricovero.Animale.DataNascita</td>
+        <td>
+            <input type="checkbox" disabled @(ricovero.Animale.PossiedeChip ? "checked" : "") />
+        </td>
+        <td>
+            @(ricovero.Animale.NumeroChip ?? "Non disponibile")
+        </td>
         <td>@ricovero.DataInizio.ToString("dd/MM/yyyy")</td>
     </tr>
 }

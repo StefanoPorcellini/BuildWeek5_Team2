@@ -105,8 +105,8 @@ namespace ClinicaVeterinaria.Controllers
                     // Salva il nuovo admin nel database
                     await _utenteService.CreateUtenteAsync(newAdmin);
 
-                    // Reindirizza alla homepage dopo la creazione dell'admin
-                    return RedirectToAction("Index", "Home");
+                    // Reindirizza alla dashboard dell'admin dopo la creazione dell'admin
+                    return RedirectToAction("AdminDashboard", "User");
                 }
                 catch (Exception)
                 {

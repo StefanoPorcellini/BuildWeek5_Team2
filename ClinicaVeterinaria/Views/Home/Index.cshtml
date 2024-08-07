@@ -19,11 +19,6 @@
  *@
 @if (ViewBag.Message != null)
 {
-    <div class="alert alert-info">@ViewBag.Message</div>
-}
-
-@if (ViewBag.Animal != null)
-{
     var animal = (ClinicaVeterinaria.Models.Animale)ViewBag.Animal;
     <div class="card mt-3">
         <div class="card-header">
@@ -37,4 +32,8 @@
             <p><strong>Chip Number:</strong> @animal.NumeroChip</p>
         </div>
     </div>
+}
+else
+{
+        <div class="alert alert-info text-center">Il tuo animale non è qui</div>
 }

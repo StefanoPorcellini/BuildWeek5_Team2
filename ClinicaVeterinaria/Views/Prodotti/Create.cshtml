@@ -1,0 +1,115 @@
+﻿@model ClinicaVeterinaria.Models.ViewModels.ProdottoViewModel
+
+@{
+    ViewData["Title"] = "Aggiungi Prodotto";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Create" method="post">
+    <!-- Campi per il prodotto -->
+    <div class="form-group">
+        <label asp-for="Nome" class="control-label">Nome del Prodotto</label>
+        <input asp-for="Nome" class="form-control" />
+        <span asp-validation-for="Nome" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Prezzo" class="control-label">Prezzo</label>
+        <input asp-for="Prezzo" class="form-control" />
+        <span asp-validation-for="Prezzo" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="NumeroArmadietto" class="control-label">Numero Armadietto</label>
+        <input asp-for="NumeroArmadietto" class="form-control" />
+        <span asp-validation-for="NumeroArmadietto" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="NumeroCassetto" class="control-label">Numero Cassetto</label>
+        <input asp-for="NumeroCassetto" class="form-control" />
+        <span asp-validation-for="NumeroCassetto" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Tipologia" class="control-label">Tipologia</label>
+        <select asp-for="Tipologia" class="form-control">
+            <option value="Medicinale">Medicinale</option>
+            <option value="Alimentare">Alimentare</option>
+        </select>
+        <span asp-validation-for="Tipologia" class="text-danger"></span>
+    </div>
+
+    <!-- Seleziona o crea una casa farmaceutica -->
+    <div class="form-group">
+        <label class="control-label">Seleziona Casa Farmaceutica</label>
+        <select asp-for="SelectedCasaFarmaceuticaId" class="form-control" id="casaFarmaceuticaSelect">
+            <option value="">-- Seleziona una casa farmaceutica --</option>
+            @foreach (var casa in Model.CaseFarmaceutiche)
+            {
+                <option value="@casa.Id">@casa.Nome</option>
+            }
+        </select>
+    </div>
+
+    <!-- Sezione per creare una nuova casa farmaceutica -->
+    <div id="nuovaCasaSection">
+        <h4>O crea una nuova Casa Farmaceutica:</h4>
+
+        <div class="form-group">
+            <label asp-for="NuovaCasaNome" class="control-label">Nome</label>
+            <input asp-for="NuovaCasaNome" class="form-control" />
+            <span asp-validation-for="NuovaCasaNome" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="NuovaCasaIndirizzo" class="control-label">Indirizzo</label>
+            <input asp-for="NuovaCasaIndirizzo" class="form-control" />
+            <span asp-validation-for="NuovaCasaIndirizzo" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="NuovaCasaEmail" class="control-label">Email</label>
+            <input asp-for="NuovaCasaEmail" class="form-control" />
+            <span asp-validation-for="NuovaCasaEmail" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Aggiungi Prodotto" class="btn btn-primary" />
+    </div>
+</form>
+
+@*
+    Questo script JavaScript gestisce il comportamento dinamico della sezione del form dedicata alla creazione di una nuova casa farmaceutica.
+
+    Funzionalità principali:
+    - La funzione `toggleNuovaCasaSection()` controlla se una casa farmaceutica è stata selezionata dal menu a tendina. Se è stata selezionata, 
+      la sezione per la creazione di una nuova casa farmaceutica viene nascosta. Se non è stata selezionata, la sezione viene mostrata.
+
+    - L'evento `change` è collegato al menu a tendina (`#casaFarmaceuticaSelect`). Ogni volta che l'utente cambia la selezione, 
+      viene eseguita la funzione `toggleNuovaCasaSection()` per determinare se mostrare o nascondere la sezione per la nuova casa farmaceutica.
+
+    - Quando la pagina viene caricata, `toggleNuovaCasaSection()` viene chiamata per impostare correttamente la visibilità della sezione in base allo stato iniziale del menu a tendina.
+
+    In sintesi, questo script assicura che l'utente debba compilare i campi della nuova casa farmaceutica solo se non ha selezionato una casa farmaceutica esistente dal menu a tendina.
+*@
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(document).ready(function() {
+            function toggleNuovaCasaSection() {
+                var selectedValue = $('#casaFarmaceuticaSelect').val();
+                if (selectedValue) {
+                    $('#nuovaCasaSection').hide();
+                } else {
+                    $('#nuovaCasaSection').show();
+                }
+            }
+
+            $('#casaFarmaceuticaSelect').change(function() {
+                toggleNuovaCasaSection();
+            });
+
+            toggleNuovaCasaSection();
+        });
+    </script>
+}
