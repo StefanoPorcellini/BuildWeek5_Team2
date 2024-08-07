@@ -43,28 +43,27 @@
                     <ul class="navbar-nav flex-grow-1">
                     </ul>
                 </div>
-                    @if (User.Identity.IsAuthenticated)
-                    {
+                @if (User.Identity.IsAuthenticated)
+                {
                     @if (isAdmin || isFarmacista)
                     {
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Prodotto" asp-action="Create">Aggiungi Prodotto</a>
                         </li>
-                    }
-
-                    @if (User.Identity.IsAuthenticated && (isAdmin || isFarmacista))
-                    {
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Prodotto" asp-action="IndexProdotti">Visualizza Prodotti</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Prodotto" asp-action="IndexCaseFarmaceutiche">Visualizza Case Farmaceutiche</a>
                         </li>
+                        <!-- Nuovo link per Ricerca Prodotto -->
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Prodotto" asp-action="RicercaProdotto">Ricerca Prodotto</a>
+                        </li>
                     }
 
-
-                    <form asp-area="" asp-controller="User" asp-action="Logout" method="post" 
-                    asp-antiforgery="true" class="d-flex gap-3 align-items-center">
+                    <form asp-area="" asp-controller="User" asp-action="Logout" method="post"
+                          asp-antiforgery="true" class="d-flex gap-3 align-items-center">
 
                         <span class="@roleClass ">
                             <i class="bi bi-person-circle"></i> @currentUser
