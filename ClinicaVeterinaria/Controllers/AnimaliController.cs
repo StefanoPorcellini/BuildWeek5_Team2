@@ -221,15 +221,15 @@ public class AnimaliController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> CreateWithProprietario(
-    [Bind("Id,Nome,TipologiaAnimale,ColoreManto,DataNascita,PossiedeChip,NumeroChip,Randagio")] Animale animale,
-    string ProprietarioNome,
-    string ProprietarioCognome,
-    string ProprietarioTelefono,
-    string ProprietarioIndirizzo,
-    string ProprietarioCitta,
-    string ProprietarioCodiceFiscale,
-    IFormFile? img,
-    int? ProprietarioId)
+        [Bind("Id,Nome,TipologiaAnimale,ColoreManto,DataNascita,PossiedeChip,NumeroChip,Randagio")] Animale animale,
+        string ProprietarioNome,
+        string ProprietarioCognome,
+        string ProprietarioTelefono,
+        string ProprietarioIndirizzo,
+        string ProprietarioCitta,
+        string ProprietarioCodiceFiscale,
+        IFormFile? img,
+        int? ProprietarioId)
     {
         if (ModelState.IsValid)
         {
@@ -272,13 +272,12 @@ public class AnimaliController : Controller
                 await _animaleService.UpdateAsync(animale);
             }
 
-            // Reindirizza alla pagina Index
-            return RedirectToAction(nameof(Index));
+            // Reindirizza alla pagina Index nella cartella Animali
+            return RedirectToAction("Index", "Animali");
         }
 
         // Se il ModelState non è valido, ritorna la vista con gli errori
         _logger.LogError("ModelState non valido, ritorno alla vista.");
         return View(animale);
     }
-
 }
