@@ -7,10 +7,13 @@ namespace ClinicaVeterinaria.Service
     public class AnimaleService : IAnimaleService
     {
         private readonly VeterinaryClinicContext _context;
+        private readonly ILogger<AnimaleService> _logger;
 
-        public AnimaleService(VeterinaryClinicContext context)
+
+        public AnimaleService(VeterinaryClinicContext context, ILogger<AnimaleService> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public async Task<IEnumerable<Animale>> GetAllAsync()
@@ -75,15 +78,30 @@ namespace ClinicaVeterinaria.Service
             return await _context.Animali
                 .FirstOrDefaultAsync(a => a.NumeroChip == chipNumber);
         }
-
-        public void SaveImg(int idAnimale, IFormFile img)
+        public void SaveImg(int animaleId, IFormFile img)
         {
-            var imgPath = Path.Combine("wwwroot", "foto", $"fotoAnimale{idAnimale}.jpg");
-
-            using (var stream = new FileStream(imgPath, FileMode.Create))
+            if (img == null || img.Length == 0)
             {
-                img.CopyTo(stream);
+                _logger.LogError("L'immagine è null o vuota.");
+                return;
+            }
+
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/foto", $"fotoAnimale{animaleId}.jpg");
+
+            try
+            {
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    img.CopyTo(stream);
+                }
+                _logger.LogInformation("Immagine salvata con successo in {Path}", path);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Errore durante il salvataggio dell'immagine: {Message}", ex.Message);
+                throw;
             }
         }
+
     }
 }
