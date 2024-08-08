@@ -150,7 +150,36 @@ public class AnimaliController : Controller
         {
             try
             {
-                await _animaleService.UpdateAsync(animale);
+                // Recupera l'animale esistente dal database
+                var animaleEsistente = await _animaleService.GetByIdAsync(id);
+                if (animaleEsistente == null)
+                {
+                    return NotFound();
+                }
+
+                // Aggiorna i campi modificabili
+                animaleEsistente.Nome = animale.Nome;
+                animaleEsistente.TipologiaAnimale = animale.TipologiaAnimale;
+                animaleEsistente.ColoreManto = animale.ColoreManto;
+                animaleEsistente.DataNascita = animale.DataNascita;
+                animaleEsistente.Randagio = animale.Randagio;
+
+                // Verifica se il campo NumeroChip è stato lasciato vuoto
+                if (string.IsNullOrEmpty(animale.NumeroChip))
+                {
+                    animaleEsistente.NumeroChip = null; // Imposta NumeroChip a null
+                    animaleEsistente.PossiedeChip = false; // Imposta PossiedeChip a false
+                }
+                else
+                {
+                    animaleEsistente.NumeroChip = animale.NumeroChip;
+                    animaleEsistente.PossiedeChip = true; // Imposta PossiedeChip a true
+                }
+
+                // Salva le modifiche
+                await _animaleService.UpdateAsync(animaleEsistente);
+
+                return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -163,7 +192,6 @@ public class AnimaliController : Controller
                     throw;
                 }
             }
-            return RedirectToAction(nameof(Index));
         }
         return View(animale);
     }
