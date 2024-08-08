@@ -240,53 +240,51 @@ public class AnimaliController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(
-    [Bind("Id,Nome,TipologiaAnimale,ColoreManto,DataNascita,PossiedeChip,NumeroChip,Randagio")] Animale animale,
-    string ProprietarioNome,
-    string ProprietarioCognome,
-    string ProprietarioTelefono,
-    string ProprietarioIndirizzo,
-    string ProprietarioCitta,
-    string ProprietarioCodiceFiscale,
-    IFormFile? img,
-    int? ProprietarioId)
+        [Bind("Id,Nome,TipologiaAnimale,ColoreManto,DataNascita,PossiedeChip,NumeroChip,Randagio")] Animale animale,
+        string ProprietarioNome,
+        string ProprietarioCognome,
+        string ProprietarioTelefono,
+        string ProprietarioIndirizzo,
+        string ProprietarioCitta,
+        string ProprietarioCodiceFiscale,
+        IFormFile? img,
+        int? ProprietarioId)
     {
-        if (ProprietarioId.HasValue)
+        // Rimuovi i campi del nuovo proprietario dalla validazione se Randagio è selezionato
+        if (animale.Randagio)
         {
-            // Se è stato selezionato un proprietario esistente
-            _logger.LogInformation("Proprietario esistente selezionato, ID: {ProprietarioId}", ProprietarioId.Value);
-
-            // Assegna l'ID del proprietario all'animale
-            animale.ProprietarioId = ProprietarioId.Value;
-
-            // Rimuovi i campi del nuovo proprietario dalla validazione
             ModelState.Remove("ProprietarioNome");
             ModelState.Remove("ProprietarioCognome");
             ModelState.Remove("ProprietarioTelefono");
             ModelState.Remove("ProprietarioIndirizzo");
             ModelState.Remove("ProprietarioCitta");
             ModelState.Remove("ProprietarioCodiceFiscale");
+            ProprietarioId = null; // Assicurati che ProprietarioId non sia impostato
         }
 
         if (ModelState.IsValid)
         {
-            // Se non è stato selezionato un proprietario esistente, crea un nuovo proprietario
-            if (!ProprietarioId.HasValue)
+            if (!animale.Randagio)
             {
-                var nuovoProprietario = new Proprietario
+                if (!ProprietarioId.HasValue)
                 {
-                    Nome = ProprietarioNome,
-                    Cognome = ProprietarioCognome,
-                    Telefono = ProprietarioTelefono,
-                    Indirizzo = ProprietarioIndirizzo,
-                    Citta = ProprietarioCitta,
-                    CodiceFiscale = ProprietarioCodiceFiscale
-                };
+                    var nuovoProprietario = new Proprietario
+                    {
+                        Nome = ProprietarioNome,
+                        Cognome = ProprietarioCognome,
+                        Telefono = ProprietarioTelefono,
+                        Indirizzo = ProprietarioIndirizzo,
+                        Citta = ProprietarioCitta,
+                        CodiceFiscale = ProprietarioCodiceFiscale
+                    };
 
-                // Salva il nuovo proprietario nel database
-                nuovoProprietario = await _proprietarioService.CreateAsync(nuovoProprietario);
-
-                // Assegna il nuovo proprietario all'animale
-                animale.ProprietarioId = nuovoProprietario.Id;
+                    nuovoProprietario = await _proprietarioService.CreateAsync(nuovoProprietario);
+                    animale.ProprietarioId = nuovoProprietario.Id;
+                }
+                else
+                {
+                    animale.ProprietarioId = ProprietarioId.Value;
+                }
             }
 
             // Salva l'animale nel database
@@ -312,7 +310,6 @@ public class AnimaliController : Controller
             return RedirectToAction("Index", "Animali");
         }
 
-        // Se il ModelState non è valido, ritorna la vista con gli errori
         _logger.LogError("ModelState non valido, ritorno alla vista con gli errori.");
         foreach (var state in ModelState)
         {
@@ -327,6 +324,7 @@ public class AnimaliController : Controller
 
         return View(animale);
     }
+
 
 
 }

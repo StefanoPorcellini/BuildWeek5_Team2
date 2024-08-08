@@ -189,5 +189,25 @@
                 $("#ProprietarioId").val(id);
             });
         });
+        /
+        $(document).ready(function () {
+            // Funzione di toggle per visualizzare i campi Proprietario se Randagio non è selezionato
+            $("#RandagioCheckbox").change(function () {
+                var isRandagio = $(this).is(":checked");
+                var proprietarioFields = $("#proprietarioForm");
+                if (isRandagio) {
+                    proprietarioFields.hide();
+                    $("#proprietarioId").val(""); // Rimuovi l'ID del proprietario se è Randagio
+                } else {
+                    proprietarioFields.show();
+                }
+            });
+
+            // Funzione per mostrare i campi Proprietario quando la checkbox Randagio non è selezionata
+            if ($("#RandagioCheckbox").is(":checked")) {
+                $("#proprietarioForm").hide();
+            }
+        });
+
     </script>
 }
