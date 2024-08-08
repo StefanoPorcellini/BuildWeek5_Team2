@@ -49,79 +49,6 @@ public class AnimaliController : Controller
         return View();
     }
 
-    //// POST: Animali/Create
-    //[HttpPost]
-    //[ValidateAntiForgeryToken]
-    //public async Task<IActionResult> Create([Bind("Id,Nome,TipologiaAnimale,ColoreManto,DataNascita,PossiedeChip,NumeroChip,ProprietarioId,Randagio")] Animale animale, IFormFile? img)
-    //{
-    //    _logger.LogInformation("Avviata la creazione di un nuovo animale.");
-
-    //    // Verifica se l'animale è randagio e non ha un proprietario
-    //    if (!animale.Randagio && !animale.ProprietarioId.HasValue)
-    //    {
-    //        _logger.LogWarning("ProprietarioId è nullo. Non è possibile creare l'animale non randagio senza un proprietario associato.");
-    //        ModelState.AddModelError("ProprietarioId", "È necessario selezionare un proprietario per un animale non randagio.");
-    //    }
-
-    //    if (ModelState.IsValid)
-    //    {
-    //        try
-    //        {
-    //            _logger.LogInformation("Modello valido. Inizio del processo di creazione per l'animale con Nome: {Nome}, Tipologia: {Tipologia}, Randagio: {Randagio}.",
-    //                animale.Nome, animale.TipologiaAnimale, animale.Randagio);
-
-    //            if (!animale.Randagio && animale.ProprietarioId.HasValue)
-    //            {
-    //                // Carica il proprietario associato solo se l'animale non è randagio
-    //                animale.Proprietario = await _proprietarioService.GetByIdAsync(animale.ProprietarioId.Value);
-    //            }
-
-    //            // Salva l'animale senza l'immagine
-    //            await _animaleService.CreateAsync(animale);
-
-    //            if (img != null && img.Length > 0)
-    //            {
-    //                // Salva l'immagine sul disco
-    //                _animaleService.SaveImg(animale.Id, img);
-
-    //                // Aggiorna il percorso dell'immagine nel modello
-    //                animale.Foto = $"foto/fotoAnimale{animale.Id}.jpg";
-
-    //                // Aggiorna l'animale nel database con il percorso dell'immagine
-    //                await _animaleService.UpdateAsync(animale);
-    //            }
-
-    //            _logger.LogInformation("Animale creato con successo. Nome: {Nome}, ID: {Id}.", animale.Nome, animale.Id);
-    //            return RedirectToAction(nameof(Index));
-    //        }
-    //        catch (Exception ex)
-    //        {
-    //            _logger.LogError(ex, "Errore durante la creazione dell'animale con Nome: {Nome}, Tipologia: {Tipologia}, Randagio: {Randagio}.",
-    //                animale.Nome, animale.TipologiaAnimale, animale.Randagio);
-    //            ModelState.AddModelError(string.Empty, "Si è verificato un errore durante la creazione dell'animale. Riprova più tardi.");
-    //        }
-    //    }
-    //    else
-    //    {
-    //        _logger.LogWarning("Modello non valido. Creazione dell'animale fallita. Dettagli degli errori:");
-
-    //        foreach (var state in ModelState)
-    //        {
-    //            var key = state.Key;
-    //            var errors = state.Value.Errors;
-
-    //            foreach (var error in errors)
-    //            {
-    //                _logger.LogWarning("Errore nel campo '{Field}': {ErrorMessage}", key, error.ErrorMessage);
-    //            }
-    //        }
-    //    }
-
-    //    return View(animale);
-    //}
-
-
-
     // GET: Animali/Edit/5
     public async Task<IActionResult> Edit(int? id)
     {
@@ -138,15 +65,17 @@ public class AnimaliController : Controller
         return View(animale);
     }
 
-    // POST: Animali/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,TipologiaAnimale,ColoreManto,DataNascita,PossiedeChip,NumeroChip,ProprietarioId,Randagio")] Animale animale)
+    public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,TipologiaAnimale,ColoreManto,DataNascita,PossiedeChip,NumeroChip,ProprietarioId,Randagio")] Animale animale, IFormFile? img, string EliminaFoto)
     {
         if (id != animale.Id)
         {
             return NotFound();
         }
+
+        // Rimuovi EliminaFoto dal ModelState
+        ModelState.Remove("EliminaFoto");
 
         if (ModelState.IsValid)
         {
@@ -178,8 +107,52 @@ public class AnimaliController : Controller
                     animaleEsistente.PossiedeChip = true; // Imposta PossiedeChip a true
                 }
 
+                // Gestione del caricamento dell'immagine
+                _logger.LogInformation("Gestione del caricamento dell'immagine per l'animale con ID {Id}.", animaleEsistente.Id);
+
+                bool shouldDeletePhoto = EliminaFoto == "on"; // Controlla se EliminaFoto è selezionato
+                if (shouldDeletePhoto && !string.IsNullOrEmpty(animaleEsistente.Foto))
+                {
+                    // Elimina il file fisico dal percorso
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", animaleEsistente.Foto);
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                        _logger.LogInformation("Foto eliminata con successo dal percorso {FilePath}.", filePath);
+                    }
+
+                    // Rimuove il riferimento alla foto dal database
+                    animaleEsistente.Foto = null;
+                }
+
+                if (img != null && img.Length > 0)
+                {
+                    _logger.LogInformation("File caricato con nome: {FileName} e dimensione: {Size} bytes.", img.FileName, img.Length);
+
+                    // Definisci il percorso di salvataggio
+                    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "foto");
+                    Directory.CreateDirectory(uploadsFolder); // Assicurati che la cartella esista
+                    var uniqueFileName = $"fotoAnimale{animaleEsistente.Id}{Path.GetExtension(img.FileName)}";
+                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    // Salva il file nel percorso specificato
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await img.CopyToAsync(fileStream);
+                    }
+
+                    // Aggiorna il percorso dell'immagine nel modello
+                    animaleEsistente.Foto = Path.Combine("foto", uniqueFileName);
+                }
+                else
+                {
+                    _logger.LogWarning("Nessun file caricato o file caricato vuoto.");
+                }
+
                 // Salva le modifiche
                 await _animaleService.UpdateAsync(animaleEsistente);
+
+                _logger.LogInformation("Animale con ID {Id} aggiornato con successo.", animale.Id);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -195,8 +168,21 @@ public class AnimaliController : Controller
                 }
             }
         }
+        else
+        {
+            // Logga gli errori nel ModelState
+            foreach (var state in ModelState)
+            {
+                foreach (var error in state.Value.Errors)
+                {
+                    _logger.LogError("Errore nel campo {Field}: {ErrorMessage}", state.Key, error.ErrorMessage);
+                }
+            }
+        }
+
         return View(animale);
     }
+
 
     // GET: Animali/Delete/5
     public async Task<IActionResult> Delete(int? id)
