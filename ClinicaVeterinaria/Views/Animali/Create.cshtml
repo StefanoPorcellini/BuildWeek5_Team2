@@ -15,29 +15,29 @@
         <span asp-validation-for="Nome" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="TipologiaAnimale" class="control-label"></label>
+        <label asp-for="TipologiaAnimale" class="control-label">Tipologia Animale</label>
         <input asp-for="TipologiaAnimale" class="form-control" />
         <span asp-validation-for="TipologiaAnimale" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="ColoreManto" class="control-label"></label>
+        <label asp-for="ColoreManto" class="control-label">Colore Manto</label>
         <input asp-for="ColoreManto" class="form-control" />
         <span asp-validation-for="ColoreManto" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="DataNascita" class="control-label"></label>
+        <label asp-for="DataNascita" class="control-label">Data Nascita</label>
         <input asp-for="DataNascita" class="form-control" type="date" />
         <span asp-validation-for="DataNascita" class="text-danger"></span>
     </div>
     <div class="form-group">
         <div class="form-check">
             <input asp-for="PossiedeChip" class="form-check-input" type="checkbox" id="PossiedeChipCheckbox" />
-            <label asp-for="PossiedeChip" class="form-check-label"></label>
+            <label asp-for="PossiedeChip" class="form-check-label">Possiede Chip</label>
             <span asp-validation-for="PossiedeChip" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group" id="NumeroChipField" style="display:none;">
-        <label asp-for="NumeroChip" class="control-label"></label>
+        <label asp-for="NumeroChip" class="control-label">Numero Chip</label>
         <input asp-for="NumeroChip" class="form-control" />
         <span asp-validation-for="NumeroChip" class="text-danger"></span>
     </div>
@@ -100,7 +100,7 @@
         <input type="hidden" id="ProprietarioId" name="ProprietarioId" />
     </div>
 
-    <button type="submit" class="btn btn-primary">Crea</button>
+    <button type="submit" class="btn btn-primary my-2">Crea</button>
 </form>
 
 @section Scripts {

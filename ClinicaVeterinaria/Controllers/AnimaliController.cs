@@ -224,35 +224,54 @@ public class AnimaliController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> CreateWithProprietario(
     [Bind("Id,Nome,TipologiaAnimale,ColoreManto,DataNascita,PossiedeChip,NumeroChip,Randagio")] Animale animale,
+    string ProprietarioNome,
+    string ProprietarioCognome,
+    string ProprietarioTelefono,
+    string ProprietarioIndirizzo,
+    string ProprietarioCitta,
+    string ProprietarioCodiceFiscale,
     IFormFile? img,
     int? ProprietarioId)
     {
         if (ModelState.IsValid)
         {
-            // Verifica se è stato selezionato un proprietario esistente
+            // Se è stato selezionato un proprietario esistente
             if (ProprietarioId.HasValue)
             {
                 _logger.LogInformation("Proprietario esistente selezionato, ID: {ProprietarioId}", ProprietarioId.Value);
 
                 // Assegna l'ID del proprietario all'animale
                 animale.ProprietarioId = ProprietarioId.Value;
-
-                // Salva l'animale nel database
-                await _animaleService.CreateAsync(animale);
-
-                // Salva l'immagine se presente
-                if (img != null && img.Length > 0)
-                {
-                    _animaleService.SaveImg(animale.Id, img);
-                    animale.Foto = $"foto/fotoAnimale{animale.Id}.jpg";
-                    await _animaleService.UpdateAsync(animale);
-                }
             }
             else
             {
-                ModelState.AddModelError("", "Devi selezionare un proprietario.");
-                _logger.LogError("Proprietario non selezionato.");
-                return View(animale);
+                // Se non è stato selezionato un proprietario esistente, crea un nuovo proprietario
+                var nuovoProprietario = new Proprietario
+                {
+                    Nome = ProprietarioNome,
+                    Cognome = ProprietarioCognome,
+                    Telefono = ProprietarioTelefono,
+                    Indirizzo = ProprietarioIndirizzo,
+                    Citta = ProprietarioCitta,
+                    CodiceFiscale = ProprietarioCodiceFiscale
+                };
+
+                // Salva il nuovo proprietario nel database
+                nuovoProprietario = await _proprietarioService.CreateAsync(nuovoProprietario);
+
+                // Assegna il nuovo proprietario all'animale
+                animale.ProprietarioId = nuovoProprietario.Id;
+            }
+
+            // Salva l'animale nel database
+            await _animaleService.CreateAsync(animale);
+
+            // Salva l'immagine se presente
+            if (img != null && img.Length > 0)
+            {
+                _animaleService.SaveImg(animale.Id, img);
+                animale.Foto = $"foto/fotoAnimale{animale.Id}.jpg";
+                await _animaleService.UpdateAsync(animale);
             }
 
             // Reindirizza alla pagina Index
@@ -263,4 +282,5 @@ public class AnimaliController : Controller
         _logger.LogError("ModelState non valido, ritorno alla vista.");
         return View(animale);
     }
+
 }
