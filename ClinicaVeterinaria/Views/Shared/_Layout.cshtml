@@ -55,17 +55,21 @@
                 {
                     @if (isAdmin || isFarmacista)
                     {
-                        <li class="nav-item">
+                        <li class="nav-item list-unstyled">
                             <a class="nav-link text-dark" asp-controller="Prodotto" asp-action="Create">Aggiungi Prodotto</a>
                         </li>
-                        <li class="nav-item">
+                    }
+
+                    @if (User.Identity.IsAuthenticated && (isAdmin || isFarmacista))
+                    {
+                        <li class="nav-item list-unstyled">
                             <a class="nav-link text-dark" asp-controller="Prodotto" asp-action="IndexProdotti">Visualizza Prodotti</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item list-unstyled">
                             <a class="nav-link text-dark" asp-controller="Prodotto" asp-action="IndexCaseFarmaceutiche">Visualizza Case Farmaceutiche</a>
                         </li>
                         <!-- Nuovo link per Ricerca Prodotto -->
-                        <li class="nav-item">
+                        <li class="nav-item list-unstyled">
                             <a class="nav-link text-dark" asp-controller="Prodotto" asp-action="RicercaProdotto">Ricerca Prodotto</a>
                         </li>
                     }
