@@ -73,13 +73,9 @@ namespace ClinicaVeterinaria.Service
         {
             return await _context.Ricoveri
                 .Include(r => r.Animale)
-                .Where(r => (r.DataFine == null || r.DataFine > DateTime.Now) && !r.Dimesso) 
+                .Where(r =>!r.Dimesso) 
                 .ToListAsync();
         }
-
-
-
-
         public async Task CreateAsync(Ricovero ricovero)
         {
             ricovero.DataInizio = DateTime.Now;

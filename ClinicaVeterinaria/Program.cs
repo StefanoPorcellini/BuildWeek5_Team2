@@ -16,6 +16,7 @@ builder.Services.AddScoped<IProprietarioService, ProprietarioService>();
 builder.Services.AddScoped<IAnimaleService, AnimaleService>();
 builder.Services.AddScoped<IVisitaService, VisitaService>();
 builder.Services.AddScoped<IUtenteService, UtenteService>();
+builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<IRicoveroService, RicoveroService>();
 builder.Services.AddScoped<IVenditaService, VenditaService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
