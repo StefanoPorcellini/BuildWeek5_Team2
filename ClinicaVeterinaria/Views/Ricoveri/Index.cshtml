@@ -1,73 +1,57 @@
 ﻿@model IEnumerable<ClinicaVeterinaria.Models.Ricovero>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Gestione Ricoveri";
 }
+<style>
+   table{
+       box-shadow:5px 5px 5px lightgrey;
+   }
+</style>
 
 <h1>VetCare - Gestione Ricoveri &#10084</h1>
+<div class="container mt-4">
+    <h1 class="mb-4">@ViewData["Title"]</h1>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.First().DataInizio)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().DataFine)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().Animale.Nome)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().Rimborso)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().CostoGiornaliero)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().PrezzoTotale)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().Dimesso)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr class="@(item.Dimesso ? "table-success" : "table-warning")">
-                <td>
-                    @item.DataInizio.ToString("dd/MM/yyyy")
-                </td>
-                <td>
-                    @(item.DataFine.HasValue ? item.DataFine.Value.ToString("dd/MM/yyyy") : "N/A")
-                </td>
-                <td>
-                    @Html.DisplayFor(_ => item.Animale.Nome)
-                </td>
-                <td>
-                    @Html.DisplayFor(_ => item.Rimborso)
-                </td>
-                <td>
-                    @item.CostoGiornaliero.ToString("C")
-                </td>
-                <td>
-                    @((item.PrezzoTotale ?? 0).ToString("C"))
-                </td>
-                <td>
-                    @Html.DisplayFor(_ => item.Dimesso)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Modifica</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Dettagli</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Elimina</a> |
-                    <a asp-action="Checkout" asp-route-id="@item.Id" class="btn btn-sm btn-success">Checkout</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <div class="mb-3">
+        <a asp-action="Create" class="btn btn-primary">Registra nuovo ricovero</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Data Inizio</th>
+                    <th>Data Fine</th>
+                    <th class="text-center">Nome Animale</th>
+                    <th>Rimborso</th>
+                    <th>Costo Giornaliero</th>
+                    <th>Prezzo Totale</th>
+                    <th>Dimesso</th>
+                    <th class="text-center">Azioni</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="@(item.Dimesso ? "table-success" : "table-warning")">
+                        <td>@item.DataInizio.ToString("dd/MM/yyyy")</td>
+                        <td>@(item.DataFine.HasValue ? item.DataFine.Value.ToString("dd/MM/yyyy") : "In Corso...")</td>
+                        <td class ="text-center">@item.Animale.Nome</td>
+                        <td>@Html.DisplayFor(_ => item.Rimborso)</td>
+                        <td>@item.CostoGiornaliero.ToString("C")</td>
+                        <td>@((item.PrezzoTotale ?? 0).ToString("C"))</td>
+                        <td>@Html.DisplayFor(_ => item.Dimesso)</td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Edit</a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Details</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                            <a asp-action="Checkout" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Checkout</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
