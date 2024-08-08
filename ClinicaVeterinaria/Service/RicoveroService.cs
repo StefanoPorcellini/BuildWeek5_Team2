@@ -76,10 +76,6 @@ namespace ClinicaVeterinaria.Service
                 .Where(r =>!r.Dimesso) 
                 .ToListAsync();
         }
-
-
-
-
         public async Task CreateAsync(Ricovero ricovero)
         {
             ricovero.DataInizio = DateTime.Now;
