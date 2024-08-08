@@ -1,9 +1,12 @@
 ﻿using ClinicaVeterinaria.Models;
 using ClinicaVeterinaria.Service.Intertface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
+
+[Authorize(Roles = "Veterinario,Admin")]
 public class AnimaliController : Controller
 {
     private readonly IAnimaleService _animaleService;

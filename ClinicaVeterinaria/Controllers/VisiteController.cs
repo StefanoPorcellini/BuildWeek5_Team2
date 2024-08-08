@@ -1,10 +1,13 @@
 ﻿using ClinicaVeterinaria.Models;
 using ClinicaVeterinaria.Service.Intertface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
+
+[Authorize(Roles = "Veterinario,Admin")]
 public class VisiteController : Controller
 {
     private readonly IVisitaService _visitaService;

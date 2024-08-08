@@ -12,11 +12,17 @@
             <h4 class="card-title">Cliente</h4>
             <hr />
             <dl class="row">
-                <dt class="col-sm-3">Proprietario</dt>
-                <dd class="col-sm-9">@Html.DisplayFor(model => model.Proprietario.Id)</dd>
+                @if (Model.Proprietario != null)
+                {
+                    <dt class="col-sm-3">Proprietario</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.Proprietario.Id)</dd>
+                }
 
-                <dt class="col-sm-3">Tipologia Animale</dt>
-                <dd class="col-sm-9">@Html.DisplayFor(model => model.TipologiaAnimale)</dd>
+                @if (!string.IsNullOrEmpty(Model.TipologiaAnimale))
+                {
+                    <dt class="col-sm-3">Tipologia Animale</dt>
+                    <dd class="col-sm-9">@Html.DisplayFor(model => model.TipologiaAnimale)</dd>
+                }
 
                 <dt class="col-sm-3">Nome</dt>
                 <dd class="col-sm-9">@Html.DisplayFor(model => model.Nome)</dd>
