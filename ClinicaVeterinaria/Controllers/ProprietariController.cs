@@ -142,7 +142,6 @@ public class ProprietariController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    [HttpGet]
     public async Task<IActionResult> Search(string term)
     {
         if (string.IsNullOrWhiteSpace(term))
@@ -157,9 +156,13 @@ public class ProprietariController : Controller
             p.Id,
             p.Nome,
             p.Cognome,
+            p.Telefono,
+            p.Indirizzo,
+            p.Citta,
             p.CodiceFiscale
         }).ToList();
 
         return Json(result);
     }
+
 }
