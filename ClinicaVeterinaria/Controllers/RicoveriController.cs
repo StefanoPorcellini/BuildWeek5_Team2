@@ -2,11 +2,13 @@
 using ClinicaVeterinaria.Models;
 using ClinicaVeterinaria.Models.Requests;
 using ClinicaVeterinaria.Service.Intertface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
+[Authorize(Roles = "Veterinario,Admin")]
 public class RicoveriController : Controller
 {
     private readonly IRicoveroService _ricoveroService;
