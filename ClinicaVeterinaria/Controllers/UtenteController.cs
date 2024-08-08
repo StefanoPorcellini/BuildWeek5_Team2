@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace ClinicaVeterinaria.Controllers
@@ -120,18 +121,21 @@ namespace ClinicaVeterinaria.Controllers
         }
 
         // Aggiungi le azioni delle dashboard
+        [Authorize(Roles = "Admin")]
         [HttpGet("AdminDashboard")]
         public IActionResult AdminDashboard()
         {
             return View("~/Views/User/AdminDashboard.cshtml");
         }
 
+        [Authorize(Roles = "Farmacista")]
         [HttpGet("FarmacistaDashboard")]
         public IActionResult FarmacistaDashboard()
         {
             return View("~/Views/User/FarmacistaDashboard.cshtml");
         }
 
+        [Authorize(Roles = "Veterinario")]
         [HttpGet("VeterinarioDashboard")]
         public IActionResult VeterinarioDashboard()
         {

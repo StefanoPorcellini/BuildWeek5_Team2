@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
+[Authorize(Roles = "Farmacista,Admin")]
 public class VenditeController : Controller
 {
     private readonly IVenditaService _venditaService;
