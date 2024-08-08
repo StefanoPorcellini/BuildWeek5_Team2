@@ -164,5 +164,10 @@ public class ProprietariController : Controller
 
         return Json(result);
     }
-
+    [HttpGet]
+    public async Task<IActionResult> GetAllProprietari()
+    {
+        var proprietari = await _proprietarioService.GetAllAsync();
+        return Json(proprietari);
+    }
 }
