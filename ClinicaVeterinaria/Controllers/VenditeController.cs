@@ -156,76 +156,160 @@ public class VenditeController : Controller
         return vendita != null;
     }
 
+    //public async Task<IActionResult> GeneratePDFPerVendita(int id)
+    //{
+    //    var vendita = await _venditaService.GetByIdAsync(id);
+
+    //    if (vendita == null)
+    //    {
+    //        return NotFound();
+    //    }
+
+    //    var memoryStream = new MemoryStream();
+    //    var document = new Document(PageSize.A4, 50, 50, 25, 25);
+    //    PdfWriter writer = PdfWriter.GetInstance(document, memoryStream);
+    //    writer.CloseStream = false;
+    //    document.Open();
+
+    //    // Aggiungere il logo
+    //    var logoPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img", "logo_vetcare.png");
+    //    if (System.IO.File.Exists(logoPath))
+    //    {
+    //        Image logo = Image.GetInstance(logoPath);
+    //        logo.ScaleAbsolute(100, 50);
+    //        logo.Alignment = Element.ALIGN_CENTER;
+    //        document.Add(logo);
+    //    }
+
+    //    document.Add(new Paragraph(" ")); // Aggiungere uno spazio vuoto
+
+    //    // Titolo del PDF
+    //    var titleFont = FontFactory.GetFont("Arial", 18, Font.BOLD);
+    //    var title = new Paragraph("Dettagli della Vendita", titleFont)
+    //    {
+    //        Alignment = Element.ALIGN_CENTER
+    //    };
+    //    document.Add(title);
+
+    //    document.Add(new Paragraph(" ")); // Aggiungere uno spazio vuoto
+
+    //    var table = new PdfPTable(2)
+    //    {
+    //        WidthPercentage = 80,
+    //        HorizontalAlignment = Element.ALIGN_CENTER
+    //    };
+    //    table.SetWidths(new float[] { 1, 2 });
+
+    //    // Aggiungere celle alla tabella
+    //    AddCellToHeader(table, "Codice Fiscale Cliente:");
+    //    AddCellToData(table, vendita.CodiceFiscaleCliente);
+
+    //    AddCellToHeader(table, "Data Vendita:");
+    //    AddCellToData(table, vendita.DataVendita.ToString("dd/MM/yyyy HH:mm"));
+
+    //    AddCellToHeader(table, "Prodotto:");
+    //    AddCellToData(table, vendita.Prodotto.Nome);
+
+    //    AddCellToHeader(table, "Prezzo Unitario:");
+    //    AddCellToData(table, vendita.Prodotto.Prezzo.ToString("C"));
+
+    //    AddCellToHeader(table, "Quantità:");
+    //    AddCellToData(table, vendita.Quantita.ToString());
+
+    //    var totale = vendita.Quantita * vendita.Prodotto.Prezzo;
+    //    AddCellToHeader(table, "Totale:");
+    //    AddCellToData(table, totale.ToString("C"));
+
+    //    document.Add(table);
+    //    document.Close();
+
+    //    memoryStream.Position = 0;
+    //    return File(memoryStream, "application/pdf", $"Vendita_{DateTime.Now}_{id}.pdf");
+    //}
+
+    //prova metodo per generare il pdf in base al template
+
     public async Task<IActionResult> GeneratePDFPerVendita(int id)
     {
+        // Recupera i dati della vendita dall'ID fornito
         var vendita = await _venditaService.GetByIdAsync(id);
 
+        // Verifica se la vendita esiste
         if (vendita == null)
         {
+            // Restituisce un errore 404 se la vendita non è trovata
             return NotFound();
         }
 
-        var memoryStream = new MemoryStream();
-        var document = new Document(PageSize.A4, 50, 50, 25, 25);
-        PdfWriter writer = PdfWriter.GetInstance(document, memoryStream);
-        writer.CloseStream = false;
-        document.Open();
+        // Costruisce il percorso del file del template PDF
+        var templatePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/pdf", "template_ricevuta_modulo.pdf");
 
-        // Aggiungere il logo
-        var logoPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img", "logo_vetcare.png");
-        if (System.IO.File.Exists(logoPath))
+        // Controlla se il file del template esiste
+        if (!System.IO.File.Exists(templatePath))
         {
-            Image logo = Image.GetInstance(logoPath);
-            logo.ScaleAbsolute(100, 50);
-            logo.Alignment = Element.ALIGN_CENTER;
-            document.Add(logo);
+            // Logga un errore e restituisce un errore 500 se il template non esiste
+            _logger.LogError("Il file del template PDF non esiste: {TemplatePath}", templatePath);
+            return StatusCode(500, "Template PDF non trovato.");
         }
 
-        document.Add(new Paragraph(" ")); // Aggiungere uno spazio vuoto
-
-        // Titolo del PDF
-        var titleFont = FontFactory.GetFont("Arial", 18, Font.BOLD);
-        var title = new Paragraph("Dettagli della Vendita", titleFont)
+        try
         {
-            Alignment = Element.ALIGN_CENTER
-        };
-        document.Add(title);
+            // Crea un MemoryStream per memorizzare il PDF generato
+            using (var memoryStream = new MemoryStream())
+            {
+                // Carica il PDF template e crea un PdfStamper per modificarlo
+                using (var pdfReader = new PdfReader(templatePath))
+                {
+                    using (var pdfStamper = new PdfStamper(pdfReader, memoryStream))
+                    {
+                        // Ottieni i campi del modulo dal PDF
+                        AcroFields formFields = pdfStamper.AcroFields;
 
-        document.Add(new Paragraph(" ")); // Aggiungere uno spazio vuoto
+                        // Compila i campi del modulo con i dati della vendita
+                        formFields.SetField("CF", vendita.CodiceFiscaleCliente);
+                        formFields.SetField("ID", vendita.Id.ToString());
 
-        var table = new PdfPTable(2)
+                        // Ottieni la posizione e la larghezza del campo data per l'allineamento
+                        string dataValue = vendita.DataVendita.ToString("dd/MM/yyyy HH:mm");
+                        var dataFieldPosition = formFields.GetFieldPositions("data")[0];
+                        float fieldWidth = dataFieldPosition.position.Width;
+
+                        // Calcola il numero di spazi necessari per allineare il testo a destra
+                        int averageCharWidth = 5; // Larghezza media del carattere, può essere regolata
+                        int spacesNeeded = (int)((fieldWidth - (dataValue.Length * averageCharWidth)) / averageCharWidth);
+                        string rightAlignedData = new string(' ', spacesNeeded) + dataValue;
+
+                        // Imposta i valori dei campi nel modulo PDF
+                        formFields.SetField("data", rightAlignedData);
+                        formFields.SetField("prodotto", vendita.Prodotto.Nome);
+                        formFields.SetField("quantita", vendita.Quantita.ToString());
+                        formFields.SetField("Prezzo", vendita.Prodotto.Prezzo.ToString("C"));
+
+                        // Calcola il totale e imposta il campo totale nel modulo PDF
+                        var totale = vendita.Quantita * vendita.Prodotto.Prezzo;
+                        formFields.SetField("totale", totale.ToString("C"));
+
+                        // Conclude e chiude il PdfStamper e il PdfReader
+                        pdfStamper.FormFlattening = true;
+                    }
+                }
+
+                // Copia il contenuto del MemoryStream in un array di byte per restituirlo come file
+                var pdfContent = memoryStream.ToArray();
+
+                // Restituisce il PDF come file scaricabile
+                var fileName = $"Vendita_{DateTime.Now:yyyyMMdd}_{id}.pdf";
+                return File(pdfContent, "application/pdf", fileName);
+            }
+        }
+        catch (Exception ex)
         {
-            WidthPercentage = 80,
-            HorizontalAlignment = Element.ALIGN_CENTER
-        };
-        table.SetWidths(new float[] { 1, 2 });
-
-        // Aggiungere celle alla tabella
-        AddCellToHeader(table, "Codice Fiscale Cliente:");
-        AddCellToData(table, vendita.CodiceFiscaleCliente);
-
-        AddCellToHeader(table, "Data Vendita:");
-        AddCellToData(table, vendita.DataVendita.ToString("dd/MM/yyyy HH:mm"));
-
-        AddCellToHeader(table, "Prodotto:");
-        AddCellToData(table, vendita.Prodotto.Nome);
-
-        AddCellToHeader(table, "Prezzo Unitario:");
-        AddCellToData(table, vendita.Prodotto.Prezzo.ToString("C"));
-
-        AddCellToHeader(table, "Quantità:");
-        AddCellToData(table, vendita.Quantita.ToString());
-
-        var totale = vendita.Quantita * vendita.Prodotto.Prezzo;
-        AddCellToHeader(table, "Totale:");
-        AddCellToData(table, totale.ToString("C"));
-
-        document.Add(table);
-        document.Close();
-
-        memoryStream.Position = 0;
-        return File(memoryStream, "application/pdf", $"Vendita_{DateTime.Now}_{id}.pdf");
+            // Logga l'errore se si verifica un problema durante la generazione del PDF
+            _logger.LogError(ex, "Errore durante la generazione del PDF per la vendita con ID: {VenditaId}", id);
+            return StatusCode(500, "Errore durante la generazione del PDF.");
+        }
     }
+
 
     private void AddCellToHeader(PdfPTable table, string text)
     {
