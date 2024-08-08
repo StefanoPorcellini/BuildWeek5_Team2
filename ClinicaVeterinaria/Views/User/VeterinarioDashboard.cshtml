@@ -1,26 +1,27 @@
 ﻿@{
     ViewData["Title"] = "Pagina Veterinario";
 }
+<div class="text-center">
+    <img src="~/img/icona_veterinario.svg" class="w-25" />
+    <h2>@ViewData["Title"]</h2>
+    <p>Benvenuto @User.Identity.Name</p>
 
-<h2>@ViewData["Title"]</h2>
-<p>Benvenuto @User.Identity.Name</p>
+    <div class="d-flex justify-content-center gap-3">
 
-<div class="d-flex justify-content-center gap-3">
-
-    <a class="button text-decoration-none" asp-area="" asp-antifo=""
-       asp-controller="Animali" asp-action="Create">Nuovo Animale</a>
+        <a class="button text-decoration-none" asp-area="" asp-antifo=""
+           asp-controller="Animali" asp-action="Create">Nuovo Animale</a>
        
-       <a class="button text-decoration-none" asp-area="" asp-antifo=""
-       asp-controller="Visite" asp-action="Create">Nuova Visita</a> 
+           <a class="button text-decoration-none" asp-area="" asp-antifo=""
+           asp-controller="Visite" asp-action="Create">Nuova Visita</a> 
 
-       <a class="button text-decoration-none" asp-area="" asp-antifo=""
-       asp-controller="Ricoveri" asp-action="Create">Nuovo Ricovero</a>
+           <a class="button text-decoration-none" asp-area="" asp-antifo=""
+           asp-controller="Ricoveri" asp-action="Create">Nuovo Ricovero</a>
        
-       <a class="button text-decoration-none" asp-area="" asp-antifo=""
-       asp-controller="Animali" asp-action="Index">Vedi gli animali registrati</a>
+           <a class="button text-decoration-none" asp-area="" asp-antifo=""
+           asp-controller="Animali" asp-action="Index">Vedi gli animali registrati</a>
 
-       <a class="button text-decoration-none" asp-area="" asp-antifo=""
-       asp-controller="Visite" asp-action="Index">Storico Visite</a>
-
+           <a class="button text-decoration-none" asp-area="" asp-antifo=""
+           asp-controller="Visite" asp-action="Index">Storico Visite</a>
+    </div>
 </div>
 

@@ -4,16 +4,16 @@
     var animalFound = TempData["AnimalFound"] != null && (bool)TempData["AnimalFound"];
     var imageUrl = Url.Content("~/img/petpc.svg");
 }
-
-<h1>VetCare &#128054 - Homepage</h1>
-
-<form method="post" asp-action="SearchAnimal" asp-controller="Animali">
-    <div class="group">
-        <input type="text" class="input" id="chipNumber" name="chipNumber" required placeholder="Inserisci il numero del chip" />
-        <button type="submit" class="btn"><i class="bi bi-search"></i></button>
-    </div>
-</form>
-
+<div class="text-center">
+    <img src="~/img/logo_vetcare.svg" class="w-50 img-fluid" />
+    <h3 class="">Hai smarrito il tua animale? Inserisci il numero del chip e controlla se è sotto le nostre cure</h3>
+    <form method="post" asp-action="SearchAnimal" asp-controller="Animali">
+        <div class="group">
+            <input type="text" class="input" id="chipNumber" name="chipNumber" required placeholder="Inserisci il numero del chip" />
+            <button type="submit" class="btn"><i class="bi bi-search"></i></button>
+        </div>
+    </form>
+</div>
 
 @if (searchInit)
 {
