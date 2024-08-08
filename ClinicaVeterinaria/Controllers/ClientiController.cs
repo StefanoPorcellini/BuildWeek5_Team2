@@ -1,44 +1,114 @@
 ﻿using ClinicaVeterinaria.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using System.Threading.Tasks;
 
 public class ClientiController : Controller
 {
-    private readonly VeterinaryClinicContext _context;
+    private readonly IClienteService _clienteService;
 
-    public ClientiController(VeterinaryClinicContext context)
+    public ClientiController(IClienteService clienteService)
     {
-        _context = context;
+        _clienteService = clienteService;
     }
 
+    // GET: Clienti
+    public async Task<IActionResult> Index()
+    {
+        var clienti = await _clienteService.GetAllAsync();
+        return View(clienti);
+    }
+
+    // GET: Clienti/Details/5
+    public async Task<IActionResult> Details(int? id)
+    {
+        if (id == null)
+        {
+            return NotFound();
+        }
+
+        var cliente = await _clienteService.GetByIdAsync(id.Value);
+
+        if (cliente == null)
+        {
+            return NotFound();
+        }
+
+        return View(cliente);
+    }
+
+    // GET: Clienti/Create
+    public IActionResult Create()
+    {
+        return View();
+    }
+
+    // POST: Clienti/Create
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create([Bind("Id,Nome,Cognome,Telefono,Indirizzo,Citta,CodiceFiscale")] Cliente cliente)
+    {
+        if (ModelState.IsValid)
+        {
+            await _clienteService.CreateAsync(cliente);
+            return RedirectToAction(nameof(Index));
+        }
+        return View(cliente);
+    }
+
+    // GET: Clienti/Edit/5
+    public async Task<IActionResult> Edit(int? id)
+    {
+        if (id == null)
+        {
+            return NotFound();
+        }
+
+        var cliente = await _clienteService.GetByIdAsync(id.Value);
+        if (cliente == null)
+        {
+            return NotFound();
+        }
+        return View(cliente);
+    }
+
+    // POST: Clienti/Edit/5
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Cognome,Telefono,Indirizzo,Citta,CodiceFiscale")] Cliente cliente)
+    {
+        if (id != cliente.Id)
+        {
+            return NotFound();
+        }
+
+        if (ModelState.IsValid)
+        {
+            try
+            {
+                await _clienteService.UpdateAsync(cliente);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await _clienteService.ClienteExistsAsync(cliente.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
+        }
+        return View(cliente);
+    }
+
+    // GET: Clienti/Search
     [HttpGet]
     public async Task<IActionResult> Search(string term)
     {
-        var clienti = await _context.Clienti
-            .Where(c => c.Nome.Contains(term) || c.CodiceFiscale.Contains(term))
-            .Select(c => new
-            {
-                Nome = c.Nome,
-                Cognome = c.Cognome,
-                CodiceFiscale = c.CodiceFiscale
-            })
-            .ToListAsync();
-
-        var proprietari = await _context.Proprietari
-            .Where(p => p.Nome.Contains(term) || p.CodiceFiscale.Contains(term))
-            .Select(p => new
-            {
-                Nome = p.Nome,
-                Cognome = p.Cognome,
-                CodiceFiscale = p.CodiceFiscale
-            })
-            .ToListAsync();
-
-        var risultati = clienti.Concat(proprietari).ToList();
-
+        var risultati = await _clienteService.SearchAsync(term);
         return Json(risultati);
     }
-
 }

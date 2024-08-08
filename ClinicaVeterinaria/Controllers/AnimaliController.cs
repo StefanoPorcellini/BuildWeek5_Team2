@@ -220,4 +220,47 @@ public class AnimaliController : Controller
         return RedirectToAction("Index", "Home");
     }
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> CreateWithProprietario(
+    [Bind("Id,Nome,TipologiaAnimale,ColoreManto,DataNascita,PossiedeChip,NumeroChip,Randagio")] Animale animale,
+    IFormFile? img,
+    int? ProprietarioId)
+    {
+        if (ModelState.IsValid)
+        {
+            // Verifica se è stato selezionato un proprietario esistente
+            if (ProprietarioId.HasValue)
+            {
+                _logger.LogInformation("Proprietario esistente selezionato, ID: {ProprietarioId}", ProprietarioId.Value);
+
+                // Assegna l'ID del proprietario all'animale
+                animale.ProprietarioId = ProprietarioId.Value;
+
+                // Salva l'animale nel database
+                await _animaleService.CreateAsync(animale);
+
+                // Salva l'immagine se presente
+                if (img != null && img.Length > 0)
+                {
+                    _animaleService.SaveImg(animale.Id, img);
+                    animale.Foto = $"foto/fotoAnimale{animale.Id}.jpg";
+                    await _animaleService.UpdateAsync(animale);
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "Devi selezionare un proprietario.");
+                _logger.LogError("Proprietario non selezionato.");
+                return View(animale);
+            }
+
+            // Reindirizza alla pagina Index
+            return RedirectToAction(nameof(Index));
+        }
+
+        // Se il ModelState non è valido, ritorna la vista con gli errori
+        _logger.LogError("ModelState non valido, ritorno alla vista.");
+        return View(animale);
+    }
 }

@@ -6,33 +6,42 @@
 
 <div class="form-group">
     <label for="query">Nome del Prodotto:</label>
+    <!-- Campo di input per inserire il nome del prodotto da ricercare -->
     <input type="text" id="query" class="form-control" placeholder="Inserisci il nome del prodotto..." />
 </div>
 
 <div id="risultati">
-    <!-- Risultati della ricerca saranno visualizzati qui -->
+    <!-- Questa sezione verrà popolata con i risultati della ricerca -->
 </div>
 
 @section Scripts {
     <script>
         $(document).ready(function () {
+            // Attende che l'utente inizi a digitare nel campo di input
             $('#query').on('input', function () {
+                // Recupera il valore corrente del campo di input
                 var query = $(this).val();
 
+                // Invia una richiesta AJAX al server per cercare i prodotti che corrispondono alla query
                 $.ajax({
-                    url: '@Url.Action("CercaProdotto", "Prodotto")',
-                    type: 'POST',
-                    data: { query: query },
+                    url: '@Url.Action("CercaProdotto", "Prodotto")', // Indirizzo dell'azione del controller che gestisce la ricerca
+                    type: 'POST', // Tipo di richiesta HTTP, in questo caso POST
+                    data: { query: query }, // Dati inviati al server, qui la query di ricerca
                     success: function (data) {
+                        // Svuota il contenitore dei risultati prima di popolarlo nuovamente
                         $('#risultati').empty();
 
+                        // Se la risposta contiene uno o più risultati
                         if (data.length > 0) {
+                            // Itera su ogni prodotto trovato e lo aggiunge al contenitore dei risultati
                             $.each(data, function (i, prodotto) {
                                 $('#risultati').append(
+                                    // Crea un paragrafo che mostra il nome del prodotto, l'armadietto e il cassetto corrispondenti
                                     '<p><strong>' + prodotto.nome + '</strong>: Armadietto ' + prodotto.numeroArmadietto + ', Cassetto ' + prodotto.numeroCassetto + '</p>'
                                 );
                             });
                         } else {
+                            // Se nessun prodotto è stato trovato, mostra un messaggio di avviso
                             $('#risultati').append('<p>Nessun prodotto trovato.</p>');
                         }
                     }
