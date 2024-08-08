@@ -12,7 +12,6 @@ namespace ClinicaVeterinaria.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IAnimaleService _animaleService;
 
-
         public HomeController(ILogger<HomeController> logger, IAnimaleService animaleService)
         {
             _logger = logger;

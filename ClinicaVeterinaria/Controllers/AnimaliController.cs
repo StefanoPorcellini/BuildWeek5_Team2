@@ -24,6 +24,8 @@ public class AnimaliController : Controller
         return View(animali);
     }
 
+
+
     // GET: Animali/Details/5
     public async Task<IActionResult> Details(int? id)
     {

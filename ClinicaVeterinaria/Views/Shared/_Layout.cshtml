@@ -40,15 +40,22 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img class="logo" src="~/img/logo_vetcare.svg" /></a>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid d-flex">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img class="logo w-75" src="~/img/logo_vetcare.svg" /></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="navbar-collapse collapse d-inline-flex justify-content-between">
+                    <ul class="navbar-nav  flex-grow-1">
+                        <li class="nav-item d-inline-flex border">
+                            <a class="nav-link" asp-controller="Animali" asp-action="Index">Lista Animali</a>
+                            <a class="nav-link" asp-controller="Proprietari" asp-action="Index">Lista Proprietari</a>
+                            <a class="nav-link" asp-controller="Visite" asp-action="Index">Lista visite</a>
+                            <a class="nav-link" asp-controller="Ricoveri" asp-action="Index">Lista Ricoveri</a>
+
+                         </li>
                     </ul>
                 </div>
                 @if (User.Identity.IsAuthenticated)
@@ -91,6 +98,9 @@
                 }
                 else
                 {
+                    <span class="@roleClass mx-3 ">
+                        <a><i class="bi bi-person-circle"></i> Utente non loggato</a>
+                    </span>
                     <a class="Btn green" asp-controller="User" asp-action="Login">
                         <div class="sign"><svg viewBox="0 0 512 512"><path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path></svg></div>
 
