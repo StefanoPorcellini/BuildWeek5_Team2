@@ -110,14 +110,49 @@
 
     <script>
         $(document).ready(function () {
-            // Funzione di toggle per visualizzare il campo Numero Chip
-            $("#PossiedeChipCheckbox").change(function () {
-                var chipField = $("#NumeroChipField");
-                if ($(this).is(":checked")) {
-                    chipField.show();
+            // Funzione per gestire la visualizzazione del campo Numero Chip
+            function toggleNumeroChipField() {
+                var hasChip = $("#PossiedeChipCheckbox").is(":checked");
+                if (hasChip) {
+                    $("#NumeroChipField").show();  // Mostra il campo per il numero di chip
                 } else {
-                    chipField.hide();
+                    $("#NumeroChipField").hide();  // Nascondi il campo per il numero di chip
                 }
+            }
+
+            // Funzione per gestire la visualizzazione dei campi del proprietario, la sezione di ricerca e il bottone "Cerca Proprietario"
+            function toggleProprietarioFields() {
+                var isRandagio = $("#RandagioCheckbox").is(":checked");
+                if (isRandagio) {
+                    $("#proprietarioForm").hide();  // Nascondi il form del proprietario
+                    $("#searchProprietarioSection").hide();  // Nascondi la sezione di ricerca del proprietario
+                    $("#proprietarioSelezionato").hide();  // Nascondi il proprietario selezionato, se presente
+                    $("#toggleSearchButton").hide();  // Nascondi il bottone "Cerca Proprietario"
+                    $("#ProprietarioId").val(""); // Rimuovi l'ID del proprietario se è Randagio
+                } else {
+                    $("#proprietarioForm").show();  // Mostra il form del proprietario
+                    $("#toggleSearchButton").show();  // Mostra il bottone "Cerca Proprietario"
+                    $("#searchProprietarioSection").hide();  // Nascondi la sezione di ricerca del proprietario
+                }
+            }
+
+            // Inizializza lo stato del form al caricamento della pagina
+            toggleNumeroChipField();
+            toggleProprietarioFields();
+
+            // Aggiungi l'evento al cambio dello stato delle checkbox
+            $("#PossiedeChipCheckbox").change(function () {
+                toggleNumeroChipField();
+            });
+
+            $("#RandagioCheckbox").change(function () {
+                toggleProprietarioFields();
+            });
+
+            // Toggle per mostrare/nascondere la ricerca del proprietario e i campi di inserimento del proprietario
+            $("#toggleSearchButton").click(function () {
+                $("#proprietarioForm").toggle();  // Toggle visibilità del form del proprietario
+                $("#searchProprietarioSection").toggle();  // Toggle visibilità della sezione di ricerca
             });
 
             // Carica tutti i proprietari in memoria
@@ -127,19 +162,15 @@
                 type: "GET",
                 success: function (data) {
                     proprietari = data;
+                    console.log("Proprietari caricati:", proprietari); // Verifica se i dati sono caricati
                 },
-                error: function () {
-                    alert("Errore durante il recupero dei dati dei proprietari.");
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Errore nel caricamento dei proprietari:', textStatus, errorThrown);
+                    alert('Errore nel caricamento dei dati. Riprova più tardi.');
                 }
             });
 
-            // Toggle per mostrare/nascondere la ricerca del proprietario
-            $("#toggleSearchButton").click(function () {
-                $("#proprietarioForm").toggle();
-                $("#searchProprietarioSection").toggle();
-            });
-
-            // Ricerca in tempo reale
+            // Funzione per la ricerca in tempo reale
             $("#searchTerm").on("input", function () {
                 var searchTerm = $(this).val().toLowerCase();
                 var filteredProprietari = proprietari.filter(function (proprietario) {
@@ -181,6 +212,7 @@
 
                 // Nascondi il form del proprietario e mostra i dettagli del proprietario selezionato
                 $("#proprietarioForm").hide();
+                $("#searchProprietarioSection").hide();
                 $("#proprietarioSelezionato").show();
 
                 // Popola i dati del proprietario selezionato
@@ -192,22 +224,8 @@
                 $("#ProprietarioId").val(id);
             });
 
-            // Gestione del campo Randagio
-            $("#RandagioCheckbox").change(function () {
-                var isRandagio = $(this).is(":checked");
-                if (isRandagio) {
-                    $("#proprietarioForm").hide();
-                    $("#proprietarioSelezionato").hide();
-                    $("#ProprietarioId").val(""); // Rimuovi l'ID del proprietario se è Randagio
-                } else {
-                    $("#proprietarioForm").show();
-                }
-            });
-
-            // Nascondi il form del proprietario all'inizio se Randagio è selezionato
-            if ($("#RandagioCheckbox").is(":checked")) {
-                $("#proprietarioForm").hide();
-            }
+            // Nascondi inizialmente la sezione di ricerca del proprietario
+            $("#searchProprietarioSection").hide();
         });
     </script>
 }
