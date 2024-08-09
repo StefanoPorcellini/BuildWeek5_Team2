@@ -7,7 +7,7 @@
 <h1><img src="~/img/logo piccolo.svg" /> @ViewData["Title"]</h1>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary">Create New</a>
+    <a asp-action="Create" class="btn btn-primary">Registra nuova vendita</a>
 </p>
 
 <table class="table">
@@ -17,8 +17,8 @@
             <th>Data Vendita</th>
             <th>Prodotto</th>
             <th>Prezzo</th>
-            <th>Numero Ricetta</th>
-            <th>Quantita</th>
+            <th class="text-center">Numero Ricetta</th>
+            <th class="text-center">Quantità</th>
             <th></th>
         </tr>
     </thead>
@@ -30,8 +30,8 @@
                 <td>@item.DataVendita.ToString("dd/MM/yyyy HH:mm")</td>
                 <td>@item.Prodotto.Nome</td>
                 <td>@item.Prodotto.Prezzo.ToString("C")</td>
-                <td>@item.NumeroRicetta</td>
-                <td>@item.Quantita</td>
+                <td class="text-center">@item.NumeroRicetta</td>
+                <td class="text-center">@item.Quantita</td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Edit</a> 
                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Details</a> 
