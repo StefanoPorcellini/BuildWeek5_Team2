@@ -57,9 +57,9 @@
                     @Html.DisplayFor(modelItem => item.Randagio)
                 </td>
                 <td>
-                    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id">Modifica</a> |
-                    <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">Dettagli</a> |
-                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Elimina</a>
+                    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pencil"></i></a> |
+                    <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id"><i class="bi bi-eye-fill"></i></a> |
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash3-fill"></i></a>
                 </td>
             </tr>
         }
