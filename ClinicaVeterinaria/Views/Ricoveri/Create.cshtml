@@ -12,12 +12,12 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="DataInizio" class="control-label"></label>
+                <label asp-for="DataInizio" class="control-label">Data Inizio</label>
                 <input asp-for="DataInizio" type="date" class="form-control" />
                 <span asp-validation-for="DataInizio" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AnimaleId" class="control-label"></label>
+                <label asp-for="AnimaleId" class="control-label">Animale Id</label>
                 <select asp-for="AnimaleId" class ="form-control" asp-items="ViewBag.AnimaleId"></select>
             </div>
             <div class="form-group form-check">
@@ -26,7 +26,7 @@
                 </label>
             </div>
             <div class="form-group">
-                <label asp-for="CostoGiornaliero" class="control-label"></label>
+                <label asp-for="CostoGiornaliero" class="control-label">Costo Giornaliero</label>
                 <input asp-for="CostoGiornaliero" class="form-control" />
                 <span asp-validation-for="CostoGiornaliero" class="text-danger"></span>
             </div>

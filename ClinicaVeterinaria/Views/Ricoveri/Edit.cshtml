@@ -14,17 +14,17 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="DataInizio" class="control-label"></label>
+                <label asp-for="DataInizio" class="control-label">Data Inizio</label>
                 <input asp-for="DataInizio" type="date" class="form-control" />
                 <span asp-validation-for="DataInizio" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DataFine" class="control-label"></label>
+                <label asp-for="DataFine" class="control-label">Data Fine</label>
                 <input asp-for="DataFine" type="date" class="form-control" />
                 <span asp-validation-for="DataFine" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AnimaleId" class="control-label"></label>
+                <label asp-for="AnimaleId" class="control-label">Animale Id</label>
                 <select asp-for="AnimaleId" class="form-control" asp-items="ViewBag.AnimaleId"></select>
                 <span asp-validation-for="AnimaleId" class="text-danger"></span>
             </div>
@@ -34,12 +34,12 @@
                 </label>
             </div>
             <div class="form-group">
-                <label asp-for="CostoGiornaliero" class="control-label"></label>
+                <label asp-for="CostoGiornaliero" class="control-label">Costo Giornaliero</label>
                 <input asp-for="CostoGiornaliero" class="form-control" />
                 <span asp-validation-for="CostoGiornaliero" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Salva" class="btn btn-primary" />
+                <input type="submit" value="Salva" class="btn btn-primary my-2" />
             </div>
         </form>
     </div>

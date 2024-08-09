@@ -1,49 +1,41 @@
 ﻿@model ClinicaVeterinaria.Models.Vendita
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Dettagli Vendita";
 }
 
-<h1>Details</h1>
+<div class="container mt-4">
+    <h1 class="mb-4">@ViewData["Title"]</h1>
 
-<div>
-    <h4>Vendita</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CodiceFiscaleCliente)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CodiceFiscaleCliente)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DataVendita)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DataVendita)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Prodotto)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Prodotto.Nome)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NumeroRicetta)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NumeroRicetta)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Quantita)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Quantita)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@Model?.Id">Modifica</a>
-    <a class="btn btn-success" asp-action="GeneratePDFPerVendita" asp-route-id="@Model.Id" class="btn btn-sm btn-secondary">Genera PDF</a>
-    <a class="btn btn-info" asp-action="Index">Torna alla lista Vendite</a>
+    <div class="card">
+        <div class="card-body shadow">
+            <div class="container d-flex flex-row justify-content-between">
+                <h4 class="card-title">Vendita</h4>
+                <a asp-action="GeneratePDFPerVendita" asp-route-id="@Model.Id" class="btn btn-warning ml-2"><i class="bi bi-filetype-pdf"></i>Genera PDF</a>
+            </div>
+
+            <hr />
+            <dl class="row">
+                <dt class="col-sm-3">Codice Fiscale Cliente</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.CodiceFiscaleCliente)</dd>
+
+                <dt class="col-sm-3">Data Vendita</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.DataVendita)</dd>
+
+                <dt class="col-sm-3">Prodotto</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Prodotto.Nome)</dd>
+
+                <dt class="col-sm-3">Numero Ricetta</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.NumeroRicetta)</dd>
+
+                <dt class="col-sm-3">Quantità</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Quantita)</dd>
+            </dl>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary"><i class="bi bi-pencil"></i>Modifica</a>
+        <a asp-action="Index" class="btn btn-info ml-2"><i class="bi bi-arrow-left-short"></i>Torna alla Lista Vendite</a>
+    </div>
 </div>

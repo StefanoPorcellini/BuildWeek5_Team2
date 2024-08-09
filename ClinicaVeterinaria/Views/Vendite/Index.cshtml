@@ -17,9 +17,9 @@
             <th>Data Vendita</th>
             <th>Prodotto</th>
             <th>Prezzo</th>
-            <th>Numero Ricetta</th>
-            <th>Quantita</th>
-            <th></th>
+            <th class="text-center">Numero Ricetta</th>
+            <th class="text-center">Quantità</th>
+            <th class="text-center">Azioni</th>
         </tr>
     </thead>
     <tbody>
@@ -30,12 +30,12 @@
                 <td>@item.DataVendita.ToString("dd/MM/yyyy HH:mm")</td>
                 <td>@item.Prodotto.Nome</td>
                 <td>@item.Prodotto.Prezzo.ToString("C")</td>
-                <td>@item.NumeroRicetta</td>
-                <td>@item.Quantita</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i>Modifica</a>
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info"><i class="bi bi-eye-fill"></i>Dettagli</a>
-                    <a asp-action="GeneratePDFPerVendita" asp-route-id="@item.Id" class="btn btn-sm btn-secondary"><i class="bi bi-pencil"></i>Genera PDF</a>
+                <td class="text-center">@item.NumeroRicetta</td>
+                <td class="text-center">@item.Quantita</td>
+                <td class="text-center">
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i>Modifica</a> 
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info"><i class="bi bi-eye-fill"></i>Dettagli</a> 
+                    <a asp-action="GeneratePDFPerVendita" asp-route-id="@item.Id" class="btn btn-sm btn-secondary"><i class="bi bi-filetype-pdf"></i>Genera PDF</a>
                 </td>
             </tr>
         }
