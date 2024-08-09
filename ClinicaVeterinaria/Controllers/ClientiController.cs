@@ -19,7 +19,13 @@ public class ClientiController : Controller
     public async Task<IActionResult> Index()
     {
         var clienti = await _clienteService.GetAllAsync();
+        if (clienti == null || !clienti.Any())
+        {
+            // Aggiungi un log o un messaggio per debug
+            Console.WriteLine("Nessun dato restituito dal servizio.");
+        }
         return View(clienti);
+
     }
 
     // GET: Clienti/Details/5

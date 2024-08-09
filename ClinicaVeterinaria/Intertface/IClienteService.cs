@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 public interface IClienteService
 {
-    Task<List<Cliente>> GetAllAsync();
+    Task<List<Object>> GetAllAsync();
     Task<Cliente> GetByIdAsync(int id);
     Task CreateAsync(Cliente cliente);
     Task UpdateAsync(Cliente cliente);

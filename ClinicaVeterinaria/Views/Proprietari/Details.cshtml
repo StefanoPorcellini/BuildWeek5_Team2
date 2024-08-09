@@ -1,13 +1,12 @@
 ﻿@model ClinicaVeterinaria.Models.Proprietario
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Dettaglio";
 }
 
-<h1>Details</h1>
+<h1><img src="~/img/logo piccolo.svg" /> @ViewData["Title"]</h1>
 
 <div>
-    <h4>Proprietario</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -103,6 +102,6 @@
     }
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Modifica</a> |
-    <a asp-action="Index">Torna alla lista</a>
+    <a asp-controller="Clienti" asp-action="Index" class="btn btn-info">Torna alla lista</a>
 </div>
+

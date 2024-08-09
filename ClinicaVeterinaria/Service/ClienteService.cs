@@ -13,10 +13,53 @@ public class ClienteService : IClienteService
         _context = context;
     }
 
-    public async Task<List<Cliente>> GetAllAsync()
+    //public async Task<List<Cliente>> GetAllAsync()
+    //{
+    //    return await _context.Clienti.ToListAsync();
+    //}
+
+    public async Task<List<object>> GetAllAsync()
     {
-        return await _context.Clienti.ToListAsync();
+        var clienti = await _context.Clienti
+            .Include(c => c.Proprietario)
+            .Select(c => new
+            {
+                Tipo = "Cliente",
+                c.Id,
+                c.Nome,
+                c.Cognome,
+                c.Telefono,
+                c.Indirizzo,
+                c.Citta,
+                c.CodiceFiscale
+            })
+            .ToListAsync();
+
+        var proprietari = await _context.Proprietari
+            .Select(p => new
+            {
+                Tipo = "Proprietario",
+                p.Id,
+                p.Nome,
+                p.Cognome,
+                p.Telefono,
+                p.Indirizzo,
+                p.Citta,
+                p.CodiceFiscale
+            })
+            .ToListAsync();
+
+        var risultato = clienti.Cast<object>().Concat(proprietari.Cast<object>()).ToList();
+
+        // Debugging output
+        foreach (var item in risultato)
+        {
+            Console.WriteLine(item.GetType().Name + ": " + item);
+        }
+
+        return risultato;
     }
+
 
     public async Task<Cliente> GetByIdAsync(int id)
     {

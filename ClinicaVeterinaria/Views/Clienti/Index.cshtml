@@ -1,11 +1,10 @@
-﻿@model IEnumerable<ClinicaVeterinaria.Models.Cliente>
+﻿@model IEnumerable<dynamic>
 
 @{
-    ViewData["Title"] = "Gestione Clienti";
+    ViewData["Title"] = "Gestione Clienti e Proprietari";
 }
 
-<div class="container mt-4">
-    <h1 class="mb-4">@ViewData["Title"]</h1>
+<h1><img src="~/img/logo piccolo.svg" /> @ViewData["Title"]</h1>
 
     <div class="mb-3">
         <a asp-action="Create" class="btn btn-primary">Crea Nuovo Cliente</a>
@@ -27,20 +26,49 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr>
-                        <td>@Html.DisplayFor(modelItem => item.Nome)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Cognome)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Telefono)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Indirizzo)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Citta)</td>
-                        <td>@Html.DisplayFor(modelItem => item.CodiceFiscale)</td>
-                        <td class="text-center">
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Modifica</a>
-                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Dettagli</a>
-                        </td>
-                    </tr>
+                    var tipo = item.Tipo;
+                    if (tipo == "Cliente")
+                    {
+                        <tr>
+                            <td>@item.Nome</td>
+                            <td>@item.Cognome</td>
+                            <td>@item.Telefono</td>
+                            <td>@item.Indirizzo</td>
+                            <td>@item.Citta</td>
+                            <td>@item.CodiceFiscale</td>
+                            <td>
+                            <td class="text-center">
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Modifica</a>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Dettagli</a>
+                            </td>                            </td>
+                        </tr>
+                    }
+                    else if (tipo == "Proprietario")
+                    {
+                        <tr>
+                            <td>@item.Nome</td>
+                            <td>@item.Cognome</td>
+                            <td>@item.Telefono</td>
+                            <td>@item.Indirizzo</td>
+                            <td>@item.Citta</td>
+                            <td>@item.CodiceFiscale</td>
+                            <td>
+                            <td class="text-center">
+                                <a asp-controller="Proprietari" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Modifica</a>
+                                <a asp-controller="Proprietari" asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Dettagli</a>
+                            </td>                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7">Tipo non riconosciuto</td>
+                        </tr>
+                    }
                 }
             </tbody>
         </table>
     </div>
-</div>
+
+
+
