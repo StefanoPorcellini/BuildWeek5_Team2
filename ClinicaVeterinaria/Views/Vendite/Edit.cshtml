@@ -1,54 +1,65 @@
 ﻿@model ClinicaVeterinaria.Models.Vendita
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Modifica Vendita";
 }
 
-<h1>Edit</h1>
+<div class="container mt-4">
+    <h1 class="mb-4">@ViewData["Title"]</h1>
 
-<h4>Vendita</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="CodiceFiscaleCliente" class="control-label"></label>
-                <input asp-for="CodiceFiscaleCliente" class="form-control" />
-                <span asp-validation-for="CodiceFiscaleCliente" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DataVendita" class="control-label"></label>
-                <input asp-for="DataVendita" class="form-control" />
-                <span asp-validation-for="DataVendita" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProdottoId" class="control-label"></label>
-                <select asp-for="ProdottoId" class="form-control" asp-items="ViewBag.ProdottoId"></select>
-                <span asp-validation-for="ProdottoId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NumeroRicetta" class="control-label"></label>
-                <input asp-for="NumeroRicetta" class="form-control" />
-                <span asp-validation-for="NumeroRicetta" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Quantita" class="control-label"></label>
-                <input asp-for="Quantita" class="form-control" />
-                <span asp-validation-for="Quantita" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Dettagli Vendita</h4>
+            <hr />
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                <input type="hidden" asp-for="Id" />
+
+                <div class="form-group">
+                    <label asp-for="CodiceFiscaleCliente" class="control-label">Codice Fiscale Cliente</label>
+                    <input asp-for="CodiceFiscaleCliente" class="form-control" />
+                    <span asp-validation-for="CodiceFiscaleCliente" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="DataVendita" class="control-label">Data Vendita</label>
+                    <input asp-for="DataVendita" class="form-control" />
+                    <span asp-validation-for="DataVendita" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ProdottoId" class="control-label">Prodotto</label>
+                    <select asp-for="ProdottoId" class="form-control" asp-items="ViewBag.ProdottoId"></select>
+                    <span asp-validation-for="ProdottoId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="NumeroRicetta" class="control-label">Numero Ricetta</label>
+                    <input asp-for="NumeroRicetta" class="form-control" />
+                    <span asp-validation-for="NumeroRicetta" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Quantita" class="control-label">Quantità</label>
+                    <input asp-for="Quantita" class="form-control" />
+                    <span asp-validation-for="Quantita" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mt-4">
+                    <input type="submit" value="Salva Modifiche" class="btn btn-primary" />
+                    <a asp-action="Index" class="btn btn-secondary ml-2">Annulla</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a asp-action="Index" class="btn btn-secondary">Torna alla Lista</a>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
