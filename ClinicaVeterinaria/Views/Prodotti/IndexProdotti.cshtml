@@ -23,18 +23,30 @@
         {
             <tr>
                 <td>@item.Nome</td>
-                <td>@item.Prezzo</td>
+                <td>@item.Prezzo.ToString("C")</td> <!-- Prezzo formattato come valuta -->
                 <td>@item.Tipologia</td>
                 <td>@item.NumeroArmadietto</td>
                 <td>@item.NumeroCassetto</td>
                 <td>@item.CasaFarmaceutica.Nome</td>
                 <td>
-                    <a asp-action="EditProdotto" asp-route-id="@item.Id" class="btn btn-warning"><i class="bi bi-pencil"></i>Modifica</a>
+                    <a asp-action="EditProdotto" asp-route-id="@item.Id" class="btn btn-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Modifica">
+                        <i class="bi bi-pencil"></i>
+                    </a>
                     <form asp-action="DeleteProdotto" asp-route-id="@item.Id" method="post" style="display:inline;">
-                        <button type="submit" class="btn btn-danger"><i class="bi bi-trash3-fill"></i>Elimina</button>
+                        <button type="submit" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Elimina">
+                            <i class="bi bi-trash3-fill"></i>
+                        </button>
                     </form>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('[data-bs-toggle="tooltip"]').tooltip();
+        });
+    </script>
+}

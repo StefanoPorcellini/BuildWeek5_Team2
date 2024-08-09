@@ -252,6 +252,19 @@ table {
     box-shadow: 5px 5px 5px lightgrey;
 }
 
+.tooltip-inner {
+    background-color: #333; /* Cambia il colore di sfondo del tooltip */
+    color: #fff; /* Cambia il colore del testo del tooltip */
+    font-size: 14px; /* Cambia la dimensione del testo del tooltip */
+    border-radius: 5px; /* Aggiunge bordi arrotondati al tooltip */
+    padding: 10px; /* Aggiunge padding interno al tooltip */
+    text-align: center; /* Centra il testo del tooltip */
+}
+
+.tooltip-arrow {
+    border-top-color: #333 !important; /* Cambia il colore della freccia del tooltip */
+}
+
 .mainContainer {
     background-color: white;
     min-height: 100%;

@@ -87,6 +87,19 @@
 </div>
 
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning"><i class="bi bi-pencil"></i>Modifica</a> |
-    <a asp-action="Index" class="btn btn-info"><i class="bi bi-arrow-left-short"></i>Torna alla lista</a>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Modifica">
+        <i class="bi bi-pencil"></i>
+    </a>
+    <a asp-action="Index" class="btn btn-info ml-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Torna alla lista">
+        <i class="bi bi-arrow-left-short"></i>
+    </a>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('[data-bs-toggle="tooltip"]').tooltip();
+        });
+    </script>
+}
+
