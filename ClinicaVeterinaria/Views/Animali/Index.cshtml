@@ -12,31 +12,15 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.First().Nome)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().TipologiaAnimale)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().ColoreManto)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().DataNascita)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().PossiedeChip)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().NumeroChip)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().Randagio)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().Foto)
-            </th>
-            <th></th>
+            <th>Nome</th>
+            <th>Tipologia Animale</th>
+            <th>Colore Manto</th>
+            <th>Data di Nascita</th>
+            <th>Possiede Chip</th>
+            <th>Numero Chip</th>
+            <th>Randagio</th>
+            <th>Foto</th>
+            <th>Azioni</th>
         </tr>
     </thead>
     <tbody>
@@ -46,7 +30,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Nome)
                 </td>
-                <td>
+                <td class="text-center">
                     @Html.DisplayFor(modelItem => item.TipologiaAnimale)
                 </td>
                 <td>
@@ -55,13 +39,13 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.DataNascita)
                 </td>
-                <td>
+                <td class="text-center">
                     @Html.DisplayFor(modelItem => item.PossiedeChip)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.NumeroChip)
                 </td>
-                <td>
+                <td class="text-center">
                     @Html.DisplayFor(modelItem => item.Randagio)
                 </td>
                 <td>
