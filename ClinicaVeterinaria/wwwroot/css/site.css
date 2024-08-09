@@ -22,7 +22,9 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    background-image: url('../img/patterns.svg');
+    background-size: 25%;
+    margin-bottom: 60px;
 }
 
 h1 img {
@@ -248,4 +250,9 @@ h1 img {
 
 table {
     box-shadow: 5px 5px 5px lightgrey;
+}
+
+.mainContainer {
+    background-color: white;
+    min-height: 100%;
 }
