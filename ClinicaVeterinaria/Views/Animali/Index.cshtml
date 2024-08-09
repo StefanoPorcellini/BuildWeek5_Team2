@@ -59,11 +59,25 @@
                     }
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info"><i class="bi bi-pencil"></i>Modifica</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-warning"><i class="bi bi-eye-fill"></i>Dettagli</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger"><i class="bi bi-trash3-fill"></i>Elimina</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Modifica">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Dettagli">
+                        <i class="bi bi-eye-fill"></i>
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Elimina">
+                        <i class="bi bi-trash3-fill"></i>
+                    </a>
                 </td>
+
             </tr>
         }
     </tbody>
 </table>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('[data-bs-toggle="tooltip"]').tooltip();
+        });
+    </script>
+}
