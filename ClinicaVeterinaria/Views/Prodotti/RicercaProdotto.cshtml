@@ -10,7 +10,7 @@
     <input type="text" id="query" class="form-control" placeholder="Inserisci il nome del prodotto..." />
 </div>
 
-<div id="risultati">
+<div id="risultati" class="mt-4">
     <!-- Questa sezione verrà popolata con i risultati della ricerca -->
 </div>
 
@@ -36,13 +36,25 @@
                             // Itera su ogni prodotto trovato e lo aggiunge al contenitore dei risultati
                             $.each(data, function (i, prodotto) {
                                 $('#risultati').append(
-                                    // Crea un paragrafo che mostra il nome del prodotto, l'armadietto e il cassetto corrispondenti
-                                    '<p><strong>' + prodotto.nome + '</strong>: Armadietto ' + prodotto.numeroArmadietto + ', Cassetto ' + prodotto.numeroCassetto + '</p>'
+                                    // Crea una card per ogni prodotto trovato
+                                    `<div class="card mb-3 shadow">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">${prodotto.nome}</h5>
+                                                    <p class="card-text ">
+                                                        <strong class="me-2">Armadietto:</strong> ${prodotto.numeroArmadietto}
+                                                        <strong class="ms-2">Cassetto:</strong> ${prodotto.numeroCassetto}
+                                                    </p>
+                                                </div>
+                                            </div>`
                                 );
                             });
                         } else {
                             // Se nessun prodotto è stato trovato, mostra un messaggio di avviso
-                            $('#risultati').append('<p>Nessun prodotto trovato.</p>');
+                            $('#risultati').append(
+                                `<div class="alert alert-warning" role="alert">
+                                            Nessun prodotto trovato.
+                                        </div>`
+                            );
                         }
                     }
                 });
