@@ -11,7 +11,7 @@
         <div class="card-body shadow">
             <div class="container d-flex flex-row justify-content-between">
                 <h4 class="card-title">Vendita</h4>
-                <a asp-action="GeneratePDFPerVendita" asp-route-id="@Model.Id" class="btn btn-warning ml-2">Genera PDF</a>
+                <a asp-action="GeneratePDFPerVendita" asp-route-id="@Model.Id" class="btn btn-warning ml-2"><i class="bi bi-filetype-pdf"></i>Genera PDF</a>
             </div>
 
             <hr />
@@ -35,7 +35,7 @@
     </div>
 
     <div class="mt-4">
-        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Modifica</a>
-        <a asp-action="Index" class="btn btn-secondary ml-2">Torna alla Lista</a>
+        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary"><i class="bi bi-pencil"></i>Modifica</a>
+        <a asp-action="Index" class="btn btn-info ml-2"><i class="bi bi-arrow-left-short"></i>Torna alla Lista Vendite</a>
     </div>
 </div>
