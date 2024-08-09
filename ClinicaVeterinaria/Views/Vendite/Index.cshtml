@@ -7,7 +7,7 @@
 <h1><img src="~/img/logo piccolo.svg" /> @ViewData["Title"]</h1>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary">Create New</a>
+    <a asp-action="Create" class="btn btn-primary">Crea nuova vendita</a>
 </p>
 
 <table class="table">
@@ -33,9 +33,9 @@
                 <td>@item.NumeroRicetta</td>
                 <td>@item.Quantita</td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Edit</a> 
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Details</a> 
-                    <a asp-action="GeneratePDFPerVendita" asp-route-id="@item.Id" class="btn btn-sm btn-secondary">Genera PDF</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i>Modifica</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info"><i class="bi bi-eye-fill"></i>Dettagli</a>
+                    <a asp-action="GeneratePDFPerVendita" asp-route-id="@item.Id" class="btn btn-sm btn-secondary"><i class="bi bi-pencil"></i>Genera PDF</a>
                 </td>
             </tr>
         }

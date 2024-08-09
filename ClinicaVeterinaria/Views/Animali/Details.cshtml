@@ -8,6 +8,7 @@
 <h1><img src="~/img/logo piccolo.svg" /> @ViewData["Title"] @nome</h1>
 
 <div>
+    <h1>VetCare - Dettagli</h1>
     <h4>Animale</h4>
     <hr />
     <dl class="row">
@@ -86,6 +87,6 @@
 </div>
 
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Modifica</a> |
-    <a asp-action="Index" class="btn btn-info">Torna alla lista</a>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning"><i class="bi bi-pencil"></i>Modifica</a> |
+    <a asp-action="Index" class="btn btn-info"><i class="bi bi-arrow-left-short"></i>Torna alla lista</a>
 </div>
