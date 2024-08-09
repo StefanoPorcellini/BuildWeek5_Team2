@@ -19,18 +19,40 @@
 {
     if (animalFound)
     {
-        <div class="card mt-3">
-            <div class="card-header">
+        <div class="card mt-3 shadow-sm">
+            <div class="card-header bg-primary text-white">
                 Dettagli Animale
             </div>
             <div class="card-body">
-                <p><strong>Nome:</strong> @TempData["AnimalName"]</p>
-                <p><strong>Tipo:</strong> @TempData["AnimalType"]</p>
-                <p><strong>Colore:</strong> @TempData["AnimalColor"]</p>
-                <p><strong>Data di Nascita:</strong> @TempData["AnimalBirthDate"]</p>
-                <p><strong>Numero Chip:</strong> @TempData["AnimalChipNumber"]</p>
+                <div class="row mb-3">
+                    <div class="col-sm-4"><strong>Nome:</strong></div>
+                    <div class="col-sm-8">@TempData["AnimalName"]</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-4"><strong>Tipo:</strong></div>
+                    <div class="col-sm-8">@TempData["AnimalType"]</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-4"><strong>Colore:</strong></div>
+                    <div class="col-sm-8">@TempData["AnimalColor"]</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-4"><strong>Data di Nascita:</strong></div>
+                    <div class="col-sm-8">@TempData["AnimalBirthDate"]</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-4"><strong>Numero Chip:</strong></div>
+                    <div class="col-sm-8">@TempData["AnimalChipNumber"]</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4"><strong>Foto:</strong></div>
+                    <div class="col-sm-8">
+                        <img src="@TempData["AnimalFoto"]" alt="@TempData["AnimalName"]" class="img-fluid rounded" style="max-width: 150px;" />
+                    </div>
+                </div>
             </div>
         </div>
+
     }
     else
     {
