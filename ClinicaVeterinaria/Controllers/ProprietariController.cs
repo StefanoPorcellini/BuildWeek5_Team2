@@ -169,7 +169,9 @@ public class ProprietariController : Controller
     [HttpGet]
     public async Task<IActionResult> GetAllProprietari()
     {
+        _logger.LogInformation("Richiesta ricevuta per ottenere tutti i proprietari."); // Aggiungi questo log
         var proprietari = await _proprietarioService.GetAllAsync();
         return Json(proprietari);
     }
+
 }
