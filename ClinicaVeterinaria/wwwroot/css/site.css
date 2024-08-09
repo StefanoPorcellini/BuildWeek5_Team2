@@ -25,6 +25,10 @@ body {
   margin-bottom: 60px;
 }
 
+h1 img {
+    width: 100px;
+}
+
 .Btn {
     display: flex;
     align-items: center;
@@ -181,4 +185,6 @@ body {
     height: 1rem;
 }
 
-
+table {
+    box-shadow: 5px 5px 5px lightgrey;
+}

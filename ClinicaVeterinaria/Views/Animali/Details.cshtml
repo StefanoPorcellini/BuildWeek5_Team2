@@ -1,10 +1,11 @@
 ﻿@model ClinicaVeterinaria.Models.Animale
 
 @{
-    ViewData["Title"] = "Dettagli Animale";
+    ViewData["Title"] = "Dettagli";
+    var nome = Model.Nome;
 }
 
-<h1>Dettagli Animale</h1>
+<h1><img src="~/img/logo piccolo.svg" /> @ViewData["Title"] @nome</h1>
 
 <div>
     <h4>Animale</h4>

@@ -6,20 +6,51 @@
     <img src="~/img/icona_admin.svg" class="w-25" />
     <h2>@ViewData["Title"]</h2>
 
-    <div class="d-flex justify-content-center gap-3 mt-4">
-            <a class="button text-decoration-none" asp-area="" asp-antifo=""
-            asp-controller="User" asp-action="CreateAdmin">Crea nuovo utente</a>
+    <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
+
+        <a class="button text-decoration-none" asp-area="" asp-antifo=""
+           asp-controller="User" asp-action="CreateAdmin">Crea nuovo utente</a>
+
         <a class="button text-decoration-none" asp-area="" asp-antifo=""
            asp-controller="Animali" asp-action="Create">Nuovo Animale</a>
-            <a class="button text-decoration-none" asp-area="" asp-antifo=""
-            asp-controller="Prodotto" asp-action="Create">Aggiungi Prodotto</a>
-            <a class="button text-decoration-none" asp-area="" asp-antifo=""
-            asp-controller="Prodotto" asp-action="IndexProdotti">Visualizza Prodotti</a>
-            <a class="button text-decoration-none text-center" asp-area="" asp-antifo=""
-            asp-controller="Prodotto" asp-action="IndexCaseFarmaceutiche">
-             Visualizza<br>Case Farmaceutiche
-             </a>
-            <a class="button text-decoration-none" asp-area="" asp-antifo=""
-            asp-controller="Prodotto" asp-action="RicercaProdotto">Ricerca Prodotto</a>
+
+        <a class="button text-decoration-none" asp-area="" asp-antifo=""
+           asp-controller="Animali" asp-action="Index">Vedi gli animali registrati</a>
+
+        <a class="button text-decoration-none" asp-area="" asp-antifo=""
+           asp-controller="Visite" asp-action="Create">Nuova Visita</a>
+
+        <a class="button text-decoration-none" asp-area="" asp-antifo=""
+           asp-controller="Visite" asp-action="Index">Storico Visite</a>
+
+        <a class="button text-decoration-none" asp-area="" asp-antifo=""
+           asp-controller="Ricoveri" asp-action="Create">Nuovo Ricovero</a>
+
+        <a class="button text-decoration-none" asp-area="" asp-antifo=""
+           asp-controller="Ricoveri" asp-action="Index">Visualizza i ricoveri</a>
+
+        <a class="button text-decoration-none" asp-area="" asp-antifo=""
+           asp-controller="Contabilizzazione" asp-action="Index">Ricoveri Attivi</a>
+
+        <a class="button text-decoration-none" asp-area=""
+           asp-controller="Prodotto" asp-action="Create">Aggiungi Prodotto</a>
+
+        <a class="button text-decoration-none" asp-area=""
+           asp-controller="Prodotto" asp-action="IndexProdotti">Visualizza Prodotti</a>
+
+        <a class="button text-decoration-none" asp-area=""
+           asp-controller="Prodotto" asp-action="RicercaProdotto">Ricerca Prodotto</a>
+
+        <a class="button text-decoration-none" asp-area=""
+           asp-controller="Vendite" asp-action="Create">Gestisci una nuova vendita</a>
+
+        <a class="button text-decoration-none" asp-area=""
+           asp-controller="Vendite" asp-action="Index">Controlla tutte le vendite</a>
+
+        <a class="button text-decoration-none text-center" asp-area=""
+           asp-controller="Prodotto" asp-action="IndexCaseFarmaceutiche">
+            Visualizza<br>Case Farmaceutiche
+        </a>
+
     </div>
 </div>

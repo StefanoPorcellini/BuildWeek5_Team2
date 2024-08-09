@@ -214,6 +214,7 @@ public class AnimaliController : Controller
     }
 
     // POST: Animali/Search
+    [AllowAnonymous]
     [HttpPost]
     public async Task<IActionResult> SearchAnimal(string chipNumber)
     {
@@ -250,24 +251,29 @@ public class AnimaliController : Controller
         IFormFile? img,
         int? ProprietarioId)
     {
-        // Rimuovi i campi del nuovo proprietario dalla validazione se Randagio è selezionato
+        // Verifica se l'animale è randagio
         if (animale.Randagio)
         {
+            // Rimuovi i campi del nuovo proprietario dalla validazione
             ModelState.Remove("ProprietarioNome");
             ModelState.Remove("ProprietarioCognome");
             ModelState.Remove("ProprietarioTelefono");
             ModelState.Remove("ProprietarioIndirizzo");
             ModelState.Remove("ProprietarioCitta");
             ModelState.Remove("ProprietarioCodiceFiscale");
-            ProprietarioId = null; // Assicurati che ProprietarioId non sia impostato
+
+            // Imposta ProprietarioId a null, in modo che non venga associato un proprietario
+            ProprietarioId = null;
         }
 
         if (ModelState.IsValid)
         {
+            // Gestione della creazione o associazione del proprietario
             if (!animale.Randagio)
             {
                 if (!ProprietarioId.HasValue)
                 {
+                    // Creazione di un nuovo proprietario
                     var nuovoProprietario = new Proprietario
                     {
                         Nome = ProprietarioNome,
@@ -278,11 +284,13 @@ public class AnimaliController : Controller
                         CodiceFiscale = ProprietarioCodiceFiscale
                     };
 
+                    // Salvataggio del nuovo proprietario
                     nuovoProprietario = await _proprietarioService.CreateAsync(nuovoProprietario);
                     animale.ProprietarioId = nuovoProprietario.Id;
                 }
                 else
                 {
+                    // Associa l'animale a un proprietario esistente
                     animale.ProprietarioId = ProprietarioId.Value;
                 }
             }
@@ -290,11 +298,12 @@ public class AnimaliController : Controller
             // Salva l'animale nel database
             await _animaleService.CreateAsync(animale);
 
-            // Salva l'immagine se presente
+            // Gestione del caricamento dell'immagine
             if (img != null && img.Length > 0)
             {
                 try
                 {
+                    // Salva l'immagine associata all'animale
                     _animaleService.SaveImg(animale.Id, img);
                     animale.Foto = $"foto/fotoAnimale{animale.Id}.jpg";
                     await _animaleService.UpdateAsync(animale);
@@ -307,9 +316,11 @@ public class AnimaliController : Controller
                 }
             }
 
+            // Reindirizza all'indice degli animali
             return RedirectToAction("Index", "Animali");
         }
 
+        // Log degli errori del ModelState
         _logger.LogError("ModelState non valido, ritorno alla vista con gli errori.");
         foreach (var state in ModelState)
         {
@@ -322,9 +333,9 @@ public class AnimaliController : Controller
             }
         }
 
+        // Ritorna alla vista se ci sono errori di validazione
         return View(animale);
     }
-
 
 
 }
