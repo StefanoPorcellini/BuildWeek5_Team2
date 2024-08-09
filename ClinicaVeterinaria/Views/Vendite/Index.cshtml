@@ -33,11 +33,25 @@
                 <td class="text-center">@item.NumeroRicetta</td>
                 <td class="text-center">@item.Quantita</td>
                 <td class="text-center">
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i></a> 
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info"><i class="bi bi-eye-fill"></i></a> 
-                    <a asp-action="GeneratePDFPerVendita" asp-route-id="@item.Id" class="btn btn-sm btn-secondary"><i class="bi bi-filetype-pdf"></i>Genera PDF</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Modifica">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Dettagli">
+                        <i class="bi bi-eye-fill"></i>
+                    </a>
+                    <a asp-action="GeneratePDFPerVendita" asp-route-id="@item.Id" class="btn btn-sm btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Genera PDF">
+                        <i class="bi bi-filetype-pdf"></i>
+                    </a>
                 </td>
+
             </tr>
         }
     </tbody>
 </table>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('[data-bs-toggle="tooltip"]').tooltip();
+        });
+    </script>
+}

@@ -35,7 +35,14 @@
     </div>
 
     <div class="mt-4">
-        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary"><i class="bi bi-pencil"></i></a>
+        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Modifica"><i class="bi bi-pencil"></i></a>
         <a asp-action="Index" class="btn btn-info ml-2"><i class="bi bi-arrow-left-short"></i>Torna alla Lista Vendite</a>
     </div>
 </div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('[data-bs-toggle="tooltip"]').tooltip();
+        });
+    </script>
+}
