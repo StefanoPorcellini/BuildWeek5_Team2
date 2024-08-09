@@ -229,6 +229,7 @@ public class AnimaliController : Controller
             TempData["AnimalColor"] = animal.ColoreManto;
             TempData["AnimalBirthDate"] = animal.DataNascita?.ToString("dd/MM/yyyy");
             TempData["AnimalChipNumber"] = animal.NumeroChip;
+            TempData["AnimalFoto"] = animal.Foto;
         }
         else
         {
